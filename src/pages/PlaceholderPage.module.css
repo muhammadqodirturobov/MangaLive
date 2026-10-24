@@ -1,0 +1,28 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  gap: var(--space-4);
+  padding: var(--space-16) var(--space-6);
+}
+
+.icon {
+  color: var(--color-text-tertiary);
+  opacity: 0.6;
+}
+
+.title {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+}
+
+.desc {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  max-width: 400px;
+  line-height: var(--leading-relaxed);
+}

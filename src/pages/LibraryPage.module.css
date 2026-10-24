@@ -1,0 +1,262 @@
+.libraryMain {
+  min-height: calc(100vh - var(--header-height));
+  padding: var(--space-4) 0 var(--space-12);
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  flex: 1;
+}
+
+/* Tab Bar */
+.tabBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tabBtn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: var(--weight-medium);
+  color: var(--color-text-secondary);
+  padding: var(--space-3) var(--space-2);
+  cursor: pointer;
+  position: relative;
+  transition: color var(--transition-fast);
+}
+
+.tabBtn:hover {
+  color: #ffffff;
+}
+
+.activeTabBtn {
+  color: var(--color-purple-400);
+  font-weight: var(--weight-semibold);
+}
+
+.activeTabBtn::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-purple-500);
+  border-radius: var(--radius-full);
+}
+
+/* History & Favorites */
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 800px;
+}
+
+.historyCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  gap: var(--space-4);
+  transition: all 0.2s ease;
+}
+
+.historyCard:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+.historyCardLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  flex: 1;
+}
+
+.historyMangaTitle {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: #f8fafc;
+  margin: 0 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.historySub {
+  font-size: var(--text-xs);
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.historyResumeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+.favoritesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: var(--space-4);
+}
+
+.emptyBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-12) var(--space-4);
+  gap: var(--space-3);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-xl);
+  color: #94a3b8;
+}
+
+.emptyTitle {
+  font-size: var(--text-lg);
+  color: #f8fafc;
+  margin: 0;
+}
+
+.emptyDesc {
+  font-size: var(--text-sm);
+  color: #94a3b8;
+  max-width: 400px;
+  margin: 0;
+}
+
+/* Empty Auth State */
+.authEmptyState {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-12) var(--space-4);
+  gap: var(--space-3);
+  margin: auto 0;
+}
+
+.iconCircle {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+}
+
+.authIcon {
+  color: var(--color-text-tertiary);
+}
+
+.authTitle {
+  font-size: 1.15rem;
+  font-weight: var(--weight-bold);
+  color: #ffffff;
+  margin: 0;
+}
+
+.authDesc {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  max-width: 380px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.signInBtn {
+  margin-top: var(--space-2);
+  padding: 8px 28px;
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  border-radius: var(--radius-sm);
+}
+
+/* Bottom App Banner */
+.appBanner {
+  background: var(--color-bg-surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: auto;
+}
+
+.appInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.appLogo {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--color-purple-600);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.appName {
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  color: #ffffff;
+  margin: 0;
+}
+
+.appSub {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.appBadges {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.appStorePill {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-base);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 640px) {
+  .appBanner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

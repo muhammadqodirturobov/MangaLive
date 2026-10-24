@@ -1,0 +1,251 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+  cursor: pointer;
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(124, 58, 237, 0.4);
+}
+
+/* Cover Wrapper */
+.coverLink {
+  display: block;
+  text-decoration: none;
+  background: #06070e;
+}
+
+.coverWrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.coverOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(6, 7, 14, 0.2) 0%,
+    transparent 50%,
+    rgba(6, 7, 14, 0.75) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Rank Badge (MangaBox style: #1, #2, #3) */
+.rankBadge {
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  font-size: 20px;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.7);
+  z-index: 3;
+}
+
+.rankBadge1 {
+  color: #f59e0b;
+}
+
+.rankBadge2 {
+  color: #fb923c;
+}
+
+.rankBadge3 {
+  color: #38bdf8;
+}
+
+/* Top Badges (Only Format or New) */
+.topBadges {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 3;
+}
+
+.badge {
+  font-size: 9px;
+  font-weight: var(--weight-bold);
+  padding: 1px 5px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+}
+
+.badgeNew {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.badgeType {
+  background: rgba(8, 10, 20, 0.85);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Chapter pill at bottom-right of cover */
+.chapterPill {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(8, 10, 20, 0.88);
+  color: #f1f5f9;
+  font-size: 10px;
+  font-weight: var(--weight-medium);
+  padding: 2px 6px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 3;
+}
+
+/* Card Body */
+.body {
+  padding: 8px 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.titleLink {
+  text-decoration: none;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color var(--transition-fast);
+}
+
+.titleLink:hover .title {
+  color: var(--color-purple-400);
+}
+
+.titleEn {
+  display: block;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.author {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Stats Row - Never clipped */
+.stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  margin-top: auto;
+  padding-top: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 10px;
+}
+
+.stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+}
+
+.ratingText {
+  color: #f8fafc;
+  font-weight: var(--weight-semibold);
+}
+
+.starIcon {
+  color: #fbbf24;
+  fill: #fbbf24;
+}
+
+.statusBadge {
+  font-size: 9px;
+  font-weight: var(--weight-medium);
+  padding: 1px 5px;
+  border-radius: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.statusFullText {
+  display: inline;
+}
+
+.statusShortText {
+  display: none;
+}
+
+.statusOngoing {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+}
+
+.statusCompleted {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+}
+
+.statusHiatus {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+}
+
+/* Mobile responsive status */
+@media (max-width: 480px) {
+  .body {
+    padding: 6px 6px 8px;
+  }
+
+  .title {
+    font-size: 12px;
+  }
+
+  .stats {
+    gap: 3px;
+  }
+
+  .statusFullText {
+    display: none;
+  }
+
+  .statusShortText {
+    display: inline;
+  }
+}

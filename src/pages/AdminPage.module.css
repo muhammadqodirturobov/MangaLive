@@ -1,0 +1,182 @@
+.adminLayout {
+  min-height: 100vh;
+  background: #080a14;
+  color: #f8fafc;
+  padding-bottom: var(--space-12);
+}
+
+.loadingScreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  background: #080a14;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+  color: #a78bfa;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Admin Top Navigation Bar ────────────────────────────────────────────── */
+.adminHeader {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 14, 25, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.adminHeaderInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: 64px;
+}
+
+.brandGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.5px;
+  color: #f8fafc;
+}
+
+.shieldIcon {
+  color: #8b5cf6;
+}
+
+.logoAccent {
+  color: #a78bfa;
+}
+
+.adminBadge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: #7c3aed;
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 4px;
+}
+
+.mainTabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.navTabBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.navTabBtn:hover {
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.activeNavTab {
+  color: #c084fc;
+  background: rgba(124, 58, 237, 0.15);
+}
+
+.userActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.userEmail {
+  font-size: 0.75rem;
+  color: #64748b;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .userEmail {
+    display: none;
+  }
+}
+
+.siteLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  transition: all 0.15s ease;
+}
+
+.siteLink:hover {
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.logoutBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #fca5a5;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 5px 10px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.logoutBtn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ffffff;
+}
+
+/* ── Dashboard Body ──────────────────────────────────────────────────────── */
+.dashboardBody {
+  padding-top: var(--space-6);
+}

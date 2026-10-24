@@ -1,0 +1,73 @@
+.widget {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+
+.widgetHeader {
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.title {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.genrePillGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.genrePillBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-base);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.genrePillBtn:hover {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: rgba(124, 58, 237, 0.3);
+  color: #ffffff;
+}
+
+.genrePillBtn.active {
+  background: var(--color-purple-600);
+  border-color: var(--color-purple-500);
+  color: #ffffff;
+  font-weight: var(--weight-medium);
+}
+
+.icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.label {
+  line-height: 1;
+}
+
+.count {
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+  margin-left: 2px;
+}
+
+.genrePillBtn.active .count {
+  color: rgba(255, 255, 255, 0.8);
+}

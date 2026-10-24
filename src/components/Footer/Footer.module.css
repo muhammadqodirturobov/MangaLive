@@ -1,0 +1,126 @@
+.footer {
+  background: var(--color-bg-raised);
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-16);
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--space-8);
+  padding-top: var(--space-12);
+  padding-bottom: var(--space-12);
+}
+
+/* Brand column */
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  width: fit-content;
+}
+
+.accent {
+  color: var(--color-purple-400);
+}
+
+.tagline {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: 280px;
+}
+
+.disclaimer {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  line-height: var(--leading-relaxed);
+  max-width: 280px;
+  font-style: italic;
+}
+
+/* Link columns */
+.groupTitle {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.linkList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.link {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.link:hover {
+  color: var(--color-purple-400);
+}
+
+/* Bottom bar */
+.bottomBar {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-4) 0;
+}
+
+.bottomBar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.copyright {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+.madeWith {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.heart {
+  color: var(--color-error);
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 960px) {
+  .inner {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+  }
+  .brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .inner {
+    grid-template-columns: 1fr;
+  }
+  .brand {
+    grid-column: 1;
+  }
+}

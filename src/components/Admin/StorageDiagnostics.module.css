@@ -1,0 +1,196 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: #0f121d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: var(--space-3);
+}
+
+.cardHeader h3 {
+  font-size: 0.95rem;
+  color: #f8fafc;
+  margin: 0;
+  flex: 1;
+}
+
+.iconPurple {
+  color: #a78bfa;
+}
+
+.iconBlue {
+  color: #38bdf8;
+}
+
+.refreshBtn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.refreshBtn:hover {
+  color: #f8fafc;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: 0.8125rem;
+  color: #94a3b8;
+  padding: 4px 0;
+}
+
+.statusRow strong {
+  color: #f8fafc;
+}
+
+.statusRow code {
+  background: rgba(255, 255, 255, 0.05);
+  color: #a78bfa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.activePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.infoText {
+  color: #38bdf8;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.bucketRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+}
+
+.bucketInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bucketInfo strong {
+  color: #f8fafc;
+  font-size: 0.8125rem;
+}
+
+.bucketInfo small {
+  color: #64748b;
+  font-size: 0.7rem;
+}
+
+.readyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.missingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.fixNotice {
+  margin-top: var(--space-2);
+  padding: var(--space-3);
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px dashed rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-md);
+}
+
+.fixNotice p {
+  font-size: 0.75rem;
+  color: #fca5a5;
+  margin: 0 0 var(--space-2);
+  line-height: 1.4;
+}
+
+.copySqlBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #1e1b4b;
+  border: 1px solid #6366f1;
+  color: #c7d2fe;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copySqlBtn:hover {
+  background: #312e81;
+  color: #ffffff;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,186 @@
+.homeMain {
+  min-height: 100vh;
+  padding-bottom: var(--space-10);
+}
+
+/* ── Database error banner ───────────────────────────────────────────────── */
+.dbErrorBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  font-size: 0.8125rem;
+  padding: var(--space-2) var(--space-4);
+  text-align: center;
+  justify-content: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-top: var(--space-4);
+}
+
+.sectionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ── Haftalik Jadval Days Tab Bar ────────────────────────────────────────── */
+.scheduleTabBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scheduleTabBar::-webkit-scrollbar {
+  display: none;
+}
+
+.daysScroll {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.dayBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.dayBtn:hover {
+  border-color: rgba(124, 58, 237, 0.4);
+  color: var(--color-text-primary);
+}
+
+.activeDayBtn {
+  background: var(--color-purple-600);
+  border-color: var(--color-purple-500);
+  color: #fff;
+}
+
+.dayCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  color: inherit;
+}
+
+.activeDayBtn .dayCount {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.viewListLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--text-xs);
+  color: var(--color-purple-400);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color var(--transition-fast);
+}
+
+.viewListLink:hover {
+  color: var(--color-purple-300);
+}
+
+/* ── Popularity Time Tabs (Bugun / Hafta / Oy) ─────────────────────────── */
+.timeTabs {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 2px;
+  gap: 2px;
+}
+
+.timeTabBtn {
+  padding: 3px 10px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.timeTabBtn:hover {
+  color: var(--color-text-primary);
+}
+
+.activeTimeTabBtn {
+  background: var(--color-purple-600);
+  color: #fff;
+}
+
+/* ── View All Link ──────────────────────────────────────────────────────── */
+.viewAllTextLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--text-xs);
+  color: var(--color-purple-400);
+  transition: color var(--transition-fast);
+}
+
+.viewAllTextLink:hover {
+  color: var(--color-purple-300);
+}
+
+.dayFull {
+  display: inline;
+}
+
+.dayShort {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .scheduleTabBar {
+    justify-content: flex-start;
+  }
+  
+  .viewListLink {
+    display: none;
+  }
+
+  .dayFull {
+    display: none;
+  }
+
+  .dayShort {
+    display: inline;
+  }
+}

@@ -1,0 +1,184 @@
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 580px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(124, 58, 237, 0.15);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  z-index: 150;
+  animation: dropdownFade 0.18s ease-out;
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sectionTitle {
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.subSectionTitle {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+}
+
+.viewAllLink {
+  font-size: 11px;
+  color: var(--color-purple-400);
+  text-decoration: none;
+}
+
+.viewAllLink:hover {
+  text-decoration: underline;
+}
+
+/* Format Types 4-column cards */
+.typesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.typeCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-bg-overlay);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 8px 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.typeCard:hover {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: rgba(124, 58, 237, 0.4);
+}
+
+.typeIconWrap {
+  color: var(--color-purple-400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.typeText {
+  display: flex;
+  flex-direction: column;
+}
+
+.typeLabel {
+  font-size: 12px;
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+.typeOrigin {
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+}
+
+/* Genres Grid (3 columns) */
+.genresGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.genreItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-bg-overlay);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.genreItem:hover {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: rgba(124, 58, 237, 0.35);
+}
+
+.genreLabel {
+  font-size: 12px;
+  color: var(--color-text-primary);
+  font-weight: var(--weight-medium);
+}
+
+.genreCount {
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+}
+
+/* Other genres simple text pill cloud */
+.otherGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.otherItem {
+  background: transparent;
+  border: none;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  text-align: left;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: color var(--transition-fast);
+}
+
+.otherItem:hover {
+  color: var(--color-purple-300);
+}
+
+@media (max-width: 640px) {
+  .dropdown {
+    width: calc(100vw - 32px);
+    left: -16px;
+  }
+  .typesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .genresGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .otherGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

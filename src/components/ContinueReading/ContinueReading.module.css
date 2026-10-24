@@ -1,0 +1,126 @@
+.continueCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.45) 0%, rgba(20, 24, 39, 0.75) 100%);
+  border: 1px solid rgba(124, 58, 237, 0.28);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  margin-bottom: var(--space-6);
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.continueCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--color-purple-500);
+}
+
+.continueCard:hover {
+  border-color: rgba(167, 139, 250, 0.45);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(124, 58, 237, 0.2);
+  border-radius: var(--radius-md);
+  color: var(--color-purple-300);
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-purple-300);
+  background: rgba(124, 58, 237, 0.25);
+  padding: 1px 7px;
+  border-radius: var(--radius-full);
+}
+
+.timeAgo {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.mangaInfo {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mangaTitle {
+  font-weight: var(--weight-semibold);
+  color: #ffffff;
+}
+
+.separator {
+  color: var(--color-text-muted);
+}
+
+.chapterNum {
+  color: var(--color-purple-400);
+  font-weight: var(--weight-medium);
+}
+
+.resumeBtn {
+  flex-shrink: 0;
+  font-size: var(--text-xs);
+  padding: 8px 14px;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.35);
+}
+
+@media (max-width: 640px) {
+  .continueCard {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+    padding: var(--space-3);
+  }
+
+  .content {
+    width: 100%;
+  }
+
+  .resumeBtn {
+    justify-content: center;
+    width: 100%;
+  }
+}

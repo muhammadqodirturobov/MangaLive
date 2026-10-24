@@ -1,0 +1,190 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.titleWrap {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: var(--weight-bold);
+  color: #ffffff;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+}
+
+.controlsWrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.arrows {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.arrowBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.arrowBtn:hover {
+  background: var(--color-bg-overlay);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Horizontal Track */
+.track {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 8px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE */
+}
+
+.track::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.card {
+  flex: 0 0 148px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.coverWrap {
+  width: 100%;
+  aspect-ratio: 3 / 4.2;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #080914;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+
+.rankBadge {
+  position: absolute;
+  bottom: 2px;
+  left: 6px;
+  font-size: 24px;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.8);
+  z-index: 3;
+}
+
+.rankBadge1 {
+  color: #f59e0b;
+}
+
+.rankBadge2 {
+  color: #fb923c;
+}
+
+.rankBadge3 {
+  color: #38bdf8;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardTitle {
+  font-size: 13px;
+  font-weight: var(--weight-medium);
+  color: #ffffff;
+  line-height: 1.3;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em;
+  transition: color var(--transition-fast);
+}
+
+.card:hover .cardTitle {
+  color: var(--color-purple-400);
+}
+
+.subRow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #fbbf24;
+  font-weight: var(--weight-semibold);
+}
+
+.starIcon {
+  fill: #fbbf24;
+}
+
+.dot {
+  opacity: 0.4;
+}
+
+.chapters {
+  color: var(--color-text-tertiary);
+}
+
+@media (max-width: 640px) {
+  .arrows {
+    display: none;
+  }
+  .card {
+    flex: 0 0 120px;
+  }
+}

@@ -1,0 +1,135 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.titleWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: var(--weight-bold);
+  color: #ffffff;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.entry {
+  display: flex;
+  gap: var(--space-3);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  transition: border-color var(--transition-fast);
+}
+
+.entry:hover {
+  border-color: rgba(124, 58, 237, 0.35);
+}
+
+.coverLink {
+  flex-shrink: 0;
+}
+
+.coverContainer {
+  width: 64px;
+  height: 90px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.entryTitle {
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  color: #ffffff;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--transition-fast);
+}
+
+.entryTitle:hover {
+  color: var(--color-purple-400);
+}
+
+.chaptersList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chapterRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.chapterLink {
+  font-size: 11px;
+  font-weight: var(--weight-medium);
+  color: var(--color-purple-400);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.chapterLink:hover {
+  color: var(--color-purple-300);
+  text-decoration: underline;
+}
+
+.timeTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+}
+
+@media (max-width: 1040px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+}
