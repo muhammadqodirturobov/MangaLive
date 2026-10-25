@@ -29,32 +29,35 @@ function loadEnv() {
   return env;
 }
 
-const env = loadEnv();
-
-// Support both R_ENDPOINT and R2_ENDPOINT
-const endpoint = env.R2_ENDPOINT || env.R_ENDPOINT;
-const accessKeyId = env.R2_ACCESS_KEY_ID;
-const secretAccessKey = env.R2_SECRET_ACCESS_KEY;
-const bucketName = env.R2_BUCKET_NAME || 'mangalive';
-const publicUrl = env.R2_PUBLIC_URL || '';
+export function getR2Config() {
+  const env = loadEnv();
+  const endpoint = env.R2_ENDPOINT || env.R_ENDPOINT || '';
+  const accessKeyId = env.R2_ACCESS_KEY_ID || '';
+  const secretAccessKey = env.R2_SECRET_ACCESS_KEY || '';
+  const bucketName = env.R2_BUCKET_NAME || 'mangalive';
+  const publicUrl = env.R2_PUBLIC_URL || '';
+  return { endpoint, accessKeyId, secretAccessKey, bucketName, publicUrl };
+}
 
 let s3Client = null;
 
 export function isR2Configured() {
-  return Boolean(endpoint && accessKeyId && secretAccessKey && bucketName);
+  const cfg = getR2Config();
+  return Boolean(cfg.endpoint && cfg.accessKeyId && cfg.secretAccessKey && cfg.bucketName);
 }
 
 export function getR2Client() {
   if (!isR2Configured()) {
     throw new Error('Cloudflare R2 is not fully configured in server environment');
   }
+  const cfg = getR2Config();
   if (!s3Client) {
     s3Client = new S3Client({
       region: 'auto',
-      endpoint,
+      endpoint: cfg.endpoint,
       credentials: {
-        accessKeyId,
-        secretAccessKey,
+        accessKeyId: cfg.accessKeyId,
+        secretAccessKey: cfg.secretAccessKey,
       },
     });
   }
@@ -62,14 +65,15 @@ export function getR2Client() {
 }
 
 export function getR2ConfigSummary() {
+  const cfg = getR2Config();
   return {
     configured: isR2Configured(),
-    bucketName: bucketName || null,
-    hasEndpoint: Boolean(endpoint),
-    hasAccessKey: Boolean(accessKeyId),
-    hasSecretKey: Boolean(secretAccessKey),
-    hasPublicDeliveryUrl: Boolean(publicUrl),
-    publicDeliveryDomain: publicUrl ? publicUrl.replace(/\/+$/, '') : null,
+    bucketName: cfg.bucketName || null,
+    hasEndpoint: Boolean(cfg.endpoint),
+    hasAccessKey: Boolean(cfg.accessKeyId),
+    hasSecretKey: Boolean(cfg.secretAccessKey),
+    hasPublicDeliveryUrl: Boolean(cfg.publicUrl),
+    publicDeliveryDomain: cfg.publicUrl ? cfg.publicUrl.replace(/\/+$/, '') : null,
   };
 }
 
@@ -81,9 +85,10 @@ export function getR2ConfigSummary() {
  * @returns {string}
  */
 export function getR2DeliveryUrl(objectKey) {
+  const cfg = getR2Config();
   const cleanKey = objectKey.replace(/^\/+/, '');
-  if (publicUrl) {
-    return `${publicUrl.replace(/\/+$/, '')}/${cleanKey}`;
+  if (cfg.publicUrl) {
+    return `${cfg.publicUrl.replace(/\/+$/, '')}/${cleanKey}`;
   }
   return `/api/r2/${cleanKey}`;
 }
@@ -106,6 +111,7 @@ export async function uploadToR2({
   maxRetries = 3,
 }) {
   const s3 = getR2Client();
+  const cfg = getR2Config();
   const cleanKey = key.replace(/^\/+/, '');
   const buffer = Buffer.isBuffer(body) ? body : Buffer.from(body);
 
@@ -114,7 +120,7 @@ export async function uploadToR2({
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const command = new PutObjectCommand({
-        Bucket: bucketName,
+        Bucket: cfg.bucketName,
         Key: cleanKey,
         Body: buffer,
         ContentType: contentType,
@@ -149,10 +155,11 @@ export async function uploadToR2({
  */
 export async function getR2Object(key) {
   const s3 = getR2Client();
+  const cfg = getR2Config();
   const cleanKey = key.replace(/^\/+/, '');
 
   const command = new GetObjectCommand({
-    Bucket: bucketName,
+    Bucket: cfg.bucketName,
     Key: cleanKey,
   });
 
@@ -174,12 +181,13 @@ export async function getR2Object(key) {
  */
 export async function checkR2ObjectExists(key) {
   const s3 = getR2Client();
+  const cfg = getR2Config();
   const cleanKey = key.replace(/^\/+/, '');
 
   try {
     await s3.send(
       new HeadObjectCommand({
-        Bucket: bucketName,
+        Bucket: cfg.bucketName,
         Key: cleanKey,
       })
     );

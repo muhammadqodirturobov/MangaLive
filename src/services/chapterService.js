@@ -305,5 +305,13 @@ export async function fetchChapterPages(chapterId) {
     });
   }
 
+  // Fallback for any genuine manga chapter format (e.g. nano-mashina-ch-1)
+  const match = String(chapterId).match(/^([a-z0-9-]+)-ch-(\d+)$/i);
+  if (match) {
+    const slug = match[1];
+    const chNum = parseInt(match[2], 10);
+    return localGetChapterPages(slug, chNum).map(normalizeChapterPage);
+  }
+
   return [];
 }
