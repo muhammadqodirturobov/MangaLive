@@ -127,7 +127,7 @@ export async function uploadToR2({
         CacheControl: cacheControl,
       });
 
-      const result = await s3.send(command);
+      const result = await s3.send(command, { abortSignal: AbortSignal.timeout(90000) });
       const deliveryUrl = getR2DeliveryUrl(cleanKey);
 
       return {
@@ -163,7 +163,7 @@ export async function getR2Object(key) {
     Key: cleanKey,
   });
 
-  const response = await s3.send(command);
+  const response = await s3.send(command, { abortSignal: AbortSignal.timeout(30000) });
 
   return {
     bodyStream: response.Body,
@@ -189,7 +189,8 @@ export async function checkR2ObjectExists(key) {
       new HeadObjectCommand({
         Bucket: cfg.bucketName,
         Key: cleanKey,
-      })
+      }),
+      { abortSignal: AbortSignal.timeout(15000) }
     );
     return true;
   } catch (err) {

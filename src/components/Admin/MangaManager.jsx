@@ -600,7 +600,7 @@ export default function MangaManager({ onSelectMangaForChapters }) {
                     required
                     value={formData.title}
                     onChange={(e) => handleTitleChange(e.target.value)}
-                    placeholder="Masalan: Tun va Tong"
+                    placeholder="Masalan: Solo Leveling: Ragnarok"
                   />
                 </div>
 
@@ -621,7 +621,7 @@ export default function MangaManager({ onSelectMangaForChapters }) {
                     type="text"
                     value={formData.titleEn}
                     onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })}
-                    placeholder="Night and Dawn"
+                    placeholder="Solo Leveling: Ragnarok"
                   />
                 </div>
 

@@ -348,7 +348,7 @@ export class FastBulkImporter {
       console.log(
         `[BULK PROGRESS] ${seriesName} | Chapters: ${this.metrics.chaptersCompleted}/${totalChapters} | Pages: ${this.metrics.pagesCompleted} (Skipped: ${this.metrics.pagesSkipped}) (${ppm} pg/min, ${kbps} KB/s) | ETA: ~${etaMin}m | Retries: ${this.metrics.retries} | Failures: ${this.metrics.failures}`
       );
-    }, 6000);
+    }, 15000);
   }
 
   stopTicker() {
@@ -416,8 +416,18 @@ export class FastBulkImporter {
     this.startTicker(name, toProcess.length, estimatedPages);
 
     // 5. Process Chapters via Queue
+    let consecutiveLocked = 0;
     await asyncPool(this.chapterConcurrency, toProcess, async (ch) => {
-      await this.processSingleChapter(slug, mangaId, ch, seriesConfig);
+      if (consecutiveLocked >= 2) return;
+      const res = await this.processSingleChapter(slug, mangaId, ch, seriesConfig);
+      if (res?.locked) {
+        consecutiveLocked++;
+        if (consecutiveLocked >= 2) {
+          console.log(`  🔒 Consecutive chapters locked on source. Remaining chapters are paywalled. Skipping rest of ${name}.`);
+        }
+      } else if (res?.success) {
+        consecutiveLocked = 0;
+      }
     });
 
     this.stopTicker();
@@ -461,7 +471,7 @@ export class FastBulkImporter {
         const pageData = await fetchMangaboxChapterPages(slug, ch.folder);
         if (pageData.locked) {
           console.log(`  [LOCKED] Chapter ${chNum} on MangaBox requires user login/pro. Skipping.`);
-          return;
+          return { locked: true };
         }
         pageList = pageData.pages.map((url, idx) => ({ pageNumber: idx + 1, url }));
       }
@@ -589,6 +599,7 @@ export class FastBulkImporter {
 
       this.metrics.chaptersCompleted++;
       console.log(`  ✓ Chapter ${chNum} published (${pageRecords.length} pages written to DB + R2)`);
+      return { success: true };
     } catch (dbErr) {
       console.error(`  ❌ Database error for Chapter ${chNum}: ${dbErr.message}`);
       this.metrics.failures++;
