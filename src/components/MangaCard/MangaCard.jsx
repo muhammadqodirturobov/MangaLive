@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { Star, Eye, BookOpen, RotateCcw } from 'lucide-react';
 import CoverImage from '../CoverImage/CoverImage.jsx';
 import { getLastReadChapter } from '../../services/userService.js';
+import { formatExternalRating } from '../../services/ratingService.js';
+import { formatViewCount } from '../../services/analyticsService.js';
 import styles from './MangaCard.module.css';
 
 const TYPE_LABELS = {
@@ -34,6 +36,8 @@ export default function MangaCard({ manga, size = 'normal', showRank = null }) {
   const isSmall = size === 'small';
   const mangaTarget = manga.slug || manga.id;
   const lastRead = getLastReadChapter(manga.id) || (manga.slug ? getLastReadChapter(manga.slug) : null);
+  const extRating = formatExternalRating(manga.slug || manga.id);
+  const formattedViews = formatViewCount(manga.views);
 
   return (
     <article
@@ -97,17 +101,30 @@ export default function MangaCard({ manga, size = 'normal', showRank = null }) {
 
         {manga.author && <p className={styles.author}>{manga.author}</p>}
 
-        {/* Stats Row: Rating, Views, Status */}
+        {/* Stats Row: Honest External Rating, Real Views, Status */}
         <div className={styles.stats}>
-          <span className={styles.stat} aria-label={`Reyting: ${manga.rating}`}>
-            <Star size={11} aria-hidden="true" className={styles.starIcon} />
-            <span className={styles.ratingText}>{Number(manga.rating || 0).toFixed(1)}</span>
-          </span>
+          {extRating.hasRating ? (
+            <span
+              className={styles.stat}
+              title={`${extRating.badge} · ${extRating.members}`}
+              aria-label={extRating.badge}
+            >
+              <Star size={11} aria-hidden="true" className={styles.starIcon} />
+              <span className={styles.ratingText}>{extRating.score}</span>
+            </span>
+          ) : (
+            <span className={styles.stat} title="Baholanmagan" aria-label="Baholanmagan">
+              <Star size={11} aria-hidden="true" style={{ color: '#64748b' }} />
+              <span style={{ color: '#64748b' }}>—</span>
+            </span>
+          )}
 
-          <span className={styles.stat} aria-label={`Ko'rishlar: ${Number(manga.views || 0).toLocaleString()}`}>
-            <Eye size={11} aria-hidden="true" />
-            <span>{formatCount(manga.views || 0)}</span>
-          </span>
+          {formattedViews && (
+            <span className={styles.stat} aria-label={`Ko'rishlar: ${formattedViews}`}>
+              <Eye size={11} aria-hidden="true" />
+              <span>{formattedViews}</span>
+            </span>
+          )}
 
           <span
             className={`${styles.statusBadge} ${statusInfo.cls}`}
@@ -120,10 +137,4 @@ export default function MangaCard({ manga, size = 'normal', showRank = null }) {
       </div>
     </article>
   );
-}
-
-function formatCount(n) {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
-  return n.toString();
 }

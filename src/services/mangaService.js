@@ -20,6 +20,8 @@ import {
   searchManga as localSearchManga,
 } from '../data/manga.js';
 import { normalizeManga } from '../types/entities.js';
+import { formatExternalRating } from './ratingService.js';
+import { WEEKLY_RANKINGS } from '../data/rankings.js';
 
 // Legacy export for fallback compatibility
 export const MANGA_LIST = isSupabaseConfigured ? [] : LOCAL_MANGA_LIST;
@@ -442,18 +444,11 @@ export async function fetchLatestManga(limit = 10) {
  */
 export async function fetchRankings(period = 'weekly') {
   if (isSupabaseConfigured && supabase) {
-    let orderColumn = 'views_count';
-    let metricLabel = "ko'rishlar";
-
-    if (period === 'alltime') {
-      orderColumn = 'rating';
-      metricLabel = 'ball / 5.0';
-    }
-
     const { data, error } = await supabase
       .from('mangas')
       .select(`*, manga_genres (genres (slug, name))`)
-      .order(orderColumn, { ascending: false })
+      .order('rating', { ascending: false })
+      .order('rating_count', { ascending: false })
       .limit(20);
 
     if (error) {
@@ -463,18 +458,25 @@ export async function fetchRankings(period = 'weekly') {
     const list = (data || []).map(normalizeManga);
     list.forEach(storeInMangaCache);
 
-    return list.map((manga, idx) => ({
-      rank: idx + 1,
-      mangaId: manga.id,
-      manga,
-      score: period === 'alltime'
-        ? Number(manga.rating || 0).toFixed(1)
-        : Number(manga.views || 0).toLocaleString('uz-UZ'),
-      metricLabel,
-    }));
+    return list.map((manga, idx) => {
+      const ext = formatExternalRating(manga.slug || manga.id);
+      return {
+        rank: idx + 1,
+        mangaId: manga.id,
+        manga,
+        score: ext.hasRating ? `${ext.score} / 10` : '—',
+        metricLabel: ext.hasRating ? `AniList (${ext.members})` : "Baholanmagan",
+      };
+    });
   }
 
-  return [];
+  return WEEKLY_RANKINGS.map((item, idx) => ({
+    rank: idx + 1,
+    mangaId: item.mangaId,
+    manga: item.manga,
+    score: `${item.score} / 10`,
+    metricLabel: `AniList (${item.members} a'zo)`,
+  }));
 }
 
 /**

@@ -8,6 +8,8 @@ import {
 import { getCachedManga, fetchMangaById } from '../services/mangaService.js';
 import { getCachedChapters, fetchChapters, fetchChapterPages } from '../services/chapterService.js';
 import { recordReadingProgress } from '../services/userService.js';
+import { recordChapterOpen } from '../services/analyticsService.js';
+import { recordGuestChapterRead } from '../components/GuestPrompt/GuestPrompt.jsx';
 import { navigateBackFromReader } from '../utils/navigationTracker.js';
 import styles from './ReaderPage.module.css';
 
@@ -118,7 +120,15 @@ export default function ReaderPage() {
     };
   }, [chapter?.id]);
 
-  // 3. Auto-record reading history
+  // 3. Record verified chapter open and guest progress counter
+  useEffect(() => {
+    if (manga && !Number.isNaN(chNum)) {
+      recordChapterOpen(manga.id, chNum, manga.slug);
+      recordGuestChapterRead();
+    }
+  }, [manga?.id, chNum]);
+
+  // 4. Auto-record reading history
   useEffect(() => {
     if (manga && !Number.isNaN(chNum)) {
       recordReadingProgress(manga.id, manga.title, chNum, readingProgress, manga.slug);

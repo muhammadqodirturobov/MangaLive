@@ -1,15 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, ChevronDown, Trophy, Globe, LogIn, User, Menu, X, BookOpen } from 'lucide-react';
+import { Search, ChevronDown, Trophy, Globe, LogIn, User, Menu, X, BookOpen, LogOut } from 'lucide-react';
 import GenresDropdown from '../GenresDropdown/GenresDropdown.jsx';
+import { useAuth } from '../../context/AuthContext.jsx';
 import styles from './Header.module.css';
 
 export default function Header() {
+  const { user, openAuthModal, signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [genresOpen, setGenresOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [lang, setLang] = useState('UZ');
   const genresRef = useRef(null);
+  const userMenuRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -18,6 +22,9 @@ export default function Header() {
     function handleClickOutside(event) {
       if (genresRef.current && !genresRef.current.contains(event.target)) {
         setGenresOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setUserDropdownOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -118,15 +125,85 @@ export default function Header() {
             <span>{lang}</span>
           </button>
 
-          {/* Login button (Desktop) */}
-          <Link to="/kutubxona" className={`btn btn-primary ${styles.loginBtn}`}>
-            <LogIn size={14} />
-            <span>Kirish</span>
-          </Link>
+          {/* User Account / Login button (Desktop) */}
+          {user ? (
+            <div className={styles.userMenuWrap} ref={userMenuRef}>
+              <button
+                type="button"
+                className={styles.userProfileBtn}
+                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                aria-expanded={userDropdownOpen}
+                aria-label="Profil menyusi"
+              >
+                <img
+                  src={user.user_metadata?.avatar_url || 'https://api.dicebear.com/7.x/bottts/svg?seed=Shadow'}
+                  alt=""
+                  className={styles.userAvatarImg}
+                />
+                <span className={styles.userDisplayName}>
+                  {user.user_metadata?.full_name?.split(' ')[0] || user.email?.split('@')[0]}
+                </span>
+                <ChevronDown size={12} className={userDropdownOpen ? styles.chevronRotated : ''} />
+              </button>
 
-          {/* Mobile Profile Icon (MangaBox style) */}
-          <Link to="/kutubxona" className={styles.mobileProfileBtn} aria-label="Profilga kirish">
-            <User size={18} />
+              {userDropdownOpen && (
+                <div className={styles.userDropdown}>
+                  <div className={styles.userDropdownHeader}>
+                    <p className={styles.userDropdownName}>{user.user_metadata?.full_name || 'Foydalanuvchi'}</p>
+                    <p className={styles.userDropdownEmail}>{user.email}</p>
+                  </div>
+                  <div className={styles.userDropdownDivider} />
+                  <Link to="/profil" className={styles.userDropdownItem} onClick={() => setUserDropdownOpen(false)}>
+                    <User size={15} />
+                    <span>Mening profilim</span>
+                  </Link>
+                  <Link to="/profil" className={styles.userDropdownItem} onClick={() => setUserDropdownOpen(false)}>
+                    <BookOpen size={15} />
+                    <span>Sevimlilar & Tarix</span>
+                  </Link>
+                  <div className={styles.userDropdownDivider} />
+                  <button
+                    type="button"
+                    className={`${styles.userDropdownItem} ${styles.userDropdownLogout}`}
+                    onClick={() => {
+                      setUserDropdownOpen(false);
+                      signOut();
+                    }}
+                  >
+                    <LogOut size={15} />
+                    <span>Chiqish</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              type="button"
+              className={`btn btn-primary ${styles.loginBtn}`}
+              onClick={() => openAuthModal('login')}
+            >
+              <LogIn size={14} />
+              <span>Kirish</span>
+            </button>
+          )}
+
+          {/* Mobile Profile Icon */}
+          <Link
+            to={user ? '/profil' : '#'}
+            onClick={(e) => {
+              if (!user) {
+                e.preventDefault();
+                openAuthModal('login');
+              }
+            }}
+            className={styles.mobileProfileBtn}
+            aria-label={user ? 'Profil' : 'Kirish'}
+          >
+            {user?.user_metadata?.avatar_url ? (
+              <img src={user.user_metadata.avatar_url} alt="" className={styles.mobileAvatarImg} />
+            ) : (
+              <User size={18} />
+            )}
           </Link>
 
           {/* Mobile hamburger */}
@@ -169,22 +246,40 @@ export default function Header() {
           </nav>
 
           <div className={styles.mobileFooterRow}>
-            <button
-              type="button"
-              className={styles.langBtn}
-              onClick={() => setLang((l) => (l === 'UZ' ? 'RU' : 'UZ'))}
-            >
-              <Globe size={13} />
-              <span>{lang}</span>
-            </button>
-            <Link
-              to="/kutubxona"
-              className={`btn btn-primary ${styles.loginBtn}`}
-              onClick={() => setMobileOpen(false)}
-            >
-              <LogIn size={14} />
-              <span>Kirish</span>
-            </Link>
+            {user ? (
+              <div className={styles.mobileUserRow}>
+                <Link to="/profil" className={styles.mobileUserLink} onClick={() => setMobileOpen(false)}>
+                  <img
+                    src={user.user_metadata?.avatar_url || 'https://api.dicebear.com/7.x/bottts/svg?seed=Shadow'}
+                    alt=""
+                    className={styles.mobileAvatarImg}
+                  />
+                  <span>{user.user_metadata?.full_name || 'Profilim'}</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    signOut();
+                  }}
+                  className={styles.mobileLogoutBtn}
+                >
+                  <LogOut size={16} />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                className={`btn btn-primary ${styles.loginBtn}`}
+                onClick={() => {
+                  setMobileOpen(false);
+                  openAuthModal('login');
+                }}
+              >
+                <LogIn size={14} />
+                <span>Kirish / Ro'yxatdan o'tish</span>
+              </button>
+            )}
           </div>
         </div>
       )}

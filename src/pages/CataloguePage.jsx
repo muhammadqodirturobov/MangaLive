@@ -32,9 +32,9 @@ const STATUSES = [
 
 const RATING_FILTERS = [
   { id: '0',   label: 'Barchasi' },
-  { id: '4.8', label: '4.8+ ★' },
-  { id: '4.5', label: '4.5+ ★' },
-  { id: '4.0', label: '4.0+ ★' },
+  { id: '4.0', label: '4.0+ ★ (AniList 8.0+)' },
+  { id: '3.5', label: '3.5+ ★ (AniList 7.0+)' },
+  { id: '3.0', label: '3.0+ ★ (AniList 6.0+)' },
 ];
 
 export default function CataloguePage() {

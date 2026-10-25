@@ -41,7 +41,7 @@ export default function BottomNav() {
       </Link>
 
       <Link
-        to="/kutubxona"
+        to="/profil"
         className={`${styles.navItem} ${path === '/profil' ? styles.active : ''}`}
       >
         <User size={20} className={styles.icon} />

@@ -8,11 +8,15 @@ import MangaDetailPage from './pages/MangaDetailPage.jsx';
 import ReaderPage      from './pages/ReaderPage.jsx';
 import RatingPage      from './pages/RatingPage.jsx';
 import LibraryPage     from './pages/LibraryPage.jsx';
+import ProfilePage     from './pages/ProfilePage.jsx';
 import PlaceholderPage from './pages/PlaceholderPage.jsx';
 import ConnectionTestPage from './pages/ConnectionTestPage.jsx';
 import AdminPage from './pages/AdminPage.jsx';
 
 import BottomNav      from './components/BottomNav/BottomNav.jsx';
+import AuthModal      from './components/AuthModal/AuthModal.jsx';
+import GuestPrompt    from './components/GuestPrompt/GuestPrompt.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
 
 import { recordNavigation } from './utils/navigationTracker.js';
 
@@ -84,43 +88,48 @@ export default function App() {
   const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
 
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <NavigationTracker />
-      <AppShell theme={theme} onThemeToggle={toggleTheme}>
-        <Routes>
-          <Route path="/"           element={<HomePage />} />
-          <Route path="/katalog"    element={<CataloguePage />} />
-          <Route path="/kutubxona"  element={<LibraryPage />} />
-          <Route path="/reyting"    element={<RatingPage />} />
-          <Route path="/test-connection" element={<ConnectionTestPage />} />
-          <Route path="/admin"      element={<AdminPage />} />
-          <Route path="/admin/*"    element={<AdminPage />} />
-          <Route path="/hamjamiyat" element={<PlaceholderPage title="Hamjamiyat" description="Forum va jamiyat xususiyatlari ishlab chiqilmoqda." />} />
-          <Route path="/haqimizda"  element={<PlaceholderPage title="Biz haqimizda" />} />
-          <Route path="/muallif"    element={<PlaceholderPage title="Muallif bo'lib qo'shiling" />} />
-          <Route path="/hisobot"    element={<PlaceholderPage title="Hisobot berish" />} />
-          <Route path="/faq"        element={<PlaceholderPage title="Tez-tez so'raladigan savollar" />} />
-          <Route path="/shartlar"   element={<PlaceholderPage title="Foydalanish shartlari" />} />
-          <Route path="/maxfiylik"  element={<PlaceholderPage title="Maxfiylik siyosati" />} />
-          <Route path="/dmca"       element={<PlaceholderPage title="Mualliflik huquqi" />} />
-          <Route path="/manga/:id"  element={<MangaDetailPage />} />
-          <Route
-            path="/manga/:id/chapter/:chapterNumber"
-            element={<ReaderPage />}
-          />
-          {/* 404 */}
-          <Route
-            path="*"
-            element={
-              <PlaceholderPage
-                title="Sahifa topilmadi"
-                description="Siz qidirgan sahifa mavjud emas. Ehtimol, havola noto'g'ri."
-              />
-            }
-          />
-        </Routes>
-      </AppShell>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <NavigationTracker />
+        <AppShell theme={theme} onThemeToggle={toggleTheme}>
+          <Routes>
+            <Route path="/"           element={<HomePage />} />
+            <Route path="/katalog"    element={<CataloguePage />} />
+            <Route path="/kutubxona"  element={<LibraryPage />} />
+            <Route path="/profil"     element={<ProfilePage />} />
+            <Route path="/reyting"    element={<RatingPage />} />
+            <Route path="/test-connection" element={<ConnectionTestPage />} />
+            <Route path="/admin"      element={<AdminPage />} />
+            <Route path="/admin/*"    element={<AdminPage />} />
+            <Route path="/hamjamiyat" element={<PlaceholderPage title="Hamjamiyat" description="Forum va jamiyat xususiyatlari ishlab chiqilmoqda." />} />
+            <Route path="/haqimizda"  element={<PlaceholderPage title="Biz haqimizda" />} />
+            <Route path="/muallif"    element={<PlaceholderPage title="Muallif bo'lib qo'shiling" />} />
+            <Route path="/hisobot"    element={<PlaceholderPage title="Hisobot berish" />} />
+            <Route path="/faq"        element={<PlaceholderPage title="Tez-tez so'raladigan savollar" />} />
+            <Route path="/shartlar"   element={<PlaceholderPage title="Foydalanish shartlari" />} />
+            <Route path="/maxfiylik"  element={<PlaceholderPage title="Maxfiylik siyosati" />} />
+            <Route path="/dmca"       element={<PlaceholderPage title="Mualliflik huquqi" />} />
+            <Route path="/manga/:id"  element={<MangaDetailPage />} />
+            <Route
+              path="/manga/:id/chapter/:chapterNumber"
+              element={<ReaderPage />}
+            />
+            {/* 404 */}
+            <Route
+              path="*"
+              element={
+                <PlaceholderPage
+                  title="Sahifa topilmadi"
+                  description="Siz qidirgan sahifa mavjud emas. Ehtimol, havola noto'g'ri."
+                />
+              }
+            />
+          </Routes>
+        </AppShell>
+        <AuthModal />
+        <GuestPrompt />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }

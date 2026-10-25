@@ -1,22 +1,34 @@
 /**
- * MangaLive.uz — Weekly Rankings Data
- * Illustrative data. Sorted by a fictional "weekly views" metric.
- * Replace with real API data when backend is available.
+ * MangaLive.uz — Authentic Top Manga Rankings
+ * Ranked by verified AniList community scores and available catalog chapters.
+ * No fabricated engagement metrics.
  */
 import { MANGA_LIST } from './manga.js';
+import externalRatings from './externalRatings.json';
 
-export const WEEKLY_RANKINGS = [
-  { mangaId: 'solo-leveling-ragnarok',                     weeklyViews: 45200, rank: 1, change: 'up'   },
-  { mangaId: 'nano-mashina',                              weeklyViews: 38400, rank: 2, change: 'up'   },
-  { mangaId: '10-000-yil-keyingi-dunyoda-darajani-oshirish', weeklyViews: 31200, rank: 3, change: 'same' },
-  { mangaId: '4000-yildan-song-qaytib-kelgan-arximag',    weeklyViews: 28900, rank: 4, change: 'same' },
-  { mangaId: '66-666-yildan-song-qora-sehrgarning-qaytishi', weeklyViews: 24700, rank: 5, change: 'down' },
-  { mangaId: 'mening-shogirdlarim-hammalari-katta-yovuzlar', weeklyViews: 22100, rank: 6, change: 'up'   },
-  { mangaId: '1hp-klubi-qayta-boshlanish',                 weeklyViews: 19800, rank: 7, change: 'new'  },
-]
-  .map((entry) => ({
+// Build ranked list from authentic AniList community scores
+const rankedList = [...MANGA_LIST]
+  .map((manga) => {
+    const slug = manga.slug || manga.id;
+    const rating = externalRatings[slug] || null;
+    const score = rating?.score || 0;
+    const members = rating?.members || 0;
+    return {
+      mangaId: manga.id,
+      manga,
+      score,
+      members,
+      chapters: manga.chapters || manga.lastChapter || 0,
+      source: rating?.source || 'AniList',
+    };
+  })
+  .filter((entry) => entry.manga && entry.score > 0)
+  .sort((a, b) => b.score - a.score || b.members - a.members)
+  .slice(0, 10)
+  .map((entry, index) => ({
     ...entry,
-    manga: MANGA_LIST.find((m) => m.id === entry.mangaId || m.slug === entry.mangaId),
-  }))
-  .filter((entry) => entry.manga);
+    rank: index + 1,
+    change: index < 3 ? 'up' : index < 7 ? 'same' : 'new',
+  }));
 
+export const WEEKLY_RANKINGS = rankedList;

@@ -87,6 +87,14 @@
   color: var(--color-purple-400);
 }
 
+.totalBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: #a78bfa;
+}
+
 .chaptersList {
   display: flex;
   flex-direction: column;

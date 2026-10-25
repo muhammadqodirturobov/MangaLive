@@ -1,9 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, AlertTriangle, RefreshCw } from 'lucide-react';
+import { ChevronRight, AlertTriangle, RefreshCw, Sparkles, Compass } from 'lucide-react';
 import FeaturedBanner from '../components/FeaturedBanner/FeaturedBanner.jsx';
 import MangaCarousel from '../components/MangaCarousel/MangaCarousel.jsx';
 import LatestUpdatesGrid from '../components/LatestUpdatesGrid/LatestUpdatesGrid.jsx';
+import ContinueReading from '../components/ContinueReading/ContinueReading.jsx';
+import WeeklyRanking from '../components/WeeklyRanking/WeeklyRanking.jsx';
+import { WEEKLY_RANKINGS } from '../data/rankings.js';
+import { GENRES } from '../data/genres.js';
+import { getReadingHistory } from '../services/userService.js';
 import {
   fetchFeaturedMangas,
   fetchPopularManga,
@@ -14,37 +19,34 @@ import {
 } from '../services/mangaService.js';
 import styles from './HomePage.module.css';
 
-// Popularity time tabs
-const TIME_TABS = [
-  { id: 'daily',   label: 'Kunlik' },
-  { id: 'weekly',  label: 'Haftalik' },
-  { id: 'monthly', label: 'Oylik' },
-];
-
-// Days of week tabs
-const DAYS = [
-  { id: 'mon', label: 'Dushanba', short: 'Dush' },
-  { id: 'tue', label: 'Seshanba', short: 'Sesh' },
-  { id: 'wed', label: 'Chorshanba', short: 'Chor' },
-  { id: 'thu', label: 'Payshanba', short: 'Pay' },
-  { id: 'fri', label: 'Juma', short: 'Juma' },
-  { id: 'sat', label: 'Shanba', short: 'Shan' },
-  { id: 'sun', label: 'Yakshanba', short: 'Yak' },
+const POPULAR_GENRES = [
+  'jangovar',
+  'fantaziya',
+  'sarguzasht',
+  'isekai',
+  'komediya',
+  'romantik',
+  'sirli',
+  'harakatli',
 ];
 
 export default function HomePage() {
-  const [activeDay, setActiveDay] = useState('tue');
-  const [activeTimeTab, setActiveTimeTab] = useState('weekly');
-
   const initialFeatured = getFeaturedMangas(4);
   const initialPopular = getPopularManga(10);
-  const initialLatest = getLatestManga(6);
+  const initialLatest = getLatestManga(8);
 
   const [featuredMangas, setFeaturedMangas] = useState(initialFeatured || []);
   const [popularManga, setPopularManga] = useState(initialPopular || []);
   const [latestManga, setLatestManga] = useState(initialLatest || []);
+  const [readingHistory, setReadingHistory] = useState([]);
   const [loading, setLoading] = useState(initialFeatured.length === 0);
   const [dbError, setDbError] = useState(null);
+
+  // Load reading history on mount
+  useEffect(() => {
+    const history = getReadingHistory();
+    setReadingHistory(history || []);
+  }, []);
 
   const loadData = useCallback(async () => {
     if (initialFeatured.length === 0) {
@@ -56,7 +58,7 @@ export default function HomePage() {
       const [featured, popular, latest] = await Promise.all([
         fetchFeaturedMangas(4),
         fetchPopularManga(10),
-        fetchLatestManga(6),
+        fetchLatestManga(8),
       ]);
       setFeaturedMangas(featured || []);
       setPopularManga(popular || []);
@@ -73,8 +75,7 @@ export default function HomePage() {
     loadData();
   }, [loadData]);
 
-  // Real ongoing manga list for the schedule carousel
-  const scheduleManga = popularManga.filter((m) => m.status === 'davom etmoqda');
+  const latestReadItem = readingHistory.length > 0 ? readingHistory[0] : null;
 
   return (
     <main className={styles.homeMain}>
@@ -83,91 +84,97 @@ export default function HomePage() {
         <div className={styles.dbErrorBanner} role="alert">
           <AlertTriangle size={16} />
           <span>Ma'lumotlar bazasi xatoligi: {dbError}</span>
-          <button type="button" className="btn btn-outline" onClick={loadData} style={{ padding: '2px 8px', fontSize: '0.75rem', gap: '4px' }}>
+          <button
+            type="button"
+            className="btn btn-outline"
+            onClick={loadData}
+            style={{ padding: '2px 8px', fontSize: '0.75rem', gap: '4px' }}
+          >
             <RefreshCw size={12} />
             <span>Qayta urinish</span>
           </button>
         </div>
       )}
 
-      {/* ── 1. Featured Manga Rotating Banner Carousel ────────────────── */}
+      {/* ── 1. Featured Manga Spotlight Banner ─────────────────────── */}
       {featuredMangas.length > 0 && <FeaturedBanner mangas={featuredMangas} />}
 
       <div className={`container ${styles.container}`}>
-        {/* ── 2. Mashhurlar (MangaBox style: Rank 1, 2, 3...) ─────────── */}
+        {/* ── 2. Continue Reading (if history exists) ────────────────── */}
+        {latestReadItem && (
+          <section className={styles.continueSection} aria-label="Mutolaani davom ettirish">
+            <ContinueReading historyItem={latestReadItem} />
+          </section>
+        )}
+
+        {/* ── 3. Quick Genre Explorer Pills ─────────────────────────── */}
+        <section className={styles.genreBar} aria-label="Ommabop janrlar">
+          <div className={styles.genreHeader}>
+            <Compass size={15} className={styles.genreIcon} />
+            <span className={styles.genreBarTitle}>Janrlar bo'yicha:</span>
+          </div>
+          <div className={styles.genrePills}>
+            {POPULAR_GENRES.map((slug) => {
+              const genreObj = GENRES.find((g) => g.slug === slug);
+              return (
+                <Link
+                  key={slug}
+                  to={`/katalog?janr=${encodeURIComponent(slug)}`}
+                  className={styles.genrePill}
+                >
+                  <span className={styles.genrePillIcon}>{genreObj?.icon || '✨'}</span>
+                  <span>{genreObj?.label || slug}</span>
+                </Link>
+              );
+            })}
+            <Link to="/katalog" className={`${styles.genrePill} ${styles.genrePillAll}`}>
+              <span>Barcha janrlar →</span>
+            </Link>
+          </div>
+        </section>
+
+        {/* ── 4. Mashhur Asarlar (Trending Manga Carousel) ──────────── */}
         {popularManga.length > 0 && (
           <section className={styles.sectionBlock}>
             <MangaCarousel
-              title="Mashhurlar"
-              subtitle="Eng ko'p o'qilayotgan top asarlar"
+              title="Mashhur Asarlar"
+              subtitle="O'zbek tiliga tarjima qilingan eng ommabop manhwa va mangalar"
               mangas={popularManga}
               showRank={true}
               rightAction={
-                <div className={styles.timeTabs}>
-                  {TIME_TABS.map((t) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      className={`${styles.timeTabBtn} ${activeTimeTab === t.id ? styles.activeTimeTabBtn : ''}`}
-                      onClick={() => setActiveTimeTab(t.id)}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
-                </div>
-              }
-            />
-          </section>
-        )}
-
-        {/* ── 3. Haftalik Jadval (Horizontal Weekday Carousel) ────────── */}
-        {scheduleManga.length > 0 && (
-          <section className={styles.sectionBlock}>
-            {/* Schedule Days Tab Bar */}
-            <div className={styles.scheduleTabBar}>
-              <div className={styles.daysScroll}>
-                {DAYS.map((d) => (
-                  <button
-                    key={d.id}
-                    type="button"
-                    className={`${styles.dayBtn} ${activeDay === d.id ? styles.activeDayBtn : ''}`}
-                    onClick={() => setActiveDay(d.id)}
-                  >
-                    <span className={styles.dayFull}>{d.label}</span>
-                    <span className={styles.dayShort}>{d.short}</span>
-                  </button>
-                ))}
-              </div>
-              <Link to="/katalog" className={styles.viewListLink}>
-                <span>Katalogga o'tish</span>
-                <ChevronRight size={14} />
-              </Link>
-            </div>
-
-            {/* Swipeable Carousel */}
-            <MangaCarousel
-              title="Haftalik jadval"
-              mangas={scheduleManga}
-            />
-          </section>
-        )}
-
-        {/* ── 4. So'nggi Qo'shilganlar (Latest Updates Compact Grid) ──── */}
-        {latestManga.length > 0 && (
-          <section className={styles.sectionBlock}>
-            <LatestUpdatesGrid
-              title="So'nggi qo'shilganlar"
-              subtitle="Kutubxonaga yangi qo'shilgan asarlar va boblar"
-              mangas={latestManga}
-              rightAction={
                 <Link to="/katalog" className={styles.viewAllTextLink}>
-                  <span>Barcha mangalar</span>
+                  <span>Hammasini ko'rish</span>
                   <ChevronRight size={14} />
                 </Link>
               }
             />
           </section>
         )}
+
+        {/* ── 5. Main 2-Column Section: Latest Releases + AniList Top Ranking ── */}
+        <div className={styles.splitLayout}>
+          <div className={styles.mainColumn}>
+            {latestManga.length > 0 && (
+              <section className={styles.sectionBlock}>
+                <LatestUpdatesGrid
+                  title="So'nggi Yangilanishlar"
+                  subtitle="Yangi qo'shilgan va tarjima qilingan boblar"
+                  mangas={latestManga}
+                  rightAction={
+                    <Link to="/katalog" className={styles.viewAllTextLink}>
+                      <span>Barcha mangalar</span>
+                      <ChevronRight size={14} />
+                    </Link>
+                  }
+                />
+              </section>
+            )}
+          </div>
+
+          <aside className={styles.sidebarColumn}>
+            <WeeklyRanking rankings={WEEKLY_RANKINGS} />
+          </aside>
+        </div>
 
         {/* Clean empty state if database has no mangas yet */}
         {!loading && featuredMangas.length === 0 && popularManga.length === 0 && latestManga.length === 0 && (

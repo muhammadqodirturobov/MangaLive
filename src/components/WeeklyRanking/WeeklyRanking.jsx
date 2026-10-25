@@ -1,33 +1,26 @@
 import { Link } from 'react-router-dom';
-import { TrendingUp, TrendingDown, Minus, Flame } from 'lucide-react';
-import { buildCoverDataUri } from '../../assets/coverHelper.js';
+import { Star, Flame } from 'lucide-react';
+import CoverImage from '../CoverImage/CoverImage.jsx';
 import styles from './WeeklyRanking.module.css';
 
-const CHANGE_ICONS = {
-  up:   <TrendingUp   size={12} className={styles.up}   aria-label="Ko'tarildi" />,
-  down: <TrendingDown size={12} className={styles.down} aria-label="Tushdi"     />,
-  same: <Minus        size={12} className={styles.same} aria-label="O'zgarmadi" />,
-  new:  <Flame        size={12} className={styles.new}  aria-label="Yangi"      />,
-};
-
 /**
- * WeeklyRanking — sidebar widget showing top-10 ranked manga for the week.
- * @param {object[]} rankings — from data/rankings.js (joined with manga data)
+ * WeeklyRanking — sidebar widget showing top-ranked manga by AniList community score.
+ * Completely free of fabricated numbers.
  */
 export default function WeeklyRanking({ rankings }) {
+  if (!rankings || rankings.length === 0) return null;
+
   return (
-    <section className={styles.widget} aria-label="Haftalik reyting">
-      <h2 className={`section-title ${styles.title}`}>Haftalik Reyting</h2>
+    <section className={styles.widget} aria-label="Eng yuqori baholanganlar">
+      <div className={styles.header}>
+        <Flame size={14} className={styles.flameIcon} />
+        <h2 className={styles.title}>Top Reyting (AniList)</h2>
+      </div>
       <ol className={styles.list}>
-        {rankings.map(({ manga, rank, weeklyViews, change }) => {
+        {rankings.map(({ manga, rank, score, members, chapters }) => {
           if (!manga) return null;
-          const coverSrc = buildCoverDataUri(
-            manga.coverColor,
-            manga.coverAccent,
-            manga.title,
-            manga.type,
-            manga.id
-          );
+          const target = manga.slug || manga.id;
+
           return (
             <li key={manga.id} className={styles.item}>
               <span
@@ -36,25 +29,32 @@ export default function WeeklyRanking({ rankings }) {
               >
                 {rank}
               </span>
-              <Link to={`/manga/${manga.id}`} className={styles.coverLink}>
-                <img
-                  src={coverSrc}
-                  alt={`${manga.title} muqovasi`}
-                  className={styles.thumb}
-                  loading="lazy"
-                />
+              <Link to={`/manga/${target}`} className={styles.coverLink} tabIndex={-1} aria-hidden="true">
+                <div className={styles.thumbWrapper}>
+                  <CoverImage
+                    src={manga.coverImage}
+                    alt={`${manga.title} muqovasi`}
+                    title={manga.title}
+                    type={manga.type}
+                    loading="lazy"
+                    className={styles.thumb}
+                  />
+                </div>
               </Link>
               <div className={styles.info}>
-                <Link to={`/manga/${manga.id}`} className={styles.name}>
+                <Link to={`/manga/${target}`} className={styles.name} title={manga.title}>
                   {manga.title}
                 </Link>
-                <span className={styles.views}>
-                  {weeklyViews.toLocaleString('uz-UZ')} ko'rishlar
-                </span>
+                <div className={styles.metaRow}>
+                  <span className={styles.scoreBadge} title={`AniList balli: ${score}/10`}>
+                    <Star size={10} className={styles.starIcon} />
+                    <strong>{score}</strong>
+                    <span className={styles.scale}>/10</span>
+                  </span>
+                  <span className={styles.dot}>•</span>
+                  <span className={styles.chaptersCount}>{chapters} ta bob</span>
+                </div>
               </div>
-              <span className={styles.change} aria-live="polite">
-                {CHANGE_ICONS[change]}
-              </span>
             </li>
           );
         })}

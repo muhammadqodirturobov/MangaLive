@@ -127,7 +127,32 @@
 .ratingRow {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-2);
+}
+
+.aniListBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  padding: 4px 10px;
+  border-radius: var(--radius-md);
+}
+
+.ratingSource {
+  color: #38bdf8;
+  font-weight: var(--weight-bold);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ratingScore {
+  color: #f8fafc;
+  font-weight: var(--weight-bold);
+  font-size: var(--text-sm);
 }
 
 .ratingVal {
@@ -137,6 +162,27 @@
 .ratingCount {
   font-size: var(--text-sm);
   color: var(--color-text-tertiary);
+}
+
+.ratingLink {
+  font-size: var(--text-xs);
+  color: #c084fc;
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+
+.ratingLink:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.unratedBadge {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .stats {

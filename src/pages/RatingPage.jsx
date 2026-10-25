@@ -131,17 +131,8 @@ export default function RatingPage() {
                       <h3 className={styles.podiumTitle}>{manga.title}</h3>
                       <div className={styles.podiumMeta}>
                         <span className={styles.podiumScore}>
-                          {activeTab === 'alltime' ? (
-                            <>
-                              <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                              {item.score}
-                            </>
-                          ) : (
-                            <>
-                              <Eye size={13} />
-                              {item.score}
-                            </>
-                          )}
+                          <Star size={13} fill="#f59e0b" color="#f59e0b" />
+                          {item.score}
                         </span>
                         <span className={styles.podiumMetric}>{item.metricLabel}</span>
                       </div>
@@ -215,17 +206,8 @@ export default function RatingPage() {
 
                       <div className={styles.colMetric}>
                         <div className={styles.metricVal}>
-                          {activeTab === 'alltime' ? (
-                            <>
-                              <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                              <span>{item.score}</span>
-                            </>
-                          ) : (
-                            <>
-                              <TrendingUp size={13} className={styles.trendIcon} />
-                              <span>{item.score}</span>
-                            </>
-                          )}
+                          <Star size={13} fill="#f59e0b" color="#f59e0b" />
+                          <span>{item.score}</span>
                         </div>
                         <span className={styles.metricSub}>{item.metricLabel}</span>
                       </div>

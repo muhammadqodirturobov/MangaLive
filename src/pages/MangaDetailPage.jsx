@@ -8,6 +8,8 @@ import { getCachedManga, fetchMangaById } from '../services/mangaService.js';
 import { getCachedChapters, fetchChapters } from '../services/chapterService.js';
 import CoverImage from '../components/CoverImage/CoverImage.jsx';
 import { isMangaFavorited, toggleFavorite, getLastReadChapter } from '../services/userService.js';
+import { formatExternalRating } from '../services/ratingService.js';
+import { formatViewCount } from '../services/analyticsService.js';
 import { navigateBackFromOverview } from '../utils/navigationTracker.js';
 import styles from './MangaDetailPage.module.css';
 
@@ -138,6 +140,8 @@ export default function MangaDetailPage() {
 
   const statusInfo = STATUS_LABELS[manga.status] ?? { label: manga.status, cls: '' };
   const stars = Math.round(Number(manga.rating || 0));
+  const extRating = formatExternalRating(manga.slug || manga.id);
+  const formattedViews = formatViewCount(manga.views);
 
   const getChapNum = (c) => {
     if (!c) return 0;
@@ -219,23 +223,37 @@ export default function MangaDetailPage() {
                 {manga.author || "Noma'lum muallif"}
               </p>
 
-              {/* Rating */}
-              <div className={styles.ratingRow} aria-label={`Reyting: ${manga.rating} dan 5`}>
-                <span className="stars" aria-hidden="true">
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <span key={i}>{i < stars ? '★' : '☆'}</span>
-                  ))}
-                </span>
-                <strong className={styles.ratingVal}>{Number(manga.rating || 0).toFixed(1)}</strong>
-                <span className={styles.ratingCount}>
-                  ({(manga.ratingCount || 0).toLocaleString()} ovoz)
-                </span>
+              {/* Rating: Authentic External Rating */}
+              <div className={styles.ratingRow}>
+                {extRating.hasRating ? (
+                  <>
+                    <div className={styles.aniListBadge} title={`${extRating.badge} · ${extRating.members}`}>
+                      <span className={styles.ratingSource}>AniList</span>
+                      <span className={styles.ratingScore}>{extRating.score} / 10</span>
+                    </div>
+                    <span className={styles.ratingCount}>({extRating.members})</span>
+                    {extRating.url && (
+                      <a
+                        href={extRating.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.ratingLink}
+                      >
+                        AniList sahifasi ↗
+                      </a>
+                    )}
+                  </>
+                ) : (
+                  <span className={styles.unratedBadge}>Baholanmagan</span>
+                )}
               </div>
 
               {/* Stats */}
               <div className={styles.stats}>
                 <Stat icon={<BookOpen size={14} />} label={`${chapters.length} ta bob`} />
-                <Stat icon={<Eye size={14} />} label={`${Number(manga.views || 0).toLocaleString()} ko'rish`} />
+                {formattedViews ? (
+                  <Stat icon={<Eye size={14} />} label={`${formattedViews} ko'rish`} />
+                ) : null}
                 {manga.lastUpdated && (
                   <Stat icon={<Clock size={14} />} label={`${manga.lastUpdated} yangilangan`} />
                 )}

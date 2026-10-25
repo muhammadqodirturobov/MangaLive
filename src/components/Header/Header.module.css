@@ -203,6 +203,162 @@
   padding: 6px 14px;
   border-radius: var(--radius-sm);
   text-decoration: none;
+  cursor: pointer;
+}
+
+/* User Menu & Dropdown */
+.userMenuWrap {
+  position: relative;
+}
+
+.userProfileBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 5px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.userProfileBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(124, 58, 237, 0.4);
+}
+
+.userAvatarImg {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #1e1b4b;
+}
+
+.userDisplayName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  max-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 220px;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  animation: dropdownIn 0.15s ease-out;
+}
+
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.userDropdownHeader {
+  padding: 10px 12px;
+}
+
+.userDropdownName {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userDropdownEmail {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userDropdownDivider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 4px 0;
+}
+
+.userDropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #cbd5e1;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.userDropdownItem:hover {
+  background: rgba(124, 58, 237, 0.15);
+  color: #fff;
+}
+
+.userDropdownLogout {
+  color: #f87171;
+}
+
+.userDropdownLogout:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+}
+
+.mobileAvatarImg {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.mobileUserRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mobileUserLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+}
+
+.mobileLogoutBtn {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mobileProfileBtn {

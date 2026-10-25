@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Play, BookOpen, Sparkles, TrendingUp, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+import { Play, BookOpen, Sparkles, TrendingUp, ChevronLeft, ChevronRight, RotateCcw, Star } from 'lucide-react';
 import CoverImage from '../CoverImage/CoverImage.jsx';
 import { buildFeaturedBannerArtwork } from '../../assets/coverHelper.js';
 import { getLastReadChapter } from '../../services/userService.js';
+import { formatExternalRating } from '../../services/ratingService.js';
 import styles from './FeaturedBanner.module.css';
 
 export default function FeaturedBanner({ mangas = [] }) {
@@ -124,15 +125,21 @@ export default function FeaturedBanner({ mangas = [] }) {
                 {currentManga.author}
               </span>
 
-              <div className={styles.ratingBadge} aria-label={`Reyting: ${currentManga.rating} dan 5`}>
-                <span className={styles.stars}>
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <span key={i} className={i < stars ? styles.starFilled : styles.starEmpty}>★</span>
-                  ))}
-                </span>
-                <span className={styles.ratingScore}>{currentManga.rating}</span>
-                <span className={styles.ratingVoters}>({currentManga.ratingCount?.toLocaleString('uz-UZ')})</span>
-              </div>
+              {(() => {
+                const extRating = formatExternalRating(currentManga.slug || currentManga.id);
+                return extRating.hasRating ? (
+                  <div className={styles.ratingBadge} title={`${extRating.badge} · ${extRating.members}`}>
+                    <Star size={13} style={{ color: '#fbbf24', fill: '#fbbf24' }} aria-hidden="true" />
+                    <span className={styles.ratingScore}>{extRating.score}</span>
+                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>/10</span>
+                    <span className={styles.ratingVoters}>({extRating.members})</span>
+                  </div>
+                ) : (
+                  <div className={styles.ratingBadge}>
+                    <span className={styles.ratingVoters}>Baholanmagan</span>
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Synopsis */}
