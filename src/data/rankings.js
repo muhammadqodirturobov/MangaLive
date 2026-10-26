@@ -6,24 +6,26 @@
 import { MANGA_LIST } from './manga.js';
 import externalRatings from './externalRatings.json';
 
-// Build ranked list from authentic AniList community scores
+// Build ranked list from authentic MyAnimeList & AniList community scores
 const rankedList = [...MANGA_LIST]
   .map((manga) => {
     const slug = manga.slug || manga.id;
     const rating = externalRatings[slug] || null;
-    const score = rating?.score || 0;
+    const scoreVal = Number(rating?.score) || 0;
+    const scoreFormatted = scoreVal.toFixed(2);
     const members = rating?.members || 0;
     return {
       mangaId: manga.id,
       manga,
-      score,
+      score: scoreFormatted,
+      scoreNum: scoreVal,
       members,
       chapters: manga.chapters || manga.lastChapter || 0,
       source: rating?.source || 'AniList',
     };
   })
-  .filter((entry) => entry.manga && entry.score > 0)
-  .sort((a, b) => b.score - a.score || b.members - a.members)
+  .filter((entry) => entry.manga && entry.scoreNum > 0)
+  .sort((a, b) => b.scoreNum - a.scoreNum || b.members - a.members)
   .slice(0, 10)
   .map((entry, index) => ({
     ...entry,

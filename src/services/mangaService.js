@@ -466,19 +466,22 @@ export async function fetchRankings(period = 'weekly') {
         rank: idx + 1,
         mangaId: manga.id,
         manga,
-        score: ext.hasRating ? `${ext.score} / 10` : '—',
-        metricLabel: ext.hasRating ? `AniList (${ext.members})` : "Baholanmagan",
+        score: ext.hasRating ? ext.score : '—',
+        metricLabel: ext.hasRating ? `${ext.source} (${ext.members})` : "Baholanmagan",
       };
     });
   }
 
-  return WEEKLY_RANKINGS.map((item, idx) => ({
-    rank: idx + 1,
-    mangaId: item.mangaId,
-    manga: item.manga,
-    score: `${item.score} / 10`,
-    metricLabel: `AniList (${item.members} a'zo)`,
-  }));
+  return WEEKLY_RANKINGS.map((item, idx) => {
+    const ext = formatExternalRating(item.manga?.slug || item.mangaId);
+    return {
+      rank: idx + 1,
+      mangaId: item.mangaId,
+      manga: item.manga,
+      score: ext.hasRating ? ext.score : `${Number(item.score).toFixed(2)}`,
+      metricLabel: ext.hasRating ? `${ext.source} (${ext.members})` : "Baholanmagan",
+    };
+  });
 }
 
 /**

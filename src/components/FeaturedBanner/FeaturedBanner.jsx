@@ -204,16 +204,14 @@ export default function FeaturedBanner({ mangas = [] }) {
                   {extRating.hasRating ? (
                     <div
                       className={styles.ratingBadge}
-                      title={`${extRating.badge} — ${extRating.members}`}
+                      title={`${extRating.source} ${extRating.score}/10 (${extRating.members})`}
                     >
                       <Star size={13} className={styles.starIcon} aria-hidden="true" />
                       <span className={styles.ratingScore}>{extRating.score}</span>
-                      <span className={styles.ratingScale}>/10</span>
-                      <span className={styles.ratingMembers}>({extRating.members})</span>
                     </div>
                   ) : (
                     <div className={styles.ratingBadge}>
-                      <span className={styles.ratingMembers}>AniList Baholanmagan</span>
+                      <span className={styles.ratingMembers}>Baholanmagan</span>
                     </div>
                   )}
 

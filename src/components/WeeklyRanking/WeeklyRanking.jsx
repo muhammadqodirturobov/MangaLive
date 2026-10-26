@@ -14,7 +14,7 @@ export default function WeeklyRanking({ rankings }) {
     <section className={styles.widget} aria-label="Eng yuqori baholanganlar">
       <div className={styles.header}>
         <Flame size={14} className={styles.flameIcon} />
-        <h2 className={styles.title}>Top Reyting (AniList)</h2>
+        <h2 className={styles.title}>Top Reyting</h2>
       </div>
       <ol className={styles.list}>
         {rankings.map(({ manga, rank, score, members, chapters }) => {
@@ -46,10 +46,9 @@ export default function WeeklyRanking({ rankings }) {
                   {manga.title}
                 </Link>
                 <div className={styles.metaRow}>
-                  <span className={styles.scoreBadge} title={`AniList balli: ${score}/10`}>
+                  <span className={styles.scoreBadge} title={`Reyting balli: ${score}/10`}>
                     <Star size={10} className={styles.starIcon} />
                     <strong>{score}</strong>
-                    <span className={styles.scale}>/10</span>
                   </span>
                   <span className={styles.dot}>•</span>
                   <span className={styles.chaptersCount} title={`MangaLive-da o'qish uchun ${chapters} ta bob mavjud`}>

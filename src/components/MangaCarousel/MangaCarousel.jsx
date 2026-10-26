@@ -100,7 +100,7 @@ export default function MangaCarousel({
                 </h3>
                 <div className={styles.subRow}>
                   {extRating.hasRating ? (
-                    <span className={styles.rating} title={`${extRating.badge} · ${extRating.members}`}>
+                    <span className={styles.rating} title={`${extRating.source} ${extRating.score}/10 (${extRating.members})`}>
                       <Star size={11} className={styles.starIcon} />
                       <span>{extRating.score}</span>
                     </span>

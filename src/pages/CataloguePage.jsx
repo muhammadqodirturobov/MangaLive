@@ -5,6 +5,7 @@ import MangaCard from '../components/MangaCard/MangaCard.jsx';
 import CoverImage from '../components/CoverImage/CoverImage.jsx';
 import EmptyState from '../components/EmptyState/EmptyState.jsx';
 import { getMangaList } from '../services/mangaService.js';
+import { formatExternalRating } from '../services/ratingService.js';
 import { GENRES } from '../services/genreService.js';
 import styles from './CataloguePage.module.css';
 
@@ -384,7 +385,10 @@ export default function CataloguePage() {
                         <span className={styles.topType}>{item.type.toUpperCase()}</span>
                         <div className={styles.topRating}>
                           <Star size={11} fill="#fbbf24" color="#fbbf24" />
-                          <span>{item.rating.toFixed(1)}</span>
+                          <span>{(() => {
+                            const ext = formatExternalRating(item.slug || item.id);
+                            return ext.hasRating ? ext.score : (item.rating ? Number(item.rating).toFixed(2) : '—');
+                          })()}</span>
                         </div>
                       </div>
                     </div>

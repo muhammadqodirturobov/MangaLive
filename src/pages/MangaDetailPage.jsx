@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Eye, BookOpen, Clock, Play, AlertCircle,
-  Heart, RotateCcw, ArrowUpDown, RefreshCw, Lock
+  Heart, RotateCcw, ArrowUpDown, RefreshCw, Lock, Star
 } from 'lucide-react';
 import { getCachedManga, fetchMangaById } from '../services/mangaService.js';
 import { getCachedChapters, fetchChapters } from '../services/chapterService.js';
@@ -235,11 +235,14 @@ export default function MangaDetailPage() {
               <div className={styles.ratingRow}>
                 {extRating.hasRating ? (
                   <>
-                    <div className={styles.aniListBadge} title={`${extRating.badge} · ${extRating.members}`}>
-                      <span className={styles.ratingSource}>AniList</span>
-                      <span className={styles.ratingScore}>{extRating.score} / 10</span>
+                    <div className={styles.aniListBadge} title={`${extRating.source} ${extRating.score}/10 (${extRating.members} ovoz)`}>
+                      <Star size={14} fill="#f59e0b" color="#f59e0b" aria-hidden="true" />
+                      <span className={styles.ratingScore}>{extRating.score}/10</span>
+                      <span className={styles.ratingSource}>· {extRating.source}</span>
                     </div>
-                    <span className={styles.ratingCount}>({extRating.members})</span>
+                    {extRating.members && (
+                      <span className={styles.ratingCount}>({extRating.members} ovoz)</span>
+                    )}
                     {extRating.url && (
                       <a
                         href={extRating.url}
@@ -247,7 +250,7 @@ export default function MangaDetailPage() {
                         rel="noopener noreferrer"
                         className={styles.ratingLink}
                       >
-                        AniList sahifasi ↗
+                        {extRating.source} sahifasi ↗
                       </a>
                     )}
                   </>

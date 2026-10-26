@@ -66,10 +66,9 @@ export default function SpotlightRecommendations({ mangas = [] }) {
               <div className={styles.cardBody}>
                 <div className={styles.metaTop}>
                   {extRating.hasRating ? (
-                    <div className={styles.ratingBadge}>
+                    <div className={styles.ratingBadge} title={`${extRating.source} ${extRating.score}/10`}>
                       <Star size={12} className={styles.starIcon} aria-hidden="true" />
                       <span className={styles.ratingScore}>{extRating.score}</span>
-                      <span className={styles.ratingScale}>/10</span>
                     </div>
                   ) : (
                     <span className={styles.unratedBadge}>Yangi</span>
