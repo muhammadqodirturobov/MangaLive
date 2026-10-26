@@ -33,7 +33,7 @@
 
 /* ── Side Peeking Slide Previews ─────────────────────────── */
 .peekCard {
-  flex: 0 0 76px;
+  flex: 0 0 62px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,15 +91,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
   height: 100%;
-  padding: 12px 4px;
+  padding: 10px 4px;
 }
 
 .peekArrowCircle {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: var(--radius-full);
   background: rgba(14, 17, 34, 0.75);
   backdrop-filter: blur(8px);
@@ -121,10 +121,10 @@
 .peekTitle {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.85);
-  max-height: 160px;
+  max-height: 125px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -137,15 +137,15 @@
   flex: 1;
   min-width: 0;
   position: relative;
-  min-height: 360px;
+  min-height: 275px;
   border-radius: var(--radius-xl);
   overflow: hidden;
   background-color: #070811;
   border: 1px solid rgba(255, 255, 255, 0.09);
   box-shadow:
-    0 16px 44px -8px rgba(0, 0, 0, 0.75),
+    0 14px 38px -8px rgba(0, 0, 0, 0.75),
     0 0 0 1px rgba(255, 255, 255, 0.05),
-    0 0 45px -15px var(--hero-glow);
+    0 0 35px -15px var(--hero-glow);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -249,11 +249,11 @@
   position: relative;
   z-index: 10;
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(200px, 0.75fr);
+  grid-template-columns: minmax(0, 1.45fr) minmax(160px, 0.7fr);
   align-items: center;
-  gap: var(--space-6);
-  padding: var(--space-6) var(--space-8);
-  min-height: 340px;
+  gap: var(--space-5);
+  padding: var(--space-4) var(--space-6);
+  min-height: 255px;
   box-sizing: border-box;
 }
 
@@ -261,8 +261,8 @@
 .contentCol {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  max-width: 600px;
+  gap: 8px;
+  max-width: 580px;
 }
 
 /* Badges */
@@ -341,7 +341,7 @@
 }
 
 .heroTitle {
-  font-size: clamp(1.35rem, 2.3vw, 1.95rem);
+  font-size: clamp(1.2rem, 1.8vw, 1.55rem);
   font-weight: 800;
   line-height: 1.15;
   color: #ffffff;
@@ -534,12 +534,12 @@
 
 .artworkFrame {
   position: relative;
-  width: 190px;
-  height: 270px;
-  border-radius: var(--radius-lg);
+  width: 148px;
+  height: 210px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow:
-    0 16px 36px -6px rgba(0, 0, 0, 0.8),
+    0 14px 32px -6px rgba(0, 0, 0, 0.8),
     0 0 0 1px rgba(255, 255, 255, 0.12);
   transform: perspective(800px) rotateY(-4deg) rotateX(2deg);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
@@ -594,8 +594,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 6px;
+  margin-top: 8px;
   width: 100%;
   flex-wrap: wrap;
 }
@@ -603,13 +603,13 @@
 .indicatorPill {
   position: relative;
   overflow: hidden;
-  height: 26px;
-  padding: 0 10px;
+  height: 24px;
+  padding: 0 8px;
   border-radius: var(--radius-full);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.6);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -708,62 +708,70 @@
   }
 
   .stageCard {
-    min-height: 260px;
+    min-height: 215px;
     border-radius: var(--radius-lg);
   }
 
   .stageGrid {
-    padding: var(--space-4) var(--space-4);
+    padding: 10px 12px;
     min-height: auto;
   }
 
   .arrowControls {
-    top: 10px;
-    right: 10px;
-    gap: 6px;
+    top: 8px;
+    right: 8px;
+    gap: 4px;
   }
 
   .arrowBtn {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
   }
 
   .heroTitle {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
+    line-height: 1.2;
+    margin-bottom: 2px;
+  }
+
+  .metaRow {
+    gap: 6px;
+    font-size: 0.72rem;
   }
 
   .synopsisText {
-    font-size: 0.8rem;
+    font-size: 0.74rem;
+    line-height: 1.35;
     -webkit-line-clamp: 2;
   }
 
   .ctaRow {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 6px;
     width: 100%;
-    margin-top: 4px;
+    margin-top: 2px;
   }
 
   .primaryCta {
-    padding: 8px 10px;
-    font-size: 0.78rem;
+    padding: 7px 10px;
+    font-size: 0.75rem;
     width: 100%;
     justify-content: center;
     box-sizing: border-box;
   }
 
   .secondaryCta {
-    padding: 8px 10px;
-    font-size: 0.78rem;
+    padding: 7px 10px;
+    font-size: 0.75rem;
     width: 100%;
     justify-content: center;
     box-sizing: border-box;
   }
 
   .indicatorBar {
-    gap: 5px;
-    margin-top: 8px;
+    gap: 4px;
+    margin-top: 6px;
     flex-wrap: nowrap;
     overflow-x: auto;
     scrollbar-width: none;
@@ -777,14 +785,18 @@
   }
 
   .indicatorPill {
-    padding: 0 6px;
-    height: 22px;
-    font-size: 0.65rem;
+    padding: 0 5px;
+    height: 20px;
+    font-size: 0.6rem;
     flex-shrink: 0;
   }
 
+  .indicatorPill:not(.indicatorPillActive) .pillTitle {
+    display: none;
+  }
+
   .pillTitle {
-    max-width: 65px;
+    max-width: 80px;
   }
 }
 

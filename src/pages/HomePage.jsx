@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, AlertTriangle, RefreshCw, Compass } from 'lucide-react';
 import FeaturedBanner from '../components/FeaturedBanner/FeaturedBanner.jsx';
-import ValuePropositionStrip from '../components/ValuePropositionStrip/ValuePropositionStrip.jsx';
 import SpotlightRecommendations from '../components/SpotlightRecommendations/SpotlightRecommendations.jsx';
 import MangaCarousel from '../components/MangaCarousel/MangaCarousel.jsx';
 import LatestUpdatesGrid from '../components/LatestUpdatesGrid/LatestUpdatesGrid.jsx';
@@ -33,7 +32,7 @@ const POPULAR_GENRES = [
 ];
 
 export default function HomePage() {
-  const initialFeatured = getFeaturedMangas(4);
+  const initialFeatured = getFeaturedMangas(10);
   const initialPopular = getPopularManga(10);
   const initialLatest = getLatestManga(8);
 
@@ -67,7 +66,7 @@ export default function HomePage() {
 
     try {
       const [featured, popular, latest] = await Promise.all([
-        fetchFeaturedMangas(4),
+        fetchFeaturedMangas(10),
         fetchPopularManga(10),
         fetchLatestManga(8),
       ]);
@@ -115,10 +114,7 @@ export default function HomePage() {
           allMangas={[...featuredMangas, ...popularManga, ...latestManga]}
         />
 
-        {/* ── 3. Platform Value Proposition Pillars Strip ────────────── */}
-        <ValuePropositionStrip />
-
-        {/* ── 4. Ommabop Asarlar (Trending Manga Carousel) ──────────── */}
+        {/* ── 3. Ommabop Asarlar (Trending Manga Carousel) ──────────── */}
         {popularManga.length > 0 && (
           <section className={styles.sectionBlock}>
             <MangaCarousel

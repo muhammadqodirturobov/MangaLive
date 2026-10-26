@@ -311,7 +311,7 @@ function getDistinctCachedMangas() {
  * @param {number} limit
  * @returns {import('../types/schema').Manga[]}
  */
-export function getFeaturedMangas(limit = 4) {
+export function getFeaturedMangas(limit = 10) {
   if (isSupabaseConfigured) {
     // If cache has mangas, return cached featured or top items
     const all = getDistinctCachedMangas();
@@ -326,7 +326,7 @@ export function getFeaturedMangas(limit = 4) {
  * @param {number} limit
  * @returns {Promise<import('../types/schema').Manga[]>}
  */
-export async function fetchFeaturedMangas(limit = 4) {
+export async function fetchFeaturedMangas(limit = 10) {
   if (isSupabaseConfigured && supabase) {
     const { data, error } = await supabase
       .from('mangas')

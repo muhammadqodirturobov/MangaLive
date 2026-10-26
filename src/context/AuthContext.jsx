@@ -22,6 +22,7 @@ const AuthContext = createContext({
   openAuthModal: () => {},
   closeAuthModal: () => {},
   signIn: async () => {},
+  signInWithGoogle: async () => {},
   signUp: async () => {},
   signOut: async () => {},
   resetPassword: async () => {},
@@ -156,6 +157,13 @@ export function AuthProvider({ children }) {
 
       if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && newSession?.user?.id) {
         await migrateGuestData(newSession.user.id);
+        if (typeof sessionStorage !== 'undefined') {
+          const dest = sessionStorage.getItem('ml_intended_destination');
+          if (dest && dest !== window.location.pathname) {
+            sessionStorage.removeItem('ml_intended_destination');
+            window.location.replace(dest);
+          }
+        }
       } else if (event === 'SIGNED_OUT') {
         syncAuthCookie(null);
       }
@@ -213,6 +221,32 @@ export function AuthProvider({ children }) {
     closeAuthModal();
     return { ...data, destination: dest };
   }, [closeAuthModal, migrateGuestData, authOptions.intendedDestination]);
+
+  const signInWithGoogle = useCallback(async () => {
+    if (!isSupabaseConfigured || !supabase) {
+      throw new Error('Supabase sozlanmagan');
+    }
+    const dest = authOptions.intendedDestination || (typeof window !== 'undefined' ? window.location.pathname + window.location.search : '/');
+    if (typeof sessionStorage !== 'undefined') {
+      try {
+        sessionStorage.setItem('ml_intended_destination', dest);
+      } catch {}
+    }
+
+    const redirectTo = `${window.location.origin}/`;
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'select_account',
+        },
+      },
+    });
+    if (error) throw error;
+    return data;
+  }, [authOptions.intendedDestination]);
 
   const signUp = useCallback(async (email, password, fullName = '') => {
     if (!isSupabaseConfigured || !supabase) {
@@ -307,6 +341,7 @@ export function AuthProvider({ children }) {
         openAuthModal,
         closeAuthModal,
         signIn,
+        signInWithGoogle,
         signUp,
         signOut,
         resetPassword,

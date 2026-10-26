@@ -545,7 +545,7 @@ export function getFeaturedManga() {
  * @param {number} limit
  * @returns {object[]}
  */
-export function getFeaturedMangas(limit = 4) {
+export function getFeaturedMangas(limit = 10) {
   const featured = MANGA_LIST.filter((m) => m.isFeatured);
   const remaining = MANGA_LIST.filter((m) => !m.isFeatured && m.rating >= 4.7);
   return [...featured, ...remaining].slice(0, limit);
