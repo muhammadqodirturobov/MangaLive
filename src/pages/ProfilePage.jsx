@@ -11,22 +11,22 @@ import {
   Play,
   Check,
   Loader2,
-  Trash2
+  Camera,
+  Filter,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
-import { getReadingHistory, getFavorites } from '../services/userService.js';
+import {
+  getReadingHistory,
+  getFavorites,
+  getGuestAvatar,
+  setGuestAvatar,
+  getGuestDisplayName,
+  setGuestDisplayName,
+} from '../services/userService.js';
 import { fetchMangaById } from '../services/mangaService.js';
+import { AVATAR_PRESETS, DEFAULT_AVATAR, resolveAvatar } from '../data/avatars.js';
 import MangaCard from '../components/MangaCard/MangaCard.jsx';
 import styles from './ProfilePage.module.css';
-
-const AVATAR_PRESETS = [
-  'https://api.dicebear.com/7.x/bottts/svg?seed=Shadow',
-  'https://api.dicebear.com/7.x/bottts/svg?seed=Phoenix',
-  'https://api.dicebear.com/7.x/bottts/svg?seed=Hunter',
-  'https://api.dicebear.com/7.x/bottts/svg?seed=Ninja',
-  'https://api.dicebear.com/7.x/bottts/svg?seed=Valkyrie',
-  'https://api.dicebear.com/7.x/bottts/svg?seed=Cyber',
-];
 
 export default function ProfilePage() {
   const { user, signOut, updateProfile, openAuthModal } = useAuth();
@@ -37,14 +37,20 @@ export default function ProfilePage() {
 
   // Profile Edit State
   const [displayName, setDisplayName] = useState('');
-  const [selectedAvatar, setSelectedAvatar] = useState('');
+  const [selectedAvatar, setSelectedAvatar] = useState(DEFAULT_AVATAR);
+  const [avatarCategory, setAvatarCategory] = useState('all'); // 'all' | 'male' | 'female'
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
     if (user?.user_metadata) {
       setDisplayName(user.user_metadata.full_name || '');
-      setSelectedAvatar(user.user_metadata.avatar_url || AVATAR_PRESETS[0]);
+      setSelectedAvatar(resolveAvatar(user.user_metadata.avatar_url));
+    } else {
+      const guestAv = getGuestAvatar();
+      const guestName = getGuestDisplayName();
+      setSelectedAvatar(resolveAvatar(guestAv || DEFAULT_AVATAR));
+      setDisplayName(guestName || '');
     }
   }, [user]);
 
@@ -97,16 +103,30 @@ export default function ProfilePage() {
     setSaving(true);
     setSaveSuccess(false);
     try {
-      await updateProfile({
-        fullName: displayName,
-        avatarUrl: selectedAvatar,
-      });
+      const cleanAvatar = resolveAvatar(selectedAvatar);
+      if (user) {
+        await updateProfile({
+          fullName: displayName,
+          avatarUrl: cleanAvatar,
+        });
+      } else {
+        setGuestAvatar(cleanAvatar);
+        if (displayName) setGuestDisplayName(displayName);
+      }
       setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      setTimeout(() => setSaveSuccess(false), 3500);
     } catch (err) {
       alert(`Xatolik: ${err.message}`);
     } finally {
       setSaving(false);
+    }
+  }
+
+  function handleSelectAvatar(avatarUrl) {
+    setSelectedAvatar(avatarUrl);
+    // Instant guest preview persistence
+    if (!user) {
+      setGuestAvatar(avatarUrl);
     }
   }
 
@@ -122,23 +142,62 @@ export default function ProfilePage() {
     return `${days} kun oldin`;
   }
 
+  const currentDisplayAvatar = resolveAvatar(
+    selectedAvatar || user?.user_metadata?.avatar_url || getGuestAvatar() || DEFAULT_AVATAR
+  );
+
+  const selectedPresetObj = AVATAR_PRESETS.find(
+    (p) => p.avatarUrl === currentDisplayAvatar
+  ) || AVATAR_PRESETS[0];
+
+  const filteredAvatars = AVATAR_PRESETS.filter((char) => {
+    if (avatarCategory === 'male') return char.gender === 'male';
+    if (avatarCategory === 'female') return char.gender === 'female';
+    return true;
+  });
+
   return (
     <main className={styles.main}>
       <div className={`container ${styles.container}`}>
         {/* ── Top Header / User Summary ───────────────────────────────── */}
         <div className={styles.userCard}>
-          <div className={styles.avatarWrap}>
+          <div
+            className={styles.avatarWrap}
+            onClick={() => setActiveTab('settings')}
+            title="Avatarni o'zgartirish"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setActiveTab('settings');
+              }
+            }}
+          >
             <img
-              src={selectedAvatar || user?.user_metadata?.avatar_url || AVATAR_PRESETS[0]}
-              alt="Avatar"
+              src={currentDisplayAvatar}
+              alt={selectedPresetObj?.name || 'Foydalanuvchi avatari'}
               className={styles.avatarImg}
             />
+            <div className={styles.avatarOverlayBadge} aria-hidden="true">
+              <Camera size={14} />
+            </div>
           </div>
 
           <div className={styles.userInfo}>
-            <h1 className={styles.userName}>
-              {user ? (user.user_metadata?.full_name || 'MangaLive foydalanuvchisi') : 'Mehmon Kitobxon'}
-            </h1>
+            <div className={styles.userTitleRow}>
+              <h1 className={styles.userName}>
+                {user
+                  ? (user.user_metadata?.full_name || 'MangaLive foydalanuvchisi')
+                  : (displayName || 'Mehmon Kitobxon')}
+              </h1>
+              {selectedPresetObj && (
+                <span className={styles.characterBadge}>
+                  {selectedPresetObj.name} ({selectedPresetObj.anime})
+                </span>
+              )}
+            </div>
+
             <p className={styles.userEmail}>
               {user ? user.email : "Mehmon holatida o'qilmoqda"}
             </p>
@@ -180,6 +239,8 @@ export default function ProfilePage() {
         <div className={styles.tabBar} role="tablist">
           <button
             type="button"
+            role="tab"
+            aria-selected={activeTab === 'continue'}
             className={`${styles.tabBtn} ${activeTab === 'continue' ? styles.activeTabBtn : ''}`}
             onClick={() => setActiveTab('continue')}
           >
@@ -188,6 +249,8 @@ export default function ProfilePage() {
           </button>
           <button
             type="button"
+            role="tab"
+            aria-selected={activeTab === 'favorites'}
             className={`${styles.tabBtn} ${activeTab === 'favorites' ? styles.activeTabBtn : ''}`}
             onClick={() => setActiveTab('favorites')}
           >
@@ -196,22 +259,24 @@ export default function ProfilePage() {
           </button>
           <button
             type="button"
+            role="tab"
+            aria-selected={activeTab === 'history'}
             className={`${styles.tabBtn} ${activeTab === 'history' ? styles.activeTabBtn : ''}`}
             onClick={() => setActiveTab('history')}
           >
             <History size={16} />
             <span>Tarix ({historyItems.length})</span>
           </button>
-          {user && (
-            <button
-              type="button"
-              className={`${styles.tabBtn} ${activeTab === 'settings' ? styles.activeTabBtn : ''}`}
-              onClick={() => setActiveTab('settings')}
-            >
-              <Settings size={16} />
-              <span>Profil sozlamalari</span>
-            </button>
-          )}
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'settings'}
+            className={`${styles.tabBtn} ${activeTab === 'settings' ? styles.activeTabBtn : ''}`}
+            onClick={() => setActiveTab('settings')}
+          >
+            <Settings size={16} />
+            <span>Profil va Avatar</span>
+          </button>
         </div>
 
         {/* ── Tab Content ────────────────────────────────────────────── */}
@@ -316,31 +381,104 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* 4. Settings / Edit Profile */}
-          {activeTab === 'settings' && user && (
+          {/* 4. Settings / Edit Profile & Avatar Selector */}
+          {activeTab === 'settings' && (
             <div className={styles.settingsWrap}>
+              {!user && (
+                <div className={styles.guestNoticeBox}>
+                  <div className={styles.guestNoticeContent}>
+                    <Sparkles size={20} className={styles.noticeIcon} />
+                    <div>
+                      <p className={styles.noticeTitle}>Mehmon rejimida avatar tanlash</p>
+                      <p className={styles.noticeText}>
+                        Tanlangan anime avataringiz ushbu qurilmada saqlanadi va ro'yxatdan o'tganingizda
+                        yangi hisobingizga avtomatik o'tkaziladi.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => openAuthModal('signup')}
+                    className={`btn btn-primary ${styles.noticeBtn}`}
+                  >
+                    Hisob ochish
+                  </button>
+                </div>
+              )}
+
               <form onSubmit={handleSaveProfile} className={styles.settingsForm}>
+                {/* ── Avatar Selection Section ──────────────────────── */}
                 <div className={styles.formSection}>
-                  <h3 className={styles.sectionTitle}>Avatarni tanlang</h3>
-                  <div className={styles.avatarGrid}>
-                    {AVATAR_PRESETS.map((av) => (
+                  <div className={styles.avatarHeaderRow}>
+                    <div>
+                      <h3 className={styles.sectionTitle}>Anime / Manga Avatari</h3>
+                      <p className={styles.sectionSubtitle}>
+                        Profil va MangaLive bo'ylab ko'rinadigan sevimli qahramoningizni tanlang.
+                      </p>
+                    </div>
+
+                    {/* Gender Category Filter Tabs */}
+                    <div className={styles.categoryFilters} role="radiogroup" aria-label="Avatar toifalari">
                       <button
-                        key={av}
                         type="button"
-                        onClick={() => setSelectedAvatar(av)}
-                        className={`${styles.avatarOption} ${selectedAvatar === av ? styles.selectedAvatar : ''}`}
+                        className={`${styles.filterBtn} ${avatarCategory === 'all' ? styles.activeFilter : ''}`}
+                        onClick={() => setAvatarCategory('all')}
                       >
-                        <img src={av} alt="Avatar" />
-                        {selectedAvatar === av && (
-                          <div className={styles.avatarCheck}>
-                            <Check size={12} />
-                          </div>
-                        )}
+                        Barchasi (16)
                       </button>
-                    ))}
+                      <button
+                        type="button"
+                        className={`${styles.filterBtn} ${avatarCategory === 'male' ? styles.activeFilter : ''}`}
+                        onClick={() => setAvatarCategory('male')}
+                      >
+                        Yigitlar (8)
+                      </button>
+                      <button
+                        type="button"
+                        className={`${styles.filterBtn} ${avatarCategory === 'female' ? styles.activeFilter : ''}`}
+                        onClick={() => setAvatarCategory('female')}
+                      >
+                        Qizlar (8)
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 16 Avatar Choices Grid */}
+                  <div className={styles.avatarGrid} role="listbox" aria-label="Anime qahramonlari">
+                    {filteredAvatars.map((char) => {
+                      const isSelected = selectedAvatar === char.avatarUrl;
+                      return (
+                        <button
+                          key={char.id}
+                          type="button"
+                          role="option"
+                          aria-selected={isSelected}
+                          aria-label={`${char.name} (${char.anime})`}
+                          onClick={() => handleSelectAvatar(char.avatarUrl)}
+                          className={`${styles.avatarCard} ${isSelected ? styles.selectedCard : ''}`}
+                        >
+                          <div className={styles.avatarThumbWrap}>
+                            <img
+                              src={char.avatarUrl}
+                              alt={char.name}
+                              loading="lazy"
+                              className={styles.avatarThumbImg}
+                            />
+                            {isSelected && (
+                              <div className={styles.selectedBadge} aria-hidden="true">
+                                <Check size={12} strokeWidth={3} />
+                              </div>
+                            )}
+                          </div>
+                          <span className={styles.characterName}>{char.name}</span>
+                          <span className={styles.characterAnime}>{char.anime}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
+                {/* ── Display Name ─────────────────────────────────── */}
                 <div className={styles.formSection}>
                   <label htmlFor="display-name" className={styles.inputLabel}>
                     Ko'rinadigan ism / Taxallus
@@ -351,16 +489,20 @@ export default function ProfilePage() {
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     className={styles.settingsInput}
-                    placeholder="Ismingizni kiriting"
+                    placeholder="Ismingiz yoki taxallusingiz"
+                    maxLength={40}
                   />
                 </div>
 
+                {/* ── Email (Read-only for signed-in, guest indicator for guests) ── */}
                 <div className={styles.formSection}>
-                  <label className={styles.inputLabel}>Email (O'zgartirib bo'lmaydi)</label>
+                  <label className={styles.inputLabel}>
+                    {user ? 'Email (Bog‘langan hisob)' : 'Hisob holati'}
+                  </label>
                   <input
                     type="text"
                     disabled
-                    value={user.email || ''}
+                    value={user ? user.email : "Mehmon foydalanuvchi (Saqlangan lokal ma'lumotlar)"}
                     className={`${styles.settingsInput} ${styles.disabledInput}`}
                   />
                 </div>
@@ -368,7 +510,11 @@ export default function ProfilePage() {
                 {saveSuccess && (
                   <div className={styles.successAlert}>
                     <Check size={16} />
-                    <span>Profil ma'lumotlari muvaffaqiyatli saqlandi!</span>
+                    <span>
+                      {user
+                        ? "Profil va anime avatar muvaffaqiyatli saqlandi!"
+                        : "Anime avatar saqlandi! Ro'yxatdan o'tganingizda u yangi hisobingizga avtomatik o'tkaziladi."}
+                    </span>
                   </div>
                 )}
 

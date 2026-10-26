@@ -15,7 +15,13 @@ import {
   getFavorites as localGetFavorites,
   toggleFavorite as localToggleFavorite,
   isMangaFavorited as localIsMangaFavorited,
+  getGuestAvatar,
+  setGuestAvatar,
+  getGuestDisplayName,
+  setGuestDisplayName,
 } from '../data/userStorage.js';
+
+export { getGuestAvatar, setGuestAvatar, getGuestDisplayName, setGuestDisplayName };
 
 /**
  * Get reading history list.

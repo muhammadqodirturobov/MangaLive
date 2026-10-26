@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase, isSupabaseConfigured } from '../services/supabaseClient.js';
-import { getFavorites, getReadingHistory } from '../data/userStorage.js';
+import { getFavorites, getReadingHistory, getGuestAvatar, setGuestAvatar } from '../data/userStorage.js';
+import { DEFAULT_AVATAR, resolveAvatar } from '../data/avatars.js';
 
 const AuthContext = createContext({
   user: null,
@@ -78,6 +79,27 @@ export function AuthProvider({ children }) {
           }
         }
       }
+
+      // 3. Migrate Guest Avatar if user doesn't have an anime avatar or still has dicebear
+      const guestAvatar = getGuestAvatar();
+      if (guestAvatar) {
+        try {
+          const { data: { user: currentUser } } = await supabase.auth.getUser();
+          const currentAv = currentUser?.user_metadata?.avatar_url;
+          if (!currentAv || currentAv.includes('dicebear.com') || currentAv.includes('bottts')) {
+            const clean = resolveAvatar(guestAvatar);
+            await supabase.auth.updateUser({
+              data: { avatar_url: clean },
+            });
+            setUser((prev) => prev ? {
+              ...prev,
+              user_metadata: { ...prev.user_metadata, avatar_url: clean }
+            } : prev);
+          }
+        } catch (e) {
+          console.warn('Guest avatar migration error:', e.message);
+        }
+      }
     } catch (err) {
       console.warn('Guest data migration error:', err);
     }
@@ -146,13 +168,14 @@ export function AuthProvider({ children }) {
     if (!isSupabaseConfigured || !supabase) {
       throw new Error('Supabase sozlanmagan');
     }
+    const initialAvatar = resolveAvatar(getGuestAvatar() || DEFAULT_AVATAR);
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
           full_name: fullName.trim() || email.split('@')[0],
-          avatar_url: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(email)}`,
+          avatar_url: initialAvatar,
         },
       },
     });
@@ -189,7 +212,11 @@ export function AuthProvider({ children }) {
     }
     const updates = {};
     if (fullName !== undefined) updates.full_name = fullName.trim();
-    if (avatarUrl !== undefined) updates.avatar_url = avatarUrl.trim();
+    if (avatarUrl !== undefined) {
+      const cleanAvatar = resolveAvatar(avatarUrl.trim());
+      updates.avatar_url = cleanAvatar;
+      setGuestAvatar(cleanAvatar);
+    }
 
     const { data, error } = await supabase.auth.updateUser({
       data: updates,

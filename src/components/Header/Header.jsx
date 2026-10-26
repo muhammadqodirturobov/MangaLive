@@ -3,6 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, ChevronDown, Trophy, Globe, LogIn, User, Menu, X, BookOpen, LogOut } from 'lucide-react';
 import GenresDropdown from '../GenresDropdown/GenresDropdown.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { resolveAvatar } from '../../data/avatars.js';
+import { getGuestAvatar } from '../../data/userStorage.js';
 import styles from './Header.module.css';
 
 export default function Header() {
@@ -136,7 +138,7 @@ export default function Header() {
                 aria-label="Profil menyusi"
               >
                 <img
-                  src={user.user_metadata?.avatar_url || 'https://api.dicebear.com/7.x/bottts/svg?seed=Shadow'}
+                  src={resolveAvatar(user.user_metadata?.avatar_url)}
                   alt=""
                   className={styles.userAvatarImg}
                 />
@@ -199,8 +201,12 @@ export default function Header() {
             className={styles.mobileProfileBtn}
             aria-label={user ? 'Profil' : 'Kirish'}
           >
-            {user?.user_metadata?.avatar_url ? (
-              <img src={user.user_metadata.avatar_url} alt="" className={styles.mobileAvatarImg} />
+            {user?.user_metadata?.avatar_url || getGuestAvatar() ? (
+              <img
+                src={resolveAvatar(user?.user_metadata?.avatar_url || getGuestAvatar())}
+                alt=""
+                className={styles.mobileAvatarImg}
+              />
             ) : (
               <User size={18} />
             )}
@@ -250,7 +256,7 @@ export default function Header() {
               <div className={styles.mobileUserRow}>
                 <Link to="/profil" className={styles.mobileUserLink} onClick={() => setMobileOpen(false)}>
                   <img
-                    src={user.user_metadata?.avatar_url || 'https://api.dicebear.com/7.x/bottts/svg?seed=Shadow'}
+                    src={resolveAvatar(user.user_metadata?.avatar_url)}
                     alt=""
                     className={styles.mobileAvatarImg}
                   />

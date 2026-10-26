@@ -8,6 +8,64 @@
 
 const HISTORY_KEY = 'mangalive_reading_history';
 const FAVORITES_KEY = 'mangalive_favorites';
+const GUEST_AVATAR_KEY = 'mangalive_guest_avatar';
+const GUEST_NAME_KEY = 'mangalive_guest_name';
+
+/**
+ * Get guest chosen avatar URL.
+ * @returns {string|null}
+ */
+export function getGuestAvatar() {
+  try {
+    return localStorage.getItem(GUEST_AVATAR_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Persist guest avatar choice.
+ * @param {string} avatarUrl
+ */
+export function setGuestAvatar(avatarUrl) {
+  try {
+    if (avatarUrl) {
+      localStorage.setItem(GUEST_AVATAR_KEY, avatarUrl);
+    } else {
+      localStorage.removeItem(GUEST_AVATAR_KEY);
+    }
+  } catch (err) {
+    console.warn('Failed to save guest avatar:', err);
+  }
+}
+
+/**
+ * Get guest chosen display name.
+ * @returns {string|null}
+ */
+export function getGuestDisplayName() {
+  try {
+    return localStorage.getItem(GUEST_NAME_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Set guest chosen display name.
+ * @param {string} name
+ */
+export function setGuestDisplayName(name) {
+  try {
+    if (name) {
+      localStorage.setItem(GUEST_NAME_KEY, name.trim());
+    } else {
+      localStorage.removeItem(GUEST_NAME_KEY);
+    }
+  } catch (err) {
+    console.warn('Failed to save guest display name:', err);
+  }
+}
 
 /**
  * Get reading history list.

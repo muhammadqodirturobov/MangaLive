@@ -234,6 +234,7 @@
   height: 28px;
   border-radius: 50%;
   object-fit: cover;
+  object-position: center 15%;
   background: #1e1b4b;
 }
 
@@ -331,6 +332,7 @@
   height: 24px;
   border-radius: 50%;
   object-fit: cover;
+  object-position: center 15%;
 }
 
 .mobileUserRow {

@@ -1,10 +1,17 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Search, BookOpen, Bookmark, User } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext.jsx';
+import { resolveAvatar } from '../../data/avatars.js';
+import { getGuestAvatar } from '../../data/userStorage.js';
 import styles from './BottomNav.module.css';
 
 export default function BottomNav() {
   const location = useLocation();
   const path = location.pathname;
+  const { user } = useAuth();
+
+  const userAvatar = user?.user_metadata?.avatar_url || getGuestAvatar();
+  const avatarSrc = userAvatar ? resolveAvatar(userAvatar) : null;
 
   return (
     <nav className={styles.bottomNav} aria-label="Mobil navigatsiya paneli">
@@ -44,7 +51,15 @@ export default function BottomNav() {
         to="/profil"
         className={`${styles.navItem} ${path === '/profil' ? styles.active : ''}`}
       >
-        <User size={20} className={styles.icon} />
+        {avatarSrc ? (
+          <img
+            src={avatarSrc}
+            alt=""
+            className={`${styles.bottomNavAvatar} ${path === '/profil' ? styles.activeAvatar : ''}`}
+          />
+        ) : (
+          <User size={20} className={styles.icon} />
+        )}
         <span className={styles.label}>Profil</span>
       </Link>
     </nav>
