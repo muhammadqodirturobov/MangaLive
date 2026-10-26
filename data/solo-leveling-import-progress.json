@@ -1,0 +1,365 @@
+{
+  "chapters": {
+    "1": {
+      "status": "COMPLETED",
+      "chapterId": "fd87fd87-5e10-466a-8e10-188a2e8fa49c",
+      "pagesCount": 32,
+      "uploadedAt": "2026-10-26T13:47:56.873Z"
+    },
+    "2": {
+      "status": "COMPLETED",
+      "chapterId": "0c06fbe8-aca4-4b5e-8a63-5139223c0843",
+      "pagesCount": 16,
+      "uploadedAt": "2026-10-26T13:48:25.636Z"
+    },
+    "3": {
+      "status": "COMPLETED",
+      "chapterId": "663cc84c-4dc5-4201-afb6-58d6393deb4a",
+      "pagesCount": 26,
+      "uploadedAt": "2026-10-26T13:50:58.608Z"
+    },
+    "4": {
+      "status": "COMPLETED",
+      "chapterId": "d08d896d-8c79-4fd1-ab9e-9ecd63f172b1",
+      "pagesCount": 25,
+      "uploadedAt": "2026-10-26T13:51:19.768Z"
+    },
+    "5": {
+      "status": "COMPLETED",
+      "chapterId": "1f91a508-595d-495a-afbf-71bb3695d445",
+      "pagesCount": 24,
+      "uploadedAt": "2026-10-26T13:51:36.075Z"
+    },
+    "6": {
+      "status": "COMPLETED",
+      "chapterId": "bcdd1b61-5ba8-4c01-a4eb-db98dffb3069",
+      "pagesCount": 30,
+      "uploadedAt": "2026-10-26T13:51:52.716Z"
+    },
+    "7": {
+      "status": "COMPLETED",
+      "chapterId": "efab7e78-99c1-4075-8303-7ffee267545a",
+      "pagesCount": 34,
+      "uploadedAt": "2026-10-26T13:52:14.720Z"
+    },
+    "8": {
+      "status": "COMPLETED",
+      "chapterId": "a28fa15d-c9f2-497c-8368-a4e588555dba",
+      "pagesCount": 30,
+      "uploadedAt": "2026-10-26T13:52:36.152Z"
+    },
+    "9": {
+      "status": "COMPLETED",
+      "chapterId": "2120ee40-083a-4102-b346-5aca4660d07e",
+      "pagesCount": 21,
+      "uploadedAt": "2026-10-26T13:52:49.749Z"
+    },
+    "10": {
+      "status": "COMPLETED",
+      "chapterId": "8fe5a0f1-dbd6-47be-92c5-16cf57bc199b",
+      "pagesCount": 31,
+      "uploadedAt": "2026-10-26T13:53:11.286Z"
+    },
+    "11": {
+      "status": "COMPLETED",
+      "chapterId": "5b5c8e72-e50e-4cbf-8c3b-d03735a5b430",
+      "pagesCount": 32,
+      "uploadedAt": "2026-10-26T13:53:32.704Z"
+    },
+    "12": {
+      "status": "COMPLETED",
+      "chapterId": "955ebdb1-b47c-4129-833a-d43fb2cb08f4",
+      "pagesCount": 26,
+      "uploadedAt": "2026-10-26T13:53:52.477Z"
+    },
+    "13": {
+      "status": "COMPLETED",
+      "chapterId": "fc9f2d93-50c4-43f9-9013-9288dd24d61f",
+      "pagesCount": 35,
+      "uploadedAt": "2026-10-26T13:54:14.328Z"
+    },
+    "14": {
+      "status": "COMPLETED",
+      "chapterId": "2019480d-df52-429e-84b7-e757493dccfb",
+      "pagesCount": 24,
+      "uploadedAt": "2026-10-26T13:54:28.701Z"
+    },
+    "15": {
+      "status": "COMPLETED",
+      "chapterId": "c299fdbc-6248-4256-bb83-1995cf480a3e",
+      "pagesCount": 35,
+      "uploadedAt": "2026-10-26T13:54:50.530Z"
+    },
+    "16": {
+      "status": "COMPLETED",
+      "chapterId": "7b11250d-4ad7-472c-b790-4210d097825c",
+      "pagesCount": 39,
+      "uploadedAt": "2026-10-26T13:55:17.702Z"
+    },
+    "17": {
+      "status": "COMPLETED",
+      "chapterId": "0b0b393d-a945-4109-af2b-72b9e044d518",
+      "pagesCount": 36,
+      "uploadedAt": "2026-10-26T13:55:39.891Z"
+    },
+    "18": {
+      "status": "COMPLETED",
+      "chapterId": "3a5def67-0098-46e4-9ae0-92996d768368",
+      "pagesCount": 31,
+      "uploadedAt": "2026-10-26T13:55:57.458Z"
+    },
+    "19": {
+      "status": "COMPLETED",
+      "chapterId": "7635bc5a-e612-4885-aaaf-12cbe07587f2",
+      "pagesCount": 26,
+      "uploadedAt": "2026-10-26T13:56:14.066Z"
+    },
+    "20": {
+      "status": "COMPLETED",
+      "chapterId": "92bb8944-7821-4db1-a1e0-1580bc6f12db",
+      "pagesCount": 22,
+      "uploadedAt": "2026-10-26T13:56:28.648Z"
+    },
+    "21": {
+      "status": "COMPLETED",
+      "chapterId": "2b6864ba-ea3f-4b94-9cad-bed3ac26db95",
+      "pagesCount": 26,
+      "uploadedAt": "2026-10-26T13:56:44.903Z"
+    },
+    "22": {
+      "status": "COMPLETED",
+      "chapterId": "83ce672b-b196-46c7-b2a5-51477d13bb6b",
+      "pagesCount": 30,
+      "uploadedAt": "2026-10-26T13:57:03.028Z"
+    },
+    "23": {
+      "status": "COMPLETED",
+      "chapterId": "879e0301-2bba-4a55-98d4-0caad735a9a7",
+      "pagesCount": 25,
+      "uploadedAt": "2026-10-26T13:57:18.981Z"
+    },
+    "24": {
+      "status": "COMPLETED",
+      "chapterId": "3864ef0d-bd9e-49e1-bd3c-ebd28e30dfdf",
+      "pagesCount": 32,
+      "uploadedAt": "2026-10-26T13:57:41.252Z"
+    },
+    "25": {
+      "status": "COMPLETED",
+      "chapterId": "7a75ae43-a4a2-4bbb-9e4e-2f97fe43e9cb",
+      "pagesCount": 20,
+      "uploadedAt": "2026-10-26T13:57:55.155Z"
+    },
+    "26": {
+      "status": "COMPLETED",
+      "chapterId": "bf487c08-ebfb-4388-bd94-a56367c0b6ac",
+      "pagesCount": 20,
+      "uploadedAt": "2026-10-26T13:58:14.342Z"
+    },
+    "27": {
+      "status": "COMPLETED",
+      "chapterId": "d96b6d9f-cf00-4bbe-9baa-1eb35fec0e6e",
+      "pagesCount": 28,
+      "uploadedAt": "2026-10-26T13:58:37.074Z"
+    },
+    "28": {
+      "status": "COMPLETED",
+      "chapterId": "cf06b0f8-e34d-41e9-b2ff-e82c27dec549",
+      "pagesCount": 25,
+      "uploadedAt": "2026-10-26T13:58:56.145Z"
+    },
+    "29": {
+      "status": "COMPLETED",
+      "chapterId": "00589807-b12d-41c2-841c-a8e3effa4123",
+      "pagesCount": 23,
+      "uploadedAt": "2026-10-26T13:59:15.667Z"
+    },
+    "30": {
+      "status": "COMPLETED",
+      "chapterId": "c3d52d5a-70ab-4c0e-b481-8bcb3aa06467",
+      "pagesCount": 27,
+      "uploadedAt": "2026-10-26T13:59:35.609Z"
+    },
+    "31": {
+      "status": "COMPLETED",
+      "chapterId": "1a3aeefa-4c99-4773-8f46-fababf4d4247",
+      "pagesCount": 27,
+      "uploadedAt": "2026-10-26T13:59:54.186Z"
+    },
+    "32": {
+      "status": "COMPLETED",
+      "chapterId": "665bf89a-ddb8-4f09-9e9b-44337a850f92",
+      "pagesCount": 29,
+      "uploadedAt": "2026-10-26T14:00:12.817Z"
+    },
+    "33": {
+      "status": "COMPLETED",
+      "chapterId": "336b0925-90fd-4adc-9988-382dc129abf1",
+      "pagesCount": 32,
+      "uploadedAt": "2026-10-26T14:00:31.047Z"
+    },
+    "34": {
+      "status": "COMPLETED",
+      "chapterId": "b7240111-2bb0-4dd1-b3a7-682db36cda50",
+      "pagesCount": 36,
+      "uploadedAt": "2026-10-26T14:00:53.474Z"
+    },
+    "35": {
+      "status": "COMPLETED",
+      "chapterId": "dd6973ac-1e2c-4c47-8e74-d8cad7cec9d3",
+      "pagesCount": 29,
+      "uploadedAt": "2026-10-26T14:01:11.402Z"
+    },
+    "36": {
+      "status": "COMPLETED",
+      "chapterId": "dc46867c-29ef-48d8-8c66-81320502081b",
+      "pagesCount": 27,
+      "uploadedAt": "2026-10-26T14:01:27.158Z"
+    },
+    "37": {
+      "status": "COMPLETED",
+      "chapterId": "aa460a26-5879-489f-a03b-45611921a0da",
+      "pagesCount": 29,
+      "uploadedAt": "2026-10-26T14:01:44.930Z"
+    },
+    "38": {
+      "status": "COMPLETED",
+      "chapterId": "f75e8a85-8ea9-4f96-be6c-4eaed8f6a343",
+      "pagesCount": 35,
+      "uploadedAt": "2026-10-26T14:02:08.631Z"
+    },
+    "39": {
+      "status": "COMPLETED",
+      "chapterId": "82fc51d6-ce46-4eab-bbab-fa137963ec6d",
+      "pagesCount": 35,
+      "uploadedAt": "2026-10-26T14:02:30.032Z"
+    },
+    "40": {
+      "status": "COMPLETED",
+      "chapterId": "f115621e-b4aa-4e89-8c61-86d1f14ead05",
+      "pagesCount": 28,
+      "uploadedAt": "2026-10-26T14:02:46.518Z"
+    },
+    "41": {
+      "status": "COMPLETED",
+      "chapterId": "f2a0efac-b8fe-48a8-83c5-4f60a8bf18ce",
+      "pagesCount": 30,
+      "uploadedAt": "2026-10-26T14:03:05.387Z"
+    },
+    "42": {
+      "status": "COMPLETED",
+      "chapterId": "2fec209c-6a83-4994-a469-4b93161dbe40",
+      "pagesCount": 26,
+      "uploadedAt": "2026-10-26T14:03:22.287Z"
+    },
+    "43": {
+      "status": "COMPLETED",
+      "chapterId": "bb5914fc-4667-4b66-8936-c34faed1e5dd",
+      "pagesCount": 28,
+      "uploadedAt": "2026-10-26T14:03:40.858Z"
+    },
+    "44": {
+      "status": "COMPLETED",
+      "chapterId": "d9ec463d-8e6e-430f-a45b-e355f7367170",
+      "pagesCount": 27,
+      "uploadedAt": "2026-10-26T14:03:57.899Z"
+    },
+    "45": {
+      "status": "COMPLETED",
+      "chapterId": "be9bb712-14dc-4fbf-9e91-35eda9c9a243",
+      "pagesCount": 38,
+      "uploadedAt": "2026-10-26T14:04:20.019Z"
+    },
+    "46": {
+      "status": "COMPLETED",
+      "chapterId": "19540ec4-cf53-4970-accb-9baaa69a3ee7",
+      "pagesCount": 23,
+      "uploadedAt": "2026-10-26T14:04:35.286Z"
+    },
+    "47": {
+      "status": "COMPLETED",
+      "chapterId": "1032adeb-abc2-4646-9c11-8307163fe6ec",
+      "pagesCount": 28,
+      "uploadedAt": "2026-10-26T14:04:54.023Z"
+    },
+    "48": {
+      "status": "COMPLETED",
+      "chapterId": "6920e72a-3ae8-42fd-be9e-5c769ec4a8ad",
+      "pagesCount": 24,
+      "uploadedAt": "2026-10-26T14:05:11.018Z"
+    },
+    "49": {
+      "status": "COMPLETED",
+      "chapterId": "dd08346f-f341-4a94-b5e2-e0ed462214db",
+      "pagesCount": 30,
+      "uploadedAt": "2026-10-26T14:05:29.614Z"
+    },
+    "50": {
+      "status": "COMPLETED",
+      "chapterId": "1480153b-a80e-495a-81aa-5d8cbdf7eac5",
+      "pagesCount": 34,
+      "uploadedAt": "2026-10-26T14:05:55.586Z"
+    },
+    "51": {
+      "status": "COMPLETED",
+      "chapterId": "1c4dfe15-62a6-4f43-b686-bd63914025ff",
+      "pagesCount": 41,
+      "uploadedAt": "2026-10-26T14:06:48.624Z"
+    },
+    "52": {
+      "status": "COMPLETED",
+      "chapterId": "0ca6464b-458c-4b36-8d55-c2db2429fda6",
+      "pagesCount": 32,
+      "uploadedAt": "2026-10-26T14:07:11.985Z"
+    },
+    "53": {
+      "status": "COMPLETED",
+      "chapterId": "286616d7-4db6-432b-9de8-58ce438f88dc",
+      "pagesCount": 40,
+      "uploadedAt": "2026-10-26T14:07:38.126Z"
+    },
+    "54": {
+      "status": "COMPLETED",
+      "chapterId": "cbfaf340-2e4e-41be-9671-2b2f0c387d87",
+      "pagesCount": 33,
+      "uploadedAt": "2026-10-26T14:08:00.058Z"
+    },
+    "55": {
+      "status": "COMPLETED",
+      "chapterId": "7e523e41-b1e6-4f05-a82a-86585c2ac647",
+      "pagesCount": 28,
+      "uploadedAt": "2026-10-26T14:08:18.531Z"
+    },
+    "56": {
+      "status": "COMPLETED",
+      "chapterId": "0a681b0c-1736-4341-9a26-f89ea93ed2ea",
+      "pagesCount": 32,
+      "uploadedAt": "2026-10-26T14:08:40.840Z"
+    },
+    "57": {
+      "status": "COMPLETED",
+      "chapterId": "b8a6ae77-7ea4-422c-b4c5-3430d4c2b0b9",
+      "pagesCount": 32,
+      "uploadedAt": "2026-10-26T14:09:01.155Z"
+    },
+    "58": {
+      "status": "COMPLETED",
+      "chapterId": "16f20d22-d69c-4450-85be-050bf2a71ca5",
+      "pagesCount": 34,
+      "uploadedAt": "2026-10-26T14:09:24.482Z"
+    },
+    "59": {
+      "status": "COMPLETED",
+      "chapterId": "99abd3ca-2fb7-43d0-9cd2-162ca37140d1",
+      "pagesCount": 31,
+      "uploadedAt": "2026-10-26T14:09:49.792Z"
+    },
+    "60": {
+      "status": "COMPLETED",
+      "chapterId": "9efcf585-adab-4216-b7e9-717219ca6bed",
+      "pagesCount": 36,
+      "uploadedAt": "2026-10-26T14:10:36.222Z"
+    }
+  },
+  "lastUpdated": "2026-10-26T14:10:36.222Z"
+}
