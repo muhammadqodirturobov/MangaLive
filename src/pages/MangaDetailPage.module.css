@@ -294,6 +294,29 @@
   color: var(--color-purple-400);
 }
 
+.chapterItemLocked {
+  opacity: 0.88;
+}
+
+.chapterItemLocked:hover {
+  border-color: rgba(168, 85, 247, 0.3);
+  background: rgba(124, 58, 237, 0.08);
+}
+
+.lockBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #c084fc;
+  background: rgba(168, 85, 247, 0.14);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  padding: 1px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
 .chNum {
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);

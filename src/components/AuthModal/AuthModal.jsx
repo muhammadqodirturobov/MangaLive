@@ -1,10 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, Mail, Lock, User, Eye, EyeOff, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { X, Mail, Lock, User, Eye, EyeOff, Loader2, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import styles from './AuthModal.module.css';
 
 export default function AuthModal() {
-  const { isAuthModalOpen, authModalTab, closeAuthModal, signIn, signUp, resetPassword } = useAuth();
+  const {
+    isAuthModalOpen,
+    authModalTab,
+    authOptions,
+    closeAuthModal,
+    signIn,
+    signUp,
+    resetPassword,
+  } = useAuth();
+  const navigate = useNavigate();
+
   const [tab, setTab] = useState(authModalTab || 'login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,17 +51,22 @@ export default function AuthModal() {
     setLoading(true);
 
     try {
+      let res = null;
       if (tab === 'login') {
         if (!email.trim() || !password) throw new Error('Email va parolni kiriting');
-        await signIn(email.trim(), password);
+        res = await signIn(email.trim(), password);
       } else if (tab === 'signup') {
         if (!email.trim() || !password) throw new Error('Email va parolni kiriting');
         if (password.length < 6) throw new Error("Parol kamida 6 ta belgidan iborat bo'lishi kerak");
-        await signUp(email.trim(), password, fullName);
+        res = await signUp(email.trim(), password, fullName);
       } else if (tab === 'reset') {
         if (!email.trim()) throw new Error('Emailingizni kiriting');
         await resetPassword(email.trim());
         setSuccessMsg("Parolni tiklash havolasi emailingizga yuborildi. Pochtangizni tekshiring.");
+      }
+
+      if (res?.destination) {
+        navigate(res.destination, { replace: true });
       }
     } catch (err) {
       setError(err.message || 'Xatolik yuz berdi');
@@ -58,6 +74,8 @@ export default function AuthModal() {
       setLoading(false);
     }
   }
+
+  const isChapterLockedReason = authOptions?.reason === 'chapter_locked';
 
   return (
     <div className={styles.overlay} onClick={(e) => e.target === e.currentTarget && closeAuthModal()}>
@@ -74,32 +92,58 @@ export default function AuthModal() {
         <div className={styles.header}>
           <div className={styles.logoBadge}>MangaLive</div>
           <h2 id="auth-modal-title" className={styles.title}>
-            {tab === 'login' && 'Hisobga kirish'}
-            {tab === 'signup' && "Ro'yxatdan o'tish"}
+            {isChapterLockedReason ? (
+              tab === 'signup' ? "Bepul hisob ochish" : "Hisobga kirish"
+            ) : (
+              tab === 'login' && 'Hisobga kirish'
+            )}
+            {!isChapterLockedReason && tab === 'signup' && "Ro'yxatdan o'tish"}
             {tab === 'reset' && 'Parolni tiklash'}
           </h2>
           <p className={styles.subtitle}>
-            {tab === 'login' && "Sevimlilar va o'qish tarixingizni barcha qurilmalarda sinxronlang"}
-            {tab === 'signup' && "Bir necha soniyada bepul MangaLive a'zosi bo'ling"}
-            {tab === 'reset' && "Emailingizni kiriting, tiklash havolasini yuboramiz"}
+            {isChapterLockedReason ? (
+              "1-bob barcha mehmonlar uchun ochiq. Keyingi boblarni o'qish uchun bepul hisobingizga kiring."
+            ) : (
+              tab === 'login' ? "Sevimlilar va o'qish tarixingizni barcha qurilmalarda sinxronlang" :
+              tab === 'signup' ? "Bir necha soniyada bepul MangaLive a'zosi bo'ling" :
+              "Emailingizni kiriting, tiklash havolasini yuboramiz"
+            )}
           </p>
         </div>
 
+        {/* ── Locked Chapter Explainer Notice ────────────────────────── */}
+        {isChapterLockedReason && (
+          <div className={styles.chapterLockNotice}>
+            <Lock size={18} className={styles.lockNoticeIcon} />
+            <div>
+              <p className={styles.lockNoticeTitle}>
+                {authOptions.chapterNumber
+                  ? `${authOptions.chapterNumber}-bob va keyingi boblar cheklovi`
+                  : "Davom etish uchun hisob talab etiladi"}
+              </p>
+              <p className={styles.lockNoticeText}>
+                {authOptions.mangaTitle ? `«${authOptions.mangaTitle}» ning ` : ''}
+                2-bob va undan keyingi boblarni o'qish hamda o'qish taraqqiyotini saqlab borish uchun bepul hisob oching yoki kiring.
+              </p>
+            </div>
+          </div>
+        )}
+
         {tab !== 'reset' && (
           <div className={styles.tabBar}>
-            <button
-              type="button"
-              className={`${styles.tabBtn} ${tab === 'login' ? styles.activeTab : ''}`}
-              onClick={() => { setTab('login'); setError(''); setSuccessMsg(''); }}
-            >
-              Kirish
-            </button>
             <button
               type="button"
               className={`${styles.tabBtn} ${tab === 'signup' ? styles.activeTab : ''}`}
               onClick={() => { setTab('signup'); setError(''); setSuccessMsg(''); }}
             >
               Ro'yxatdan o'tish
+            </button>
+            <button
+              type="button"
+              className={`${styles.tabBtn} ${tab === 'login' ? styles.activeTab : ''}`}
+              onClick={() => { setTab('login'); setError(''); setSuccessMsg(''); }}
+            >
+              Kirish
             </button>
           </div>
         )}
@@ -204,8 +248,8 @@ export default function AuthModal() {
               </>
             ) : (
               <span>
-                {tab === 'login' && 'Kirish'}
-                {tab === 'signup' && "Ro'yxatdan o'tish"}
+                {tab === 'login' && 'Kirish va davom etish'}
+                {tab === 'signup' && "Ro'yxatdan o'tish va o'qish"}
                 {tab === 'reset' && 'Tiklash havolasini yuborish'}
               </span>
             )}
@@ -225,7 +269,8 @@ export default function AuthModal() {
         )}
 
         <div className={styles.guestNote}>
-          ✨ <span>Mehmon sifatida cheklovsiz o'qish doim ochiq</span>
+          <Sparkles size={13} style={{ color: '#c084fc' }} />
+          <span>1-bob barcha asarlar uchun ro'yxatdan o'tmasdan ochiq</span>
         </div>
       </div>
     </div>

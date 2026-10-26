@@ -5,8 +5,90 @@ import {
   getR2Object,
   checkR2ObjectExists,
   getR2DeliveryUrl,
+  loadEnv,
 } from './r2Storage.js';
 import { MangaboxPublicConnector } from './sourceAdapters/MangaboxPublicConnector.js';
+import { createClient } from '@supabase/supabase-js';
+
+// Server-side token validation cache (token -> { valid, expiresAt })
+const tokenValidationCache = new Map();
+let serverSupabase = null;
+
+function getServerSupabase() {
+  if (serverSupabase) return serverSupabase;
+  const env = loadEnv();
+  const url = env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+  const key = env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  serverSupabase = createClient(url, key);
+  return serverSupabase;
+}
+
+function extractAuthToken(req, url) {
+  // 1. Authorization header: "Bearer <token>"
+  const authHeader = req.headers['authorization'] || req.headers['x-access-token'];
+  if (authHeader && typeof authHeader === 'string') {
+    const parts = authHeader.split(' ');
+    if (parts.length === 2 && /^bearer$/i.test(parts[0])) return parts[1].trim();
+    if (parts.length === 1 && parts[0].length > 10) return parts[0].trim();
+  }
+
+  // 2. Cookie header: mangalive_token=<token> or sb-<projectId>-auth-token=<json>
+  const cookieHeader = req.headers['cookie'];
+  if (cookieHeader && typeof cookieHeader === 'string') {
+    const cookies = cookieHeader.split(';').map((c) => c.trim());
+    for (const c of cookies) {
+      if (c.startsWith('mangalive_token=')) {
+        return decodeURIComponent(c.substring('mangalive_token='.length).trim());
+      }
+      if (c.startsWith('sb-') && c.includes('-auth-token=')) {
+        try {
+          const raw = decodeURIComponent(c.split('=').slice(1).join('='));
+          const parsed = JSON.parse(raw);
+          if (parsed?.access_token) return parsed.access_token;
+          if (Array.isArray(parsed) && parsed[0]) return parsed[0];
+        } catch {}
+      }
+    }
+  }
+
+  // 3. Query parameter: ?auth=<token> or ?token=<token>
+  const queryToken = url.searchParams.get('auth') || url.searchParams.get('token');
+  if (queryToken && queryToken.trim().length > 10) {
+    return queryToken.trim();
+  }
+
+  return null;
+}
+
+async function verifySupabaseToken(token) {
+  if (!token || typeof token !== 'string') return false;
+
+  const now = Date.now();
+  const cached = tokenValidationCache.get(token);
+  if (cached && now < cached.expiresAt) {
+    return cached.valid;
+  }
+
+  const supabase = getServerSupabase();
+  if (!supabase) {
+    // If Supabase credentials are missing on server, do not lock out development
+    return true;
+  }
+
+  try {
+    const { data, error } = await supabase.auth.getUser(token);
+    const isValid = Boolean(!error && data?.user?.id);
+    tokenValidationCache.set(token, {
+      valid: isValid,
+      expiresAt: now + (isValid ? 5 * 60 * 1000 : 30 * 1000), // 5 min TTL for valid, 30s for invalid
+    });
+    return isValid;
+  } catch (err) {
+    console.warn('[R2 Auth Middleware] Token verification failed:', err.message);
+    return false;
+  }
+}
 
 /**
  * Vite plugin that adds server-side R2 upload & image streaming middleware.
@@ -204,6 +286,30 @@ export function createR2Middleware() {
       if (!objectKey) {
         next();
         return;
+      }
+
+      // Enforce Chapter 2+ registration requirement on server-side content delivery
+      const chapterMatch = objectKey.match(/^manga\/[^/]+\/chapters\/([^/]+)\//i);
+      if (chapterMatch) {
+        const chNum = parseFloat(chapterMatch[1]);
+        // Only Chapter 2 and above require an authenticated account.
+        // Chapter 1 and Chapter 0 (prologue) are free to all visitors.
+        if (!isNaN(chNum) && chNum > 1) {
+          const token = extractAuthToken(req, url);
+          const isAuthed = await verifySupabaseToken(token);
+          if (!isAuthed) {
+            res.statusCode = 401;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(
+              JSON.stringify({
+                error: 'Unauthorized: Registration or login is required to access Chapter 2 and above.',
+                locked: true,
+                chapterNumber: chNum,
+              })
+            );
+            return;
+          }
+        }
       }
 
       if (req.method === 'HEAD') {

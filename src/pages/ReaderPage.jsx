@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   ArrowLeft, ArrowRight, ChevronLeft, ChevronRight,
   List, BookOpen, AlertCircle, Maximize2, Minimize2,
-  ZoomIn, ZoomOut, RefreshCw
+  ZoomIn, ZoomOut, RefreshCw, Lock, Sparkles
 } from 'lucide-react';
 import { getCachedManga, fetchMangaById } from '../services/mangaService.js';
 import { getCachedChapters, fetchChapters, fetchChapterPages } from '../services/chapterService.js';
@@ -11,6 +11,8 @@ import { recordReadingProgress } from '../services/userService.js';
 import { recordChapterOpen } from '../services/analyticsService.js';
 import { recordGuestChapterRead } from '../components/GuestPrompt/GuestPrompt.jsx';
 import { navigateBackFromReader } from '../utils/navigationTracker.js';
+import { useAuth } from '../context/AuthContext.jsx';
+import { isChapterLocked } from '../utils/chapterAccess.js';
 import styles from './ReaderPage.module.css';
 
 const WIDTH_OPTIONS = [
@@ -23,6 +25,7 @@ export default function ReaderPage() {
   const { id, chapterNumber } = useParams();
   const navigate = useNavigate();
   const chNum = parseInt(chapterNumber, 10);
+  const { user, loading: authLoading, openAuthModal } = useAuth();
 
   const handleBackToManga = useCallback(() => {
     navigateBackFromReader(navigate, id);
@@ -43,6 +46,9 @@ export default function ReaderPage() {
   const chapter = sortedChapters.find((c) => c.number === chNum) || null;
   const prevChapter = currentIndex > 0 ? sortedChapters[currentIndex - 1] : null;
   const nextChapter = currentIndex >= 0 && currentIndex < sortedChapters.length - 1 ? sortedChapters[currentIndex + 1] : null;
+
+  // Chapter Access Authorization
+  const isCurrentChapterLocked = !authLoading && isChapterLocked(chNum, user);
 
   // Pages state (real pages only)
   const [pages, setPages] = useState([]);
@@ -86,12 +92,12 @@ export default function ReaderPage() {
     loadReaderData();
   }, [loadReaderData]);
 
-  // 2. Load live chapter pages when chapter is resolved
+  // 2. Load live chapter pages when chapter is resolved and not locked
   useEffect(() => {
     let cancelled = false;
 
     async function loadPages() {
-      if (!chapter?.id) {
+      if (!chapter?.id || isCurrentChapterLocked) {
         setPages([]);
         setPagesLoading(false);
         return;
@@ -118,19 +124,31 @@ export default function ReaderPage() {
     return () => {
       cancelled = true;
     };
-  }, [chapter?.id]);
+  }, [chapter?.id, isCurrentChapterLocked]);
 
-  // 3. Record verified chapter open and guest progress counter
+  // 3. Auto-prompt registration when visiting locked chapter directly
   useEffect(() => {
-    if (manga && !Number.isNaN(chNum)) {
+    if (!authLoading && isCurrentChapterLocked && manga) {
+      openAuthModal('signup', {
+        intendedDestination: `/manga/${manga.slug || id}/chapter/${chNum}`,
+        reason: 'chapter_locked',
+        chapterNumber: chNum,
+        mangaTitle: manga.title,
+      });
+    }
+  }, [authLoading, isCurrentChapterLocked, chNum, manga?.id]);
+
+  // 4. Record verified chapter open and guest progress counter
+  useEffect(() => {
+    if (manga && !Number.isNaN(chNum) && !isCurrentChapterLocked) {
       recordChapterOpen(manga.id, chNum, manga.slug);
       recordGuestChapterRead();
     }
-  }, [manga?.id, chNum]);
+  }, [manga?.id, chNum, isCurrentChapterLocked]);
 
-  // 4. Auto-record reading history
+  // 5. Auto-record reading history
   useEffect(() => {
-    if (manga && !Number.isNaN(chNum)) {
+    if (manga && !Number.isNaN(chNum) && !isCurrentChapterLocked) {
       const totalChs = Number(manga.availableChapters ?? manga.chapters ?? manga.chapters_count ?? 0);
       recordReadingProgress(
         manga.id,
@@ -142,7 +160,7 @@ export default function ReaderPage() {
         totalChs
       );
     }
-  }, [manga, chNum, readingProgress]);
+  }, [manga, chNum, readingProgress, isCurrentChapterLocked]);
 
   // Track vertical scroll progress
   useEffect(() => {
@@ -157,46 +175,65 @@ export default function ReaderPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Keyboard navigation
+  // Keyboard navigation shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
-      if (e.key === 'Escape') {
-        if (isFullscreen && document.fullscreenElement) {
-          document.exitFullscreen().catch(() => {});
-        } else {
-          handleBackToManga();
+      if (e.key === 'ArrowLeft') {
+        if (prevChapter) {
+          navigate(`/manga/${manga?.slug || id}/chapter/${prevChapter.number}`, { replace: true });
+          window.scrollTo(0, 0);
         }
-      } else if (e.key === 'ArrowLeft' && prevChapter) {
-        navigate(`/manga/${manga?.slug || id}/chapter/${prevChapter.number}`, { replace: true });
-        window.scrollTo(0, 0);
-      } else if (e.key === 'ArrowRight' && nextChapter) {
-        navigate(`/manga/${manga?.slug || id}/chapter/${nextChapter.number}`, { replace: true });
-        window.scrollTo(0, 0);
+      } else if (e.key === 'ArrowRight') {
+        if (nextChapter) {
+          if (isChapterLocked(nextChapter.number, user)) {
+            openAuthModal('signup', {
+              intendedDestination: `/manga/${manga?.slug || id}/chapter/${nextChapter.number}`,
+              reason: 'chapter_locked',
+              chapterNumber: nextChapter.number,
+              mangaTitle: manga?.title,
+            });
+            return;
+          }
+          navigate(`/manga/${manga?.slug || id}/chapter/${nextChapter.number}`, { replace: true });
+          window.scrollTo(0, 0);
+        }
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
       }
     };
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [id, manga, prevChapter, nextChapter, navigate, isFullscreen, handleBackToManga]);
+  }, [prevChapter, nextChapter, manga, id, user, openAuthModal]);
 
-  // Fullscreen toggle
-  const toggleFullscreen = useCallback(() => {
+  const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().then(() => setIsFullscreen(true)).catch(() => {});
+      document.documentElement.requestFullscreen().catch(() => {});
+      setIsFullscreen(true);
     } else {
-      document.exitFullscreen().then(() => setIsFullscreen(false)).catch(() => {});
+      document.exitFullscreen().catch(() => {});
+      setIsFullscreen(false);
     }
-  }, []);
+  };
 
-  useEffect(() => {
-    const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener('fullscreenchange', handleFsChange);
-    return () => document.removeEventListener('fullscreenchange', handleFsChange);
-  }, []);
+  function handleNavigateChapter(targetChapterNum) {
+    if (isChapterLocked(targetChapterNum, user)) {
+      openAuthModal('signup', {
+        intendedDestination: `/manga/${manga?.slug || id}/chapter/${targetChapterNum}`,
+        reason: 'chapter_locked',
+        chapterNumber: targetChapterNum,
+        mangaTitle: manga?.title,
+      });
+      return;
+    }
+    navigate(`/manga/${manga?.slug || id}/chapter/${targetChapterNum}`, { replace: true });
+    window.scrollTo(0, 0);
+  }
 
-  // Loading state (prevents premature 404!)
-  if (loading) {
+  // Loading skeleton state (also wait for auth restoring to prevent signed-out flash)
+  if ((loading && !manga) || (authLoading && !manga)) {
     return (
       <main className={styles.readerRoot}>
         <div className={styles.loadingContainer}>
@@ -224,7 +261,7 @@ export default function ReaderPage() {
     );
   }
 
-  // Genuine 404 (only after completed fetch confirming manga does not exist)
+  // Genuine 404
   if (!manga) {
     return (
       <main className={styles.errorContainer}>
@@ -238,7 +275,7 @@ export default function ReaderPage() {
     );
   }
 
-  // Genuine chapter not found (only after chapters list is fully loaded)
+  // Genuine chapter not found
   if (!chapter) {
     return (
       <main className={styles.errorContainer}>
@@ -258,14 +295,74 @@ export default function ReaderPage() {
               <button
                 type="button"
                 onClick={() => {
-                  navigate(`/manga/${manga.slug || manga.id}/chapter/${sortedChapters[0].number}`, { replace: true });
-                  window.scrollTo(0, 0);
+                  handleNavigateChapter(sortedChapters[0].number);
                 }}
                 className="btn btn-outline"
               >
                 {sortedChapters[0].number === 0 ? '0-bob (Prolog)' : `${sortedChapters[0].number}-bob`}dan boshlash
               </button>
             )}
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // ── Protected Chapter Lock Gate (Requirement 1 & 2) ────────────────────────
+  if (isCurrentChapterLocked) {
+    return (
+      <main className={styles.lockedContainer}>
+        <div className={styles.lockedBox}>
+          <div className={styles.lockIconCircle}>
+            <Lock size={36} />
+          </div>
+          <span className={styles.lockedBadge}>Cheklangan Bob</span>
+          <h1 className={styles.lockedTitle}>
+            {manga ? `«${manga.title}» — ` : ''}{chNum}-bobni o'qish uchun hisob talab etiladi
+          </h1>
+          <p className={styles.lockedDesc}>
+            1-bob barcha mehmon kitobxonlar uchun mutlaqo bepul. 2-bob va undan keyingi boblarni o'qish,
+            xatcho'plarni saqlash va qolgan joyingizdan davom ettirish uchun bepul hisob oching yoki kiring.
+          </p>
+
+          <div className={styles.lockedActions}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => {
+                openAuthModal('signup', {
+                  intendedDestination: `/manga/${manga.slug || id}/chapter/${chNum}`,
+                  reason: 'chapter_locked',
+                  chapterNumber: chNum,
+                  mangaTitle: manga.title,
+                });
+              }}
+            >
+              <Sparkles size={16} />
+              <span>Bepul hisob ochish / Kirish</span>
+            </button>
+
+            {sortedChapters.some((c) => c.number === 1) && (
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={() => {
+                  navigate(`/manga/${manga.slug || id}/chapter/1`, { replace: true });
+                  window.scrollTo(0, 0);
+                }}
+              >
+                <span>1-bobni o'qish (Bepul)</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={handleBackToManga}
+            >
+              <ArrowLeft size={15} />
+              <span>Manga sahifasiga qaytish</span>
+            </button>
           </div>
         </div>
       </main>
@@ -304,8 +401,7 @@ export default function ReaderPage() {
               disabled={!prevChapter}
               onClick={() => {
                 if (prevChapter) {
-                  navigate(`/manga/${manga.slug || manga.id}/chapter/${prevChapter.number}`, { replace: true });
-                  window.scrollTo(0, 0);
+                  handleNavigateChapter(prevChapter.number);
                 }
               }}
               title={prevChapter ? `Oldingi bob: ${prevChapter.number}-bob` : "Birinchi bob"}
@@ -330,8 +426,7 @@ export default function ReaderPage() {
               disabled={!nextChapter}
               onClick={() => {
                 if (nextChapter) {
-                  navigate(`/manga/${manga.slug || manga.id}/chapter/${nextChapter.number}`, { replace: true });
-                  window.scrollTo(0, 0);
+                  handleNavigateChapter(nextChapter.number);
                 }
               }}
               title={nextChapter ? `Keyingi bob: ${nextChapter.number}-bob` : "Oxirgi bob"}
@@ -350,84 +445,69 @@ export default function ReaderPage() {
                 type="button"
                 role="radio"
                 aria-checked={pageWidthMode === w.id}
-                className={`${styles.widthBtn} ${pageWidthMode === w.id ? styles.widthBtnActive : ''}`}
+                className={`${styles.widthBtn} ${pageWidthMode === w.id ? styles.activeWidthBtn : ''}`}
                 onClick={() => setPageWidthMode(w.id)}
-                title={`${w.label} kenglik (${w.maxPx}px)`}
+                title={w.label}
               >
-                {w.id === 'narrow' ? <ZoomOut size={13} /> : w.id === 'wide' ? <ZoomIn size={13} /> : <BookOpen size={13} />}
-                <span>{w.label}</span>
+                {w.label}
               </button>
             ))}
           </div>
 
           <button
             type="button"
-            className={styles.fullscreenBtn}
+            className={styles.controlIconBtn}
             onClick={toggleFullscreen}
-            title={isFullscreen ? "To'liq ekrandan chiqish" : "To'liq ekran"}
-            aria-label={isFullscreen ? "To'liq ekrandan chiqish" : "To'liq ekran"}
+            title={isFullscreen ? "To'liq ekrandan chiqish" : "To'liq ekran rejimi"}
+            aria-label={isFullscreen ? "To'liq ekrandan chiqish" : "To'liq ekran rejimi"}
           >
             {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
           </button>
         </div>
       </header>
 
-      {/* ── Reading Progress Bar ──────────────────────────────────── */}
-      <div className={styles.readingProgressBarWrapper} aria-hidden="true">
-        <div
-          className={styles.readingProgressBar}
-          style={{ width: `${readingProgress}%` }}
-        />
-      </div>
-
-      {/* ── Chapter Menu Modal / Dropdown ─────────────────────────── */}
+      {/* ── Slide-down Chapter Selection Drawer ─────────────────────── */}
       {showChapterMenu && (
-        <div
-          className={styles.chapterMenuOverlay}
-          onClick={() => setShowChapterMenu(false)}
-        >
-          <div
-            className={styles.chapterMenuModal}
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-label="Boblar ro'yxati"
-          >
-            <div className={styles.chapterMenuHeader}>
-              <h3 className={styles.chapterMenuTitle}>
-                {manga.title} — Boblar ({chapters.length})
-              </h3>
+        <div className={styles.chapterMenuOverlay} onClick={() => setShowChapterMenu(false)}>
+          <div className={styles.chapterMenuDrawer} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.drawerHeader}>
+              <h3>Bobni tanlang</h3>
               <button
                 type="button"
-                className={styles.closeMenuBtn}
+                className={styles.closeDrawerBtn}
                 onClick={() => setShowChapterMenu(false)}
               >
-                ×
+                ✕
               </button>
             </div>
-
-            <div className={styles.chapterMenuList}>
-              {sortedChapters.map((c) => (
-                <button
-                  key={c.id}
-                  type="button"
-                  className={`${styles.chapterMenuItem} ${c.number === chNum ? styles.activeChapterItem : ''}`}
-                  onClick={() => {
-                    navigate(`/manga/${manga.slug || manga.id}/chapter/${c.number}`, { replace: true });
-                    setShowChapterMenu(false);
-                    window.scrollTo(0, 0);
-                  }}
-                >
-                  <div className={styles.menuItemLeft}>
-                    <span className={styles.menuItemNumber}>
-                      {c.number === 0 ? '0-bob (Prolog)' : `${c.number}-bob`}
+            <div className={styles.drawerList}>
+              {sortedChapters.map((c) => {
+                const locked = isChapterLocked(c.number, user);
+                return (
+                  <button
+                    key={c.id}
+                    type="button"
+                    className={`${styles.chapterMenuItem} ${c.number === chNum ? styles.activeChapterItem : ''}`}
+                    onClick={() => {
+                      setShowChapterMenu(false);
+                      handleNavigateChapter(c.number);
+                    }}
+                  >
+                    <div className={styles.menuItemLeft}>
+                      <span className={styles.menuItemNumber}>
+                        {c.number === 0 ? '0-bob (Prolog)' : `${c.number}-bob`}
+                      </span>
+                      {locked && (
+                        <Lock size={12} className={styles.chapterMenuLockIcon} title="Hisob talab etiladi" />
+                      )}
+                      <span className={styles.menuItemTitle}>{c.title}</span>
+                    </div>
+                    <span className={styles.menuItemPages}>
+                      {c.pageCount || 0} bet
                     </span>
-                    <span className={styles.menuItemTitle}>{c.title}</span>
-                  </div>
-                  <span className={styles.menuItemPages}>
-                    {c.pageCount || 0} bet
-                  </span>
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -455,8 +535,7 @@ export default function ReaderPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    navigate(`/manga/${manga.slug || manga.id}/chapter/${nextChapter.number}`, { replace: true });
-                    window.scrollTo(0, 0);
+                    handleNavigateChapter(nextChapter.number);
                   }}
                   className="btn btn-primary"
                 >
@@ -496,8 +575,7 @@ export default function ReaderPage() {
                 type="button"
                 className="btn btn-outline"
                 onClick={() => {
-                  navigate(`/manga/${manga.slug || manga.id}/chapter/${prevChapter.number}`, { replace: true });
-                  window.scrollTo(0, 0);
+                  handleNavigateChapter(prevChapter.number);
                 }}
               >
                 <ChevronLeft size={16} />
@@ -521,8 +599,7 @@ export default function ReaderPage() {
                 type="button"
                 className="btn btn-primary"
                 onClick={() => {
-                  navigate(`/manga/${manga.slug || manga.id}/chapter/${nextChapter.number}`, { replace: true });
-                  window.scrollTo(0, 0);
+                  handleNavigateChapter(nextChapter.number);
                 }}
               >
                 <span>Keyingi: {nextChapter.number === 0 ? '0-bob (Prolog)' : `${nextChapter.number}-bob`}</span>

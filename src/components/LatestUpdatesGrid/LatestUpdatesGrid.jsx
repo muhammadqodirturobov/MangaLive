@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Lock } from 'lucide-react';
 import CoverImage from '../CoverImage/CoverImage.jsx';
+import { useAuth } from '../../context/AuthContext.jsx';
+import { isChapterLocked } from '../../utils/chapterAccess.js';
 import styles from './LatestUpdatesGrid.module.css';
 
 export default function LatestUpdatesGrid({ title, mangas = [], rightAction, subtitle }) {
+  const { user, openAuthModal } = useAuth();
   if (!mangas || mangas.length === 0) return null;
 
   return (
@@ -58,20 +61,35 @@ export default function LatestUpdatesGrid({ title, mangas = [], rightAction, sub
                 </div>
 
                 <div className={styles.chaptersList}>
-                  {recentChapters.map((chNum) => (
-                    <div key={`${target}-ch-${chNum}`} className={styles.chapterRow}>
-                      <Link
-                        to={`/manga/${target}/chapter/${chNum}`}
-                        className={styles.chapterLink}
-                        title={`${manga.title} ${chNum}-bobni o'qish`}
-                      >
-                        {chNum}-bob
-                      </Link>
-                      <span className={styles.timeTag}>
-                        <span>{chNum === lastCh ? 'So\'nggi' : 'Mavjud'}</span>
-                      </span>
-                    </div>
-                  ))}
+                  {recentChapters.map((chNum) => {
+                    const locked = isChapterLocked(chNum, user);
+                    return (
+                      <div key={`${target}-ch-${chNum}`} className={styles.chapterRow}>
+                        <Link
+                          to={`/manga/${target}/chapter/${chNum}`}
+                          className={styles.chapterLink}
+                          title={locked ? `${manga.title} ${chNum}-bob (Hisob talab etiladi)` : `${manga.title} ${chNum}-bobni o'qish`}
+                          onClick={(e) => {
+                            if (locked) {
+                              e.preventDefault();
+                              openAuthModal('signup', {
+                                intendedDestination: `/manga/${target}/chapter/${chNum}`,
+                                reason: 'chapter_locked',
+                                chapterNumber: chNum,
+                                mangaTitle: manga.title,
+                              });
+                            }
+                          }}
+                        >
+                          <span>{chNum}-bob</span>
+                          {locked && <Lock size={10} style={{ color: '#c084fc', marginLeft: 4 }} />}
+                        </Link>
+                        <span className={styles.timeTag}>
+                          <span>{chNum === lastCh ? 'So\'nggi' : 'Mavjud'}</span>
+                        </span>
+                      </div>
+                    );
+                  })}
                   {recentChapters.length === 0 && (
                     <span className={styles.timeTag}>Boblar tayyorlanmoqda</span>
                   )}

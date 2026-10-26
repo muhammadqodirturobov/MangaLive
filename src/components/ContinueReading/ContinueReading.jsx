@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
-import { BookOpen, Play, ChevronRight, Clock, Sparkles } from 'lucide-react';
+import { BookOpen, Play, ChevronRight, Clock, Sparkles, Lock } from 'lucide-react';
 import CoverImage from '../CoverImage/CoverImage.jsx';
+import { useAuth } from '../../context/AuthContext.jsx';
+import { isChapterLocked } from '../../utils/chapterAccess.js';
 import styles from './ContinueReading.module.css';
 
 /**
@@ -104,6 +106,7 @@ function formatTimeAgo(timestamp) {
 }
 
 export default function ContinueReading({ items = [], historyItem = null, allMangas = [] }) {
+  const { user, openAuthModal } = useAuth();
   // Support both array of items and single legacy historyItem
   let sourceList = Array.isArray(items) && items.length > 0
     ? items
@@ -214,15 +217,31 @@ export default function ContinueReading({ items = [], historyItem = null, allMan
               </div>
 
               {/* Fast Resume Action Button */}
-              <Link
-                to={resumeUrl}
-                className={styles.resumeActionBtn}
-                title={`Davom ettirish: ${item.chapterNumber}-bob`}
-                aria-label={`${item.mangaTitle} ${item.chapterNumber}-bobni o'qish`}
-              >
-                <Play size={14} fill="currentColor" />
-                <span className={styles.resumeBtnText}>O'qish</span>
-              </Link>
+              {(() => {
+                const locked = isChapterLocked(item.targetChapter, user);
+                return (
+                  <Link
+                    to={resumeUrl}
+                    className={styles.resumeActionBtn}
+                    title={locked ? `${item.chapterNumber}-bob (Hisob talab etiladi)` : `Davom ettirish: ${item.chapterNumber}-bob`}
+                    aria-label={`${item.mangaTitle} ${item.chapterNumber}-bobni o'qish`}
+                    onClick={(e) => {
+                      if (locked) {
+                        e.preventDefault();
+                        openAuthModal('signup', {
+                          intendedDestination: resumeUrl,
+                          reason: 'chapter_locked',
+                          chapterNumber: item.targetChapter,
+                          mangaTitle: item.mangaTitle,
+                        });
+                      }
+                    }}
+                  >
+                    {locked ? <Lock size={13} /> : <Play size={14} fill="currentColor" />}
+                    <span className={styles.resumeBtnText}>{locked ? 'Kirish' : "O'qish"}</span>
+                  </Link>
+                );
+              })()}
             </div>
           );
         })}

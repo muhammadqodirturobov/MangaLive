@@ -25,6 +25,7 @@ import {
 } from '../services/userService.js';
 import { fetchMangaById } from '../services/mangaService.js';
 import { AVATAR_PRESETS, DEFAULT_AVATAR, resolveAvatar } from '../data/avatars.js';
+import { isChapterLocked } from '../utils/chapterAccess.js';
 import MangaCard from '../components/MangaCard/MangaCard.jsx';
 import styles from './ProfilePage.module.css';
 
@@ -304,13 +305,30 @@ export default function ProfilePage() {
                           <span className={styles.cardTime}>{formatTimeAgo(item.timestamp)}</span>
                         </div>
                       </div>
-                      <Link
-                        to={`/manga/${item.mangaSlug || item.mangaId}/chapter/${item.chapterNumber}`}
-                        className={`btn btn-primary ${styles.continueBtn}`}
-                      >
-                        <Play size={14} />
-                        <span>O'qish</span>
-                      </Link>
+                      {(() => {
+                        const locked = isChapterLocked(item.chapterNumber, user);
+                        const chUrl = `/manga/${item.mangaSlug || item.mangaId}/chapter/${item.chapterNumber}`;
+                        return (
+                          <Link
+                            to={chUrl}
+                            className={`btn btn-primary ${styles.continueBtn}`}
+                            onClick={(e) => {
+                              if (locked) {
+                                e.preventDefault();
+                                openAuthModal('signup', {
+                                  intendedDestination: chUrl,
+                                  reason: 'chapter_locked',
+                                  chapterNumber: item.chapterNumber,
+                                  mangaTitle: item.mangaTitle,
+                                });
+                              }
+                            }}
+                          >
+                            <Play size={14} />
+                            <span>{locked ? 'Kirish' : "O'qish"}</span>
+                          </Link>
+                        );
+                      })()}
                     </div>
                   ))}
                 </div>
@@ -368,12 +386,29 @@ export default function ProfilePage() {
                           <span>{formatTimeAgo(item.timestamp)}</span>
                         </div>
                       </div>
-                      <Link
-                        to={`/manga/${item.mangaSlug || item.mangaId}/chapter/${item.chapterNumber}`}
-                        className={styles.historyActionLink}
-                      >
-                        Davom etish →
-                      </Link>
+                      {(() => {
+                        const locked = isChapterLocked(item.chapterNumber, user);
+                        const chUrl = `/manga/${item.mangaSlug || item.mangaId}/chapter/${item.chapterNumber}`;
+                        return (
+                          <Link
+                            to={chUrl}
+                            className={styles.historyActionLink}
+                            onClick={(e) => {
+                              if (locked) {
+                                e.preventDefault();
+                                openAuthModal('signup', {
+                                  intendedDestination: chUrl,
+                                  reason: 'chapter_locked',
+                                  chapterNumber: item.chapterNumber,
+                                  mangaTitle: item.mangaTitle,
+                                });
+                              }
+                            }}
+                          >
+                            {locked ? "Qulflangan (Kirish) →" : "Davom etish →"}
+                          </Link>
+                        );
+                      })()}
                     </div>
                   ))}
                 </div>

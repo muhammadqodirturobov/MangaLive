@@ -5,12 +5,15 @@ import CoverImage from '../CoverImage/CoverImage.jsx';
 import { getMangaThematicProfile } from '../../assets/coverHelper.js';
 import { getLastReadChapter } from '../../services/userService.js';
 import { formatExternalRating } from '../../services/ratingService.js';
+import { useAuth } from '../../context/AuthContext.jsx';
+import { isChapterLocked } from '../../utils/chapterAccess.js';
 import styles from './FeaturedBanner.module.css';
 
 // 6 seconds per slide (meets 5-7 seconds requirement)
 const SLIDE_DURATION_MS = 6000;
 
 export default function FeaturedBanner({ mangas = [] }) {
+  const { user, openAuthModal } = useAuth();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -251,6 +254,17 @@ export default function FeaturedBanner({ mangas = [] }) {
                   <Link
                     to={`/manga/${mangaTarget}/chapter/${targetChapter}`}
                     className={`${styles.primaryCta} btn`}
+                    onClick={(e) => {
+                      if (isChapterLocked(targetChapter, user)) {
+                        e.preventDefault();
+                        openAuthModal('signup', {
+                          intendedDestination: `/manga/${mangaTarget}/chapter/${targetChapter}`,
+                          reason: 'chapter_locked',
+                          chapterNumber: targetChapter,
+                          mangaTitle: currentManga?.title,
+                        });
+                      }
+                    }}
                   >
                     {lastRead ? (
                       <>

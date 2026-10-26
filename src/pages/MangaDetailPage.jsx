@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Eye, BookOpen, Clock, Play, AlertCircle,
-  Heart, RotateCcw, ArrowUpDown, RefreshCw
+  Heart, RotateCcw, ArrowUpDown, RefreshCw, Lock
 } from 'lucide-react';
 import { getCachedManga, fetchMangaById } from '../services/mangaService.js';
 import { getCachedChapters, fetchChapters } from '../services/chapterService.js';
@@ -11,6 +11,8 @@ import { isMangaFavorited, toggleFavorite, getLastReadChapter } from '../service
 import { formatExternalRating } from '../services/ratingService.js';
 import { formatViewCount } from '../services/analyticsService.js';
 import { navigateBackFromOverview } from '../utils/navigationTracker.js';
+import { useAuth } from '../context/AuthContext.jsx';
+import { isChapterLocked } from '../utils/chapterAccess.js';
 import styles from './MangaDetailPage.module.css';
 
 const TYPE_LABELS = { manga: 'Manga', manhwa: 'Manhwa', manhua: 'Manhua', komiks: 'Komiks' };
@@ -23,6 +25,7 @@ const STATUS_LABELS = {
 export default function MangaDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user, openAuthModal } = useAuth();
 
   const handleBack = useCallback(() => {
     navigateBackFromOverview(navigate, id);
@@ -283,6 +286,17 @@ export default function MangaDetailPage() {
                     <Link
                       to={`/manga/${mangaTarget}/chapter/${lastRead.chapterNumber}`}
                       className={`btn btn-primary ${styles.readBtn}`}
+                      onClick={(e) => {
+                        if (isChapterLocked(lastRead.chapterNumber, user)) {
+                          e.preventDefault();
+                          openAuthModal('signup', {
+                            intendedDestination: `/manga/${mangaTarget}/chapter/${lastRead.chapterNumber}`,
+                            reason: 'chapter_locked',
+                            chapterNumber: lastRead.chapterNumber,
+                            mangaTitle: manga.title,
+                          });
+                        }
+                      }}
                     >
                       <Play size={16} fill="currentColor" />
                       O'qishni davom ettirish ({lastRead.chapterNumber}-bob)
@@ -304,6 +318,17 @@ export default function MangaDetailPage() {
                     <Link
                       to={`/manga/${mangaTarget}/chapter/${firstChapNum}`}
                       className={`btn btn-primary ${styles.readBtn}`}
+                      onClick={(e) => {
+                        if (isChapterLocked(firstChapNum, user)) {
+                          e.preventDefault();
+                          openAuthModal('signup', {
+                            intendedDestination: `/manga/${mangaTarget}/chapter/${firstChapNum}`,
+                            reason: 'chapter_locked',
+                            chapterNumber: firstChapNum,
+                            mangaTitle: manga.title,
+                          });
+                        }
+                      }}
                     >
                       <Play size={16} fill="currentColor" />
                       O'qishni boshlash ({firstChapNum}-bob{firstChapNum === 0 ? ': Prolog' : ''})
@@ -323,6 +348,18 @@ export default function MangaDetailPage() {
                       <Link
                         to={`/manga/${mangaTarget}/chapter/${getChapNum(latestChapter)}`}
                         className="btn btn-outline"
+                        onClick={(e) => {
+                          const latChNum = getChapNum(latestChapter);
+                          if (isChapterLocked(latChNum, user)) {
+                            e.preventDefault();
+                            openAuthModal('signup', {
+                              intendedDestination: `/manga/${mangaTarget}/chapter/${latChNum}`,
+                              reason: 'chapter_locked',
+                              chapterNumber: latChNum,
+                              mangaTitle: manga.title,
+                            });
+                          }
+                        }}
                       >
                         So'nggi bob ({getChapNum(latestChapter)}-bob)
                       </Link>
@@ -389,18 +426,36 @@ export default function MangaDetailPage() {
               {displayChapters.map((ch) => {
                 const chNum = getChapNum(ch);
                 const isRead = lastRead && Number(lastRead.chapterNumber) === chNum;
+                const locked = isChapterLocked(chNum, user);
                 return (
                   <Link
                     key={ch.id || `chap-${chNum}`}
                     to={`/manga/${mangaTarget}/chapter/${chNum}`}
-                    className={`${styles.chapterItem} ${isRead ? styles.chapterItemRead : ''}`}
+                    className={`${styles.chapterItem} ${isRead ? styles.chapterItemRead : ''} ${locked ? styles.chapterItemLocked : ''}`}
                     role="listitem"
-                    aria-label={`${ch.title || `${chNum}-bob`}, ${ch.pageCount || 0} sahifa`}
+                    aria-label={`${ch.title || `${chNum}-bob`}, ${ch.pageCount || 0} sahifa${locked ? ' (Hisob talab etiladi)' : ''}`}
+                    onClick={(e) => {
+                      if (locked) {
+                        e.preventDefault();
+                        openAuthModal('signup', {
+                          intendedDestination: `/manga/${mangaTarget}/chapter/${chNum}`,
+                          reason: 'chapter_locked',
+                          chapterNumber: chNum,
+                          mangaTitle: manga.title,
+                        });
+                      }
+                    }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span className={styles.chNum}>
                         {chNum === 0 ? '0-bob (Prolog)' : (ch.title || `${chNum}-bob`)}
                       </span>
+                      {locked && (
+                        <span className={styles.lockBadge} title="2-bob va undan keyingi boblarni o'qish uchun hisob talab etiladi">
+                          <Lock size={11} />
+                          <span>Qulflangan</span>
+                        </span>
+                      )}
                       {isRead && (
                         <span style={{ fontSize: '0.65rem', background: 'rgba(124,58,237,0.3)', color: '#c084fc', padding: '1px 6px', borderRadius: '4px', fontWeight: 600 }}>
                           O'qilgan

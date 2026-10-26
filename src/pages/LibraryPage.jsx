@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Clock, Heart, Play } from 'lucide-react';
+import { BookOpen, Clock, Heart, Play, Lock } from 'lucide-react';
 import { getReadingHistory, getFavorites } from '../services/userService.js';
 import { fetchMangaById } from '../services/mangaService.js';
+import { useAuth } from '../context/AuthContext.jsx';
+import { isChapterLocked } from '../utils/chapterAccess.js';
 import MangaCard from '../components/MangaCard/MangaCard.jsx';
 import styles from './LibraryPage.module.css';
 
@@ -13,6 +15,7 @@ const TABS = [
 ];
 
 export default function LibraryPage() {
+  const { user, openAuthModal } = useAuth();
   const [activeTab, setActiveTab] = useState('history');
   const [historyItems, setHistoryItems] = useState(() => getReadingHistory());
   const [favoriteMangas, setFavoriteMangas] = useState([]);
@@ -135,13 +138,30 @@ export default function LibraryPage() {
                         </div>
                       </div>
 
-                      <Link
-                        to={`/manga/${targetSlug}/chapter/${item.chapterNumber}`}
-                        className={`btn btn-primary ${styles.historyResumeBtn}`}
-                      >
-                        <Play size={13} fill="currentColor" />
-                        <span>Davom ettirish</span>
-                      </Link>
+                      {(() => {
+                        const locked = isChapterLocked(item.chapterNumber, user);
+                        const resumeUrl = `/manga/${targetSlug}/chapter/${item.chapterNumber}`;
+                        return (
+                          <Link
+                            to={resumeUrl}
+                            className={`btn btn-primary ${styles.historyResumeBtn}`}
+                            onClick={(e) => {
+                              if (locked) {
+                                e.preventDefault();
+                                openAuthModal('signup', {
+                                  intendedDestination: resumeUrl,
+                                  reason: 'chapter_locked',
+                                  chapterNumber: item.chapterNumber,
+                                  mangaTitle: item.mangaTitle,
+                                });
+                              }
+                            }}
+                          >
+                            {locked ? <Lock size={13} /> : <Play size={13} fill="currentColor" />}
+                            <span>{locked ? 'Kirish' : 'Davom ettirish'}</span>
+                          </Link>
+                        );
+                      })()}
                     </div>
                   );
                 })}

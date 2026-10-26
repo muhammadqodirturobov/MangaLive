@@ -9,7 +9,7 @@ import {
 } from '@aws-sdk/client-s3';
 
 // Load environment from .env.local or process.env safely
-function loadEnv() {
+export function loadEnv() {
   const env = { ...process.env };
   const envFiles = ['.env.local', '.env'];
   for (const file of envFiles) {

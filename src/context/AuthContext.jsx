@@ -3,12 +3,22 @@ import { supabase, isSupabaseConfigured } from '../services/supabaseClient.js';
 import { getFavorites, getReadingHistory, getGuestAvatar, setGuestAvatar } from '../data/userStorage.js';
 import { DEFAULT_AVATAR, resolveAvatar } from '../data/avatars.js';
 
+function syncAuthCookie(token) {
+  if (typeof document === 'undefined') return;
+  if (token) {
+    document.cookie = `mangalive_token=${encodeURIComponent(token)}; path=/; max-age=604800; SameSite=Lax`;
+  } else {
+    document.cookie = `mangalive_token=; path=/; max-age=0; SameSite=Lax`;
+  }
+}
+
 const AuthContext = createContext({
   user: null,
   session: null,
   loading: true,
   isAuthModalOpen: false,
   authModalTab: 'login',
+  authOptions: {},
   openAuthModal: () => {},
   closeAuthModal: () => {},
   signIn: async () => {},
@@ -24,15 +34,20 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalTab, setAuthModalTab] = useState('login');
+  const [authOptions, setAuthOptions] = useState({
+    intendedDestination: null,
+    reason: null,
+    chapterNumber: null,
+    mangaTitle: null,
+  });
 
-  // Migrate guest data (favorites & reading history) to Supabase account
+  // Migrate guest data (favorites & reading history & avatar) to Supabase account
   const migrateGuestData = useCallback(async (userId) => {
     if (!userId || !isSupabaseConfigured || !supabase) return;
     try {
       // 1. Migrate Favorites
       const localFavs = getFavorites();
       if (localFavs.length > 0) {
-        // Resolve UUIDs for slugs
         for (const fId of localFavs) {
           try {
             const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(fId);
@@ -91,10 +106,10 @@ export function AuthProvider({ children }) {
             await supabase.auth.updateUser({
               data: { avatar_url: clean },
             });
-            setUser((prev) => prev ? {
+            setUser((prev) => (prev ? {
               ...prev,
               user_metadata: { ...prev.user_metadata, avatar_url: clean }
-            } : prev);
+            } : prev));
           }
         } catch (e) {
           console.warn('Guest avatar migration error:', e.message);
@@ -105,7 +120,7 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  // Listen to Supabase Auth state changes
+  // Listen to Supabase Auth state changes and restore session
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) {
       setLoading(false);
@@ -115,12 +130,16 @@ export function AuthProvider({ children }) {
     supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
       setSession(initialSession);
       setUser(initialSession?.user ?? null);
+      if (initialSession?.access_token) {
+        syncAuthCookie(initialSession.access_token);
+      }
       setLoading(false);
       if (initialSession?.user?.id) {
         migrateGuestData(initialSession.user.id);
       }
     }).catch((err) => {
       console.warn('[AuthContext] Session fetch error:', err.message);
+      syncAuthCookie(null);
       setLoading(false);
     });
 
@@ -129,8 +148,16 @@ export function AuthProvider({ children }) {
       setUser(newSession?.user ?? null);
       setLoading(false);
 
-      if (event === 'SIGNED_IN' && newSession?.user?.id) {
+      if (newSession?.access_token) {
+        syncAuthCookie(newSession.access_token);
+      } else {
+        syncAuthCookie(null);
+      }
+
+      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && newSession?.user?.id) {
         await migrateGuestData(newSession.user.id);
+      } else if (event === 'SIGNED_OUT') {
+        syncAuthCookie(null);
       }
     });
 
@@ -139,8 +166,16 @@ export function AuthProvider({ children }) {
     };
   }, [migrateGuestData]);
 
-  const openAuthModal = useCallback((tab = 'login') => {
+  const openAuthModal = useCallback((tab = 'login', options = {}) => {
     setAuthModalTab(tab);
+    if (options && typeof options === 'object') {
+      setAuthOptions((prev) => ({ ...prev, ...options }));
+      if (options.intendedDestination) {
+        try {
+          sessionStorage.setItem('ml_intended_destination', options.intendedDestination);
+        } catch {}
+      }
+    }
     setIsAuthModalOpen(true);
   }, []);
 
@@ -157,12 +192,27 @@ export function AuthProvider({ children }) {
       password,
     });
     if (error) throw error;
+    if (data?.session?.access_token) {
+      syncAuthCookie(data.session.access_token);
+    }
     if (data?.user?.id) {
       await migrateGuestData(data.user.id);
     }
+
+    let dest = authOptions.intendedDestination;
+    if (!dest && typeof sessionStorage !== 'undefined') {
+      dest = sessionStorage.getItem('ml_intended_destination');
+    }
+    if (dest) {
+      try {
+        sessionStorage.removeItem('ml_intended_destination');
+      } catch {}
+      setAuthOptions((prev) => ({ ...prev, intendedDestination: null }));
+    }
+
     closeAuthModal();
-    return data;
-  }, [closeAuthModal, migrateGuestData]);
+    return { ...data, destination: dest };
+  }, [closeAuthModal, migrateGuestData, authOptions.intendedDestination]);
 
   const signUp = useCallback(async (email, password, fullName = '') => {
     if (!isSupabaseConfigured || !supabase) {
@@ -180,17 +230,36 @@ export function AuthProvider({ children }) {
       },
     });
     if (error) throw error;
+    if (data?.session?.access_token) {
+      syncAuthCookie(data.session.access_token);
+    }
     if (data?.user?.id) {
       await migrateGuestData(data.user.id);
     }
+
+    let dest = authOptions.intendedDestination;
+    if (!dest && typeof sessionStorage !== 'undefined') {
+      dest = sessionStorage.getItem('ml_intended_destination');
+    }
+    if (dest) {
+      try {
+        sessionStorage.removeItem('ml_intended_destination');
+      } catch {}
+      setAuthOptions((prev) => ({ ...prev, intendedDestination: null }));
+    }
+
     closeAuthModal();
-    return data;
-  }, [closeAuthModal, migrateGuestData]);
+    return { ...data, destination: dest };
+  }, [closeAuthModal, migrateGuestData, authOptions.intendedDestination]);
 
   const signOut = useCallback(async () => {
     if (!isSupabaseConfigured || !supabase) return;
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    try {
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.warn('SignOut error:', err);
+    }
+    syncAuthCookie(null);
     setUser(null);
     setSession(null);
   }, []);
@@ -234,6 +303,7 @@ export function AuthProvider({ children }) {
         loading,
         isAuthModalOpen,
         authModalTab,
+        authOptions,
         openAuthModal,
         closeAuthModal,
         signIn,
