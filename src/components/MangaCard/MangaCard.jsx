@@ -71,7 +71,10 @@ export default function MangaCard({ manga, size = 'normal', showRank = null }) {
           </div>
 
           {/* Chapter / Resume pill at bottom right */}
-          <div className={styles.chapterPill} title={lastRead ? `O'qilgan: ${lastRead.chapterNumber}-bob` : `${manga.chapters} ta bob`}>
+          <div
+            className={styles.chapterPill}
+            title={lastRead ? `O'qilgan: ${lastRead.chapterNumber}-bob` : `MangaLive-da o'qish uchun ${manga.chapters || manga.lastChapter || 0} ta bob mavjud`}
+          >
             {lastRead ? (
               <>
                 <RotateCcw size={10} style={{ color: '#c084fc' }} aria-hidden="true" />
@@ -80,7 +83,7 @@ export default function MangaCard({ manga, size = 'normal', showRank = null }) {
             ) : (
               <>
                 <BookOpen size={10} aria-hidden="true" />
-                <span>{manga.chapters || manga.lastChapter || 0} ta bob</span>
+                <span>{manga.chapters || manga.lastChapter || 0} bob mavjud</span>
               </>
             )}
           </div>

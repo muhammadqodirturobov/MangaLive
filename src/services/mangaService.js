@@ -342,12 +342,13 @@ export async function fetchFeaturedMangas(limit = 4) {
 
     let list = (data || []).map(normalizeManga);
 
-    // If no mangas are explicitly marked as featured in DB, fallback to top viewed real mangas
+    // If no mangas are explicitly marked as featured in DB, fallback to top-rated real mangas
     if (list.length === 0) {
       const { data: topData } = await supabase
         .from('mangas')
         .select(`*, manga_genres (genres (slug, name))`)
-        .order('views_count', { ascending: false })
+        .order('rating', { ascending: false })
+        .order('chapters_count', { ascending: false })
         .limit(limit);
       list = (topData || []).map(normalizeManga);
     }
@@ -382,7 +383,8 @@ export async function fetchPopularManga(limit = 8) {
     const { data, error } = await supabase
       .from('mangas')
       .select(`*, manga_genres (genres (slug, name))`)
-      .order('views_count', { ascending: false })
+      .order('rating', { ascending: false })
+      .order('chapters_count', { ascending: false })
       .limit(limit);
 
     if (error) {

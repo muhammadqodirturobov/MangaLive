@@ -3,13 +3,17 @@
   flex-direction: column;
   gap: var(--space-3);
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
+  flex-wrap: wrap;
+  gap: var(--space-2);
   padding-bottom: 6px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -18,6 +22,8 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
+  flex: 1;
 }
 
 .title {
@@ -34,8 +40,11 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-4);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .entry {
@@ -45,6 +54,9 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   padding: 10px;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   transition: border-color var(--transition-fast);
 }
 
@@ -131,13 +143,13 @@
 
 @media (max-width: 1040px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 640px) {
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-2);
   }
 }

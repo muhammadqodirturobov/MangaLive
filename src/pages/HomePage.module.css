@@ -22,11 +22,19 @@
   flex-direction: column;
   gap: var(--space-8);
   padding-top: var(--space-4);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* ── Continue Reading Section ────────────────────────────────────────────── */
 .continueSection {
   margin-top: -0.5rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* ── Quick Genre Explorer Pills ─────────────────────────────────────────── */
@@ -41,6 +49,10 @@
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .genreBar::-webkit-scrollbar {
@@ -74,6 +86,8 @@
   flex-wrap: nowrap;
   overflow-x: auto;
   scrollbar-width: none;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .genrePills::-webkit-scrollbar {
@@ -125,6 +139,10 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* ── View All Link ──────────────────────────────────────────────────────── */
@@ -145,23 +163,30 @@
 /* ── Main Split Layout: Latest Updates + Top Rankings Sidebar ─────────────── */
 .splitLayout {
   display: grid;
-  grid-template-columns: 1fr 320px;
+  grid-template-columns: minmax(0, 1fr) 320px;
   gap: var(--space-6);
   align-items: start;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .mainColumn {
   min-width: 0;
+  max-width: 100%;
 }
 
 .sidebarColumn {
   position: sticky;
   top: 80px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 @media (max-width: 1024px) {
   .splitLayout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .sidebarColumn {

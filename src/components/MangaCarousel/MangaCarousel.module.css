@@ -3,13 +3,17 @@
   flex-direction: column;
   gap: var(--space-3);
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
+  flex-wrap: wrap;
+  gap: var(--space-2);
   padding-bottom: 6px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -17,7 +21,9 @@
 .titleWrap {
   display: flex;
   align-items: baseline;
-  gap: var(--space-3);
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  min-width: 0;
 }
 
 .title {
@@ -166,6 +172,16 @@
   gap: 3px;
   color: #fbbf24;
   font-weight: var(--weight-semibold);
+  font-size: 11px;
+}
+
+.ratingUnrated {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #64748b;
+  font-weight: var(--weight-medium);
+  font-size: 11px;
 }
 
 .starIcon {
@@ -174,10 +190,15 @@
 
 .dot {
   opacity: 0.4;
+  flex-shrink: 0;
 }
 
 .chapters {
   color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
 }
 
 @media (max-width: 640px) {
@@ -185,6 +206,9 @@
     display: none;
   }
   .card {
-    flex: 0 0 120px;
+    flex: 0 0 125px;
+  }
+  .chapters {
+    font-size: 10px;
   }
 }

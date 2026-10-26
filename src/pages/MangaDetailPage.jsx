@@ -150,8 +150,13 @@ export default function MangaDetailPage() {
   };
 
   // Determine reading order & resume actions
-  const lastRead = getLastReadChapter(manga.id) || (manga.slug ? getLastReadChapter(manga.slug) : null);
+  const lastReadRaw = getLastReadChapter(manga.id) || (manga.slug ? getLastReadChapter(manga.slug) : null);
   const sortedChapters = [...chapters].sort((a, b) => getChapNum(a) - getChapNum(b));
+  // Validate that lastRead chapter actually exists in available chapters to never link to unavailable chapter
+  const lastRead = lastReadRaw && sortedChapters.some((c) => getChapNum(c) === lastReadRaw.chapterNumber)
+    ? lastReadRaw
+    : null;
+
   const chapter0 = sortedChapters.find((c) => getChapNum(c) === 0);
   const chapter1 = sortedChapters.find((c) => getChapNum(c) === 1);
   const earliestChapter = sortedChapters[0] || null;
@@ -250,7 +255,7 @@ export default function MangaDetailPage() {
 
               {/* Stats */}
               <div className={styles.stats}>
-                <Stat icon={<BookOpen size={14} />} label={`${chapters.length} ta bob`} />
+                <Stat icon={<BookOpen size={14} />} label={`${chapters.length} ta bob mavjud`} />
                 {formattedViews ? (
                   <Stat icon={<Eye size={14} />} label={`${formattedViews} ko'rish`} />
                 ) : null}
@@ -355,10 +360,10 @@ export default function MangaDetailPage() {
 
         {/* Chapter list */}
         <section aria-label="Boblar ro'yxati" className={styles.chaptersSection}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '8px' }}>
             <h2 className="section-title" style={{ margin: 0 }}>
               Boblar
-              <span className={styles.chapterCount}>({chapters.length} ta)</span>
+              <span className={styles.chapterCount}>({chapters.length} ta mavjud)</span>
             </h2>
 
             {chapters.length > 1 && (

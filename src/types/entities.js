@@ -1,3 +1,5 @@
+import externalRatingsData from '../data/externalRatings.json';
+
 /**
  * MangaLive.uz — Entity Normalizers & JSDoc Models
  *
@@ -36,10 +38,26 @@ export function normalizeManga(raw) {
     ? raw.dbId.trim()
     : null;
 
-  const realSlug = (raw.slug || (!isUuidPattern(raw.id) ? raw.id : '') || '').trim();
+  const realSlug = (raw.slug || (!isUuidPattern(raw.id) ? raw.id : '') || '').trim().toLowerCase();
 
   // Primary identifier: Database UUID takes precedence when available, fallback to slug for demo data
   const primaryId = realUuid || realSlug;
+
+  // Resolve canonical AniList /10 rating
+  const ext = externalRatingsData[realSlug] || (realUuid ? externalRatingsData[realUuid] : null);
+  const canonicalRating10 = ext && ext.score
+    ? Number(ext.score)
+    : raw.rating > 0
+    ? (raw.rating <= 5.0 ? Math.round(Number(raw.rating) * 20) / 10 : Number(raw.rating))
+    : 0;
+
+  const ratingCount = ext && ext.members
+    ? Number(ext.members)
+    : Number(raw.rating_count ?? raw.ratingCount ?? 0);
+
+  // Chapter counts: distinguish available chapters to read on MangaLive
+  const availableChapters = Number(raw.chapters_count ?? raw.chapters ?? 0);
+  const lastChapter = Number(raw.last_chapter_number ?? raw.lastChapter ?? availableChapters ?? 1);
 
   return {
     id: primaryId,
@@ -51,9 +69,13 @@ export function normalizeManga(raw) {
     author: raw.author || 'Noma\'lum',
     type: raw.type || 'manga',
     status: raw.status || 'davom etmoqda',
-    rating: Number(raw.rating ?? 0),
-    ratingCount: Number(raw.rating_count ?? raw.ratingCount ?? 0),
-    chapters: Number(raw.chapters_count ?? raw.chapters ?? 0),
+    rating: canonicalRating10,
+    ratingScale: 10,
+    ratingCount,
+    hasRating: Boolean(canonicalRating10 > 0),
+    ratingSource: ext?.source || 'AniList',
+    chapters: availableChapters,
+    availableChapters,
     views: Number(raw.views_count ?? raw.views ?? 0),
     genres,
     coverImage: raw.cover_url || raw.coverImage || '',
@@ -65,7 +87,7 @@ export function normalizeManga(raw) {
     isFeatured: Boolean(raw.is_featured ?? raw.isFeatured),
     isPopular: Boolean(raw.is_popular ?? raw.isPopular),
     isNew: Boolean(raw.is_new ?? raw.isNew),
-    lastChapter: Number(raw.last_chapter_number ?? raw.lastChapter ?? raw.chapters_count ?? 1),
+    lastChapter,
     lastUpdated: raw.last_updated_at ? new Date(raw.last_updated_at).toISOString().split('T')[0] : (raw.lastUpdated || ''),
     createdAt: raw.created_at || raw.createdAt,
     updatedAt: raw.updated_at || raw.updatedAt,

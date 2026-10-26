@@ -102,6 +102,13 @@
   --max-width: 1440px;
   --sidebar-width: 320px;
   --header-height: 56px;
+  --mobile-bottom-space: 0px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --mobile-bottom-space: 72px;
+  }
 }
 
 /* Light theme override (if theme toggle is used) */

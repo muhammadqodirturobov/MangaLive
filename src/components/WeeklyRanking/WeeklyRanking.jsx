@@ -52,7 +52,9 @@ export default function WeeklyRanking({ rankings }) {
                     <span className={styles.scale}>/10</span>
                   </span>
                   <span className={styles.dot}>•</span>
-                  <span className={styles.chaptersCount}>{chapters} ta bob</span>
+                  <span className={styles.chaptersCount} title={`MangaLive-da o'qish uchun ${chapters} ta bob mavjud`}>
+                    {chapters} bob mavjud
+                  </span>
                 </div>
               </div>
             </li>

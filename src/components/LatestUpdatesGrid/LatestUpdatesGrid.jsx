@@ -19,13 +19,18 @@ export default function LatestUpdatesGrid({ title, mangas = [], rightAction, sub
       <div className={styles.grid}>
         {mangas.map((manga, idx) => {
           const target = manga.slug || manga.id;
-          const totalChapters = manga.chapters || manga.lastChapter || 0;
-          const lastCh = manga.lastChapter || manga.chapters || 1;
+          const totalChapters = Number(manga.availableChapters ?? manga.chapters ?? manga.lastChapter ?? 0);
+          const lastCh = Math.min(
+            Number(manga.lastChapter || manga.chapters || 0),
+            totalChapters
+          );
 
-          // Generate up to 3 recent available chapters
+          // Generate up to 3 recent genuinely available chapters
           const recentChapters = [];
-          for (let c = lastCh; c >= Math.max(1, lastCh - 2); c--) {
-            recentChapters.push(c);
+          if (lastCh > 0) {
+            for (let c = lastCh; c >= Math.max(1, lastCh - 2); c--) {
+              recentChapters.push(c);
+            }
           }
 
           return (
@@ -47,9 +52,9 @@ export default function LatestUpdatesGrid({ title, mangas = [], rightAction, sub
                   {manga.title}
                 </Link>
 
-                <div className={styles.totalBadge}>
+                <div className={styles.totalBadge} title={`MangaLive-da o'qish uchun ${totalChapters} ta bob mavjud`}>
                   <BookOpen size={10} aria-hidden="true" />
-                  <span>Jami: {totalChapters} ta bob</span>
+                  <span>Mavjud: {totalChapters} ta bob</span>
                 </div>
 
                 <div className={styles.chaptersList}>
@@ -67,6 +72,9 @@ export default function LatestUpdatesGrid({ title, mangas = [], rightAction, sub
                       </span>
                     </div>
                   ))}
+                  {recentChapters.length === 0 && (
+                    <span className={styles.timeTag}>Boblar tayyorlanmoqda</span>
+                  )}
                 </div>
               </div>
             </div>

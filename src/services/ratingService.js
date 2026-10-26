@@ -1,24 +1,28 @@
 import externalRatingsData from '../data/externalRatings.json';
 
 /**
- * Get the verified external rating for a manga by slug.
- * @param {string} slug
+ * Get the verified external rating for a manga by slug, id, or manga object.
+ * @param {string|object} slugOrManga
  * @returns {{ source: string, externalId: number, title: string, score: number, scale: number, members: number, url: string, syncedAt: string } | null}
  */
-export function getExternalRating(slug) {
-  if (!slug) return null;
-  const cleanSlug = String(slug).toLowerCase().trim();
-  return externalRatingsData[cleanSlug] || null;
+export function getExternalRating(slugOrManga) {
+  if (!slugOrManga) return null;
+  const key = typeof slugOrManga === 'object'
+    ? (slugOrManga.slug || slugOrManga.id || '')
+    : String(slugOrManga);
+
+  const cleanKey = String(key).toLowerCase().trim();
+  return externalRatingsData[cleanKey] || null;
 }
 
 /**
  * Format rating for consistent, authentic display.
  * Example: "AniList 8.5/10 · 47.6K a'zo" or "Baholanmagan"
- * @param {string} slug
+ * @param {string|object} slugOrManga
  * @returns {{ badge: string, score: string, members: string, hasRating: boolean, source: string, url?: string }}
  */
-export function formatExternalRating(slug) {
-  const rating = getExternalRating(slug);
+export function formatExternalRating(slugOrManga) {
+  const rating = getExternalRating(slugOrManga);
   if (!rating || !rating.score) {
     return {
       badge: "Baholanmagan",

@@ -416,8 +416,10 @@
   }
 
   .bannerContent {
-    padding: var(--space-4) var(--space-4);
+    padding: var(--space-4) var(--space-4) 32px var(--space-4);
     gap: var(--space-2);
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .topBadges {
@@ -433,6 +435,9 @@
   .bannerTitle {
     font-size: 1.25rem;
     line-height: 1.2;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
   }
 
   .synopsis {
@@ -440,26 +445,40 @@
   }
 
   .ctaRow {
+    display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: var(--space-2);
     margin-top: 4px;
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .primaryCta {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 140px;
     justify-content: center;
-    padding: 7px 10px;
+    padding: 8px 12px;
     font-size: 11px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .secondaryCta {
-    flex-shrink: 0;
+    flex: 1 1 auto;
+    min-width: 110px;
     justify-content: center;
-    padding: 7px 10px;
+    padding: 8px 12px;
     font-size: 11px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dots {
+    bottom: 8px;
   }
 
   .navBtn {

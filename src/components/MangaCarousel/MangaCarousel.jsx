@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import CoverImage from '../CoverImage/CoverImage.jsx';
+import { formatExternalRating } from '../../services/ratingService.js';
 import styles from './MangaCarousel.module.css';
 
 export default function MangaCarousel({
@@ -57,6 +58,8 @@ export default function MangaCarousel({
       <div className={styles.track} ref={scrollRef}>
         {mangas.map((manga, idx) => {
           const rankNumber = showRank ? idx + 1 : null;
+          const extRating = formatExternalRating(manga);
+          const availableCh = manga.availableChapters ?? manga.chapters ?? manga.lastChapter ?? 0;
 
           return (
             <Link
@@ -96,13 +99,20 @@ export default function MangaCarousel({
                   {manga.title}
                 </h3>
                 <div className={styles.subRow}>
-                  <span className={styles.rating}>
-                    <Star size={11} className={styles.starIcon} />
-                    <span>{manga.rating?.toFixed(1) || '4.8'}</span>
-                  </span>
+                  {extRating.hasRating ? (
+                    <span className={styles.rating} title={`${extRating.badge} · ${extRating.members}`}>
+                      <Star size={11} className={styles.starIcon} />
+                      <span>{extRating.score}</span>
+                    </span>
+                  ) : (
+                    <span className={styles.ratingUnrated} title="Baholanmagan">
+                      <Star size={11} style={{ color: '#64748b' }} />
+                      <span>—</span>
+                    </span>
+                  )}
                   <span className={styles.dot}>•</span>
-                  <span className={styles.chapters}>
-                    {manga.chapters || manga.lastChapter} bob
+                  <span className={styles.chapters} title={`MangaLive-da o'qish uchun ${availableCh} ta bob mavjud`}>
+                    {availableCh} bob mavjud
                   </span>
                 </div>
               </div>

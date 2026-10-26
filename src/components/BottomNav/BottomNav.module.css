@@ -4,20 +4,25 @@
 
 @media (max-width: 768px) {
   .bottomNav {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow: hidden;
     height: 60px;
-    background: rgba(9, 10, 20, 0.95);
+    background: rgba(9, 10, 20, 0.96);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     z-index: 999;
     align-items: center;
-    justify-content: space-around;
-    padding: 0 4px;
+    padding: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
     box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.5);
   }
 
@@ -29,7 +34,8 @@
     gap: 3px;
     color: var(--color-text-secondary);
     text-decoration: none;
-    flex: 1;
+    min-width: 0;
+    width: 100%;
     height: 100%;
     transition: color var(--transition-fast);
     -webkit-tap-highlight-color: transparent;
@@ -37,11 +43,16 @@
 
   .icon {
     transition: transform var(--transition-fast);
+    flex-shrink: 0;
   }
 
   .label {
     font-size: 10px;
     font-weight: var(--weight-medium);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
 
   .active {

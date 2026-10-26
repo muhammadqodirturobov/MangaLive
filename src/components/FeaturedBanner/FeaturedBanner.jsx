@@ -165,7 +165,10 @@ export default function FeaturedBanner({ mangas = [] }) {
               {(() => {
                 const mangaTarget = currentManga.slug || currentManga.id;
                 const lastRead = getLastReadChapter(currentManga.id) || (currentManga.slug ? getLastReadChapter(currentManga.slug) : null);
-                const targetChapter = lastRead ? lastRead.chapterNumber : 1;
+                const maxAvailable = Number(currentManga.availableChapters ?? currentManga.chapters ?? currentManga.lastChapter ?? 1);
+                const targetChapter = lastRead
+                  ? Math.min(Math.max(1, Number(lastRead.chapterNumber) || 1), maxAvailable)
+                  : 1;
 
                 return (
                   <>

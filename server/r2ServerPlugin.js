@@ -235,6 +235,19 @@ export function createR2Middleware() {
           res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
           res.setHeader('Access-Control-Allow-Origin', '*');
 
+          bodyStream.on('error', (err) => {
+            // Client closed or socket aborted, avoid unhandled error crash
+            if (!res.headersSent) {
+              res.statusCode = 500;
+              res.end();
+            }
+          });
+          res.on('close', () => {
+            if (typeof bodyStream.destroy === 'function') {
+              bodyStream.destroy();
+            }
+          });
+
           bodyStream.pipe(res);
           return;
         } catch (streamErr) {
