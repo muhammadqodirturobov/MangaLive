@@ -225,9 +225,12 @@
   }
   .card {
     flex: 0 0 135px;
+    scroll-snap-align: start;
   }
   .track {
     gap: 12px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
   .rankBadge {
     font-size: 22px;

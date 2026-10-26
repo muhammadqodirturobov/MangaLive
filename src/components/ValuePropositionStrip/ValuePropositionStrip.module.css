@@ -80,11 +80,25 @@
 
 @media (max-width: 600px) {
   .stripCard {
-    grid-template-columns: 1fr;
-    gap: var(--space-3);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 10px 12px;
   }
 
   .pillarItem {
-    gap: var(--space-3);
+    gap: 8px;
+  }
+
+  .iconWrap {
+    width: 32px;
+    height: 32px;
+  }
+
+  .pillarTitle {
+    font-size: 11px;
+  }
+
+  .pillarDesc {
+    font-size: 10px;
   }
 }

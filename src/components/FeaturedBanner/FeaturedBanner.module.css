@@ -708,13 +708,24 @@
   }
 
   .stageCard {
-    min-height: 290px;
+    min-height: 260px;
     border-radius: var(--radius-lg);
   }
 
   .stageGrid {
     padding: var(--space-4) var(--space-4);
     min-height: auto;
+  }
+
+  .arrowControls {
+    top: 10px;
+    right: 10px;
+    gap: 6px;
+  }
+
+  .arrowBtn {
+    width: 28px;
+    height: 28px;
   }
 
   .heroTitle {
@@ -726,27 +737,54 @@
     -webkit-line-clamp: 2;
   }
 
+  .ctaRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+    margin-top: 4px;
+  }
+
   .primaryCta {
-    padding: 7px 14px;
+    padding: 8px 10px;
     font-size: 0.78rem;
     width: 100%;
     justify-content: center;
+    box-sizing: border-box;
   }
 
   .secondaryCta {
-    padding: 7px 12px;
+    padding: 8px 10px;
     font-size: 0.78rem;
     width: 100%;
     justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .indicatorBar {
+    gap: 5px;
+    margin-top: 8px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+    max-width: 100%;
+    justify-content: center;
+  }
+
+  .indicatorBar::-webkit-scrollbar {
+    display: none;
   }
 
   .indicatorPill {
-    padding: 0 8px;
-    height: 24px;
+    padding: 0 6px;
+    height: 22px;
+    font-size: 0.65rem;
+    flex-shrink: 0;
   }
 
   .pillTitle {
-    max-width: 80px;
+    max-width: 65px;
   }
 }
 

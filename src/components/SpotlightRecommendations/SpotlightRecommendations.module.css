@@ -294,25 +294,146 @@
 
 /* ── Mobile Layout ────────────────────────────────────────── */
 @media (max-width: 768px) {
+  .section {
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .header {
+    margin-bottom: var(--space-3);
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .subtitle {
+    font-size: 0.75rem;
+  }
+
+  .viewAllLink {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
   .grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-3);
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 12px;
+    padding: 4px 2px 10px 2px;
+    scrollbar-width: none;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .grid::-webkit-scrollbar {
+    display: none;
   }
 
   .card {
-    padding: var(--space-3);
-    gap: var(--space-3);
+    flex: 0 0 calc(84vw - 24px);
+    max-width: 320px;
+    min-width: 260px;
+    scroll-snap-align: start;
+    padding: 10px;
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    height: 132px;
+    box-sizing: border-box;
   }
 
   .coverLink {
-    width: 90px;
+    width: 78px;
+    height: 100%;
+    flex-shrink: 0;
+  }
+
+  .coverWrap {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .cardBody {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 4px;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .metaTop {
+    gap: 6px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  .ratingBadge {
+    font-size: 10px;
+    padding: 2px 5px;
+    flex-shrink: 0;
+  }
+
+  .chapterBadge {
+    font-size: 10px;
+    padding: 2px 5px;
+    flex-shrink: 0;
+  }
+
+  .titleLink {
+    min-width: 0;
+  }
+
+  .cardTitle {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.25;
+  }
+
+  .cardTitleEn {
+    display: none;
   }
 
   .synopsis {
     display: none; /* Keep mobile card tight and punchy */
   }
 
-  .cardTitle {
-    font-size: var(--text-sm);
+  .cardFooter {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .genresList {
+    display: flex;
+    gap: 3px;
+    overflow: hidden;
+    max-width: 90px;
+    flex-shrink: 1;
+  }
+
+  .genreTag {
+    font-size: 9px;
+    padding: 1px 4px;
+    white-space: nowrap;
+  }
+
+  .readBtn {
+    padding: 4px 8px;
+    font-size: 10px;
+    gap: 3px;
+    flex-shrink: 0;
   }
 }

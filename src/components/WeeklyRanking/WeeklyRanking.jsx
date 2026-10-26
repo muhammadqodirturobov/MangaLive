@@ -14,7 +14,7 @@ export default function WeeklyRanking({ rankings }) {
     <section className={styles.widget} aria-label="Eng yuqori baholanganlar">
       <div className={styles.header}>
         <Flame size={14} className={styles.flameIcon} />
-        <h2 className={styles.title}>Top Reyting</h2>
+        <h2 className={styles.title}>Top Reyting (AniList)</h2>
       </div>
       <ol className={styles.list}>
         {rankings.map(({ manga, rank, score, members, chapters }) => {
