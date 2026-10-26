@@ -1,5 +1,5 @@
 /* =========================================================
-   MangaLive.uz — Five-Column Cinematic Manga Showcase
+   MangaLive.uz — 1 : 3 : 1 : 1 Hero Carousel Composition
    ========================================================= */
 
 .heroSection {
@@ -20,131 +20,28 @@
   padding-right: var(--space-4);
 }
 
-/* ── Peeking Stage Track ─────────────────────────────────── */
-.stageTrack {
-  display: flex;
+/* ── 1 : 3 : 1 : 1 Composition Carousel Track ────────────── */
+.carouselTrack {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr 1fr;
+  gap: 14px;
   align-items: stretch;
-  justify-content: center;
-  gap: 12px;
   width: 100%;
-  position: relative;
   box-sizing: border-box;
 }
 
-/* ── Side Peeking Slide Previews ─────────────────────────── */
-.peekCard {
-  flex: 0 0 52px;
-  min-width: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background-color: #070811;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  outline: none;
-  opacity: 0.72;
-  transition: opacity var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+/* ── Shared Cover Fill Utility ────────────────────────────── */
+.coverImageFill {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: unset !important;
+  border-radius: 0 !important;
 }
 
-.peekCard:hover,
-.peekCard:focus-visible {
-  opacity: 1;
-  border-color: rgba(168, 85, 247, 0.45);
-  transform: scale(1.02);
-}
-
-.peekCover {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center top;
-  filter: blur(3px) brightness(0.5);
-  transform: scale(1.1);
-  pointer-events: none;
-  transition: transform 0.4s ease;
-}
-
-.peekCard:hover .peekCover {
-  transform: scale(1.18);
-  filter: blur(2px) brightness(0.65);
-}
-
-.peekScrim {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(7, 8, 17, 0.5) 0%,
-    rgba(7, 8, 17, 0.85) 100%
-  );
-  pointer-events: none;
-}
-
-.peekAction {
-  position: relative;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  height: 100%;
-  padding: 10px 4px;
-}
-
-.peekArrowCircle {
-  width: 28px;
-  height: 28px;
-  border-radius: var(--radius-full);
-  background: rgba(14, 17, 34, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
-}
-
-.peekCard:hover .peekArrowCircle {
-  background: rgba(168, 85, 247, 0.6);
-  transform: scale(1.08);
-}
-
-.peekTitle {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-size: 0.66rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.85);
-  max-height: 125px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-/* ── 5-Unit Composition Showcase Grid ────────────────────── */
-.showcaseFiveGrid {
-  flex: 1;
-  min-width: 0;
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 12px;
-  align-items: stretch;
-}
-
-/* ── Main Featured Manga Card (2/5 units) ─────────────────── */
-.mainStageCard {
+/* ── Main Featured Manga Card (3 units) ──────────────────── */
+.mainFeaturedCard {
   position: relative;
   min-height: 295px;
   border-radius: var(--radius-xl);
@@ -168,7 +65,7 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 65%;
+  width: 60%;
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
@@ -198,9 +95,9 @@
   background: linear-gradient(
     90deg,
     #070811 0%,
-    rgba(7, 8, 17, 0.98) 42%,
-    rgba(7, 8, 17, 0.85) 60%,
-    rgba(7, 8, 17, 0.45) 80%,
+    rgba(7, 8, 17, 0.98) 48%,
+    rgba(7, 8, 17, 0.85) 66%,
+    rgba(7, 8, 17, 0.45) 84%,
     rgba(7, 8, 17, 0.15) 100%
   );
   pointer-events: none;
@@ -253,19 +150,20 @@
   transform: scale(1.06);
 }
 
-/* ── Main Stage Internal Grid ─────────────────────────────── */
-.mainStageGrid {
+/* ── Main Card Internal Grid (2 units Info + 1 unit Cover) ── */
+.mainCardGrid {
   position: relative;
   z-index: 10;
   display: grid;
-  grid-template-columns: 1fr 135px;
-  gap: 14px;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
   align-items: center;
+  height: 100%;
   padding: 16px 20px;
   box-sizing: border-box;
 }
 
-.contentCol {
+.infoPanel {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -347,9 +245,9 @@
 }
 
 .heroTitle {
-  font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+  font-size: clamp(1.2rem, 1.7vw, 1.55rem);
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.22;
   color: #ffffff;
   margin: 0;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
@@ -439,6 +337,31 @@
   text-overflow: ellipsis;
 }
 
+/* Janrlar */
+.genresList {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.genrePill {
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: #c084fc;
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.genrePill:hover {
+  background: rgba(124, 58, 237, 0.25);
+  color: #ffffff;
+}
+
 /* CTA Tugmalari */
 .ctaRow {
   display: flex;
@@ -492,41 +415,27 @@
   color: #ffffff;
 }
 
-/* O'ng ustun: Ko'rgazmali Muqova */
-.artworkCol {
+/* ── Main Cover Panel (1 unit — Identical size to secondary covers!) ── */
+.coverPanel {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
+  width: 100%;
   position: relative;
 }
 
-.artworkPerspective {
+.coverFrame {
   position: relative;
-  perspective: 900px;
-}
-
-.artworkGlow {
-  position: absolute;
-  inset: -8px;
-  background: var(--hero-accent);
-  filter: blur(18px);
-  opacity: 0.45;
-  border-radius: var(--radius-lg);
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-
-.artworkFrame {
-  position: relative;
-  width: 135px;
-  height: 190px;
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow:
     0 16px 32px -8px rgba(0, 0, 0, 0.9),
     0 0 0 1px rgba(255, 255, 255, 0.16);
-  transform: rotateY(-3deg) rotateX(1deg);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  background-color: #0d0f1c;
 }
 
 .artworkGlassSheen {
@@ -539,6 +448,7 @@
     transparent 60%
   );
   pointer-events: none;
+  z-index: 2;
 }
 
 .coverFloatingBadge {
@@ -558,6 +468,7 @@
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.02em;
+  z-index: 3;
 }
 
 .badgePulse {
@@ -568,7 +479,7 @@
   box-shadow: 0 0 8px #a855f7;
 }
 
-/* ── Secondary Preview Cards (1/5 unit each) ──────────────── */
+/* ── Secondary Manga Cards (1 unit each) ──────────────────── */
 .secondaryCard {
   position: relative;
   display: flex;
@@ -583,19 +494,53 @@
   text-align: left;
   outline: none;
   min-height: 295px;
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
   box-sizing: border-box;
 }
 
 .secondaryCard:hover,
 .secondaryCard:focus-visible {
   transform: translateY(-3px);
-  border-color: rgba(168, 85, 247, 0.7);
+  border-color: rgba(168, 85, 247, 0.75);
   box-shadow:
     0 12px 28px -6px rgba(0, 0, 0, 0.85),
     0 0 22px -4px rgba(168, 85, 247, 0.45);
+  opacity: 1;
 }
 
+/* Left Preview Card Specifics (Peeking at left edge) */
+.leftPreviewCard {
+  opacity: 0.88;
+}
+
+.leftScrim {
+  background: linear-gradient(
+    180deg,
+    rgba(7, 8, 17, 0.85) 0%,
+    rgba(7, 8, 17, 0.35) 35%,
+    rgba(7, 8, 17, 0.75) 68%,
+    rgba(7, 8, 17, 0.98) 100%
+  ) !important;
+}
+
+.leftPeekIndicator {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  background: rgba(14, 17, 34, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-full);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.62rem;
+  font-weight: 700;
+  z-index: 4;
+}
+
+/* Secondary Cover Background */
 .secondaryCoverBg {
   position: absolute;
   inset: 0;
@@ -603,16 +548,6 @@
   height: 100%;
   pointer-events: none;
   z-index: 1;
-}
-
-/* Force CoverImage to fill card background */
-.secondaryCoverWrapper {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  aspect-ratio: unset !important;
-  border-radius: 0 !important;
 }
 
 .secondaryCoverBg img {
@@ -646,7 +581,7 @@
   z-index: 3;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 6px;
 }
 
@@ -821,21 +756,18 @@
 
 /* ── Tablet View (641px - 1024px) ────────────────────────── */
 @media (max-width: 1024px) {
-  .peekCard {
-    display: none;
-  }
-
-  .showcaseFiveGrid {
-    grid-template-columns: 2fr 1fr 1fr;
+  /* 1 : 3 : 1 ratio: Left preview + Main Feature + Right preview 1 */
+  .carouselTrack {
+    grid-template-columns: 1fr 3fr 1fr;
     gap: 10px;
   }
 
-  /* Retain main title and 2 secondary previews on tablet */
-  .secondaryCard3 {
+  /* Right preview 2 hidden on tablet to preserve space */
+  .rightPreview2Column {
     display: none;
   }
 
-  .mainStageCard {
+  .mainFeaturedCard {
     min-height: 270px;
   }
 
@@ -843,14 +775,10 @@
     min-height: 270px;
   }
 
-  .mainStageGrid {
-    grid-template-columns: 1fr 120px;
+  .mainCardGrid {
+    grid-template-columns: 2fr 1fr;
     padding: 14px 16px;
-  }
-
-  .artworkFrame {
-    width: 120px;
-    height: 170px;
+    gap: 12px;
   }
 
   .pillTitle {
@@ -870,29 +798,20 @@
     padding-right: var(--space-3);
   }
 
-  .stageTrack {
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .peekCard {
-    display: none;
-  }
-
-  .showcaseFiveGrid {
+  .carouselTrack {
     display: flex;
     flex-direction: column;
     gap: 0;
   }
 
   /* Desktop secondary cards hide in favor of touch horizontal row */
-  .secondaryCard1,
-  .secondaryCard2,
-  .secondaryCard3 {
+  .leftPreviewColumn,
+  .rightPreview1Column,
+  .rightPreview2Column {
     display: none;
   }
 
-  .mainStageCard {
+  .mainFeaturedCard {
     min-height: unset;
     border-radius: var(--radius-lg);
   }
@@ -902,13 +821,13 @@
     opacity: 0.3;
   }
 
-  .mainStageGrid {
+  .mainCardGrid {
     grid-template-columns: 1fr;
     padding: 12px 14px;
     gap: 10px;
   }
 
-  .artworkCol {
+  .coverPanel {
     display: none;
   }
 
