@@ -531,7 +531,7 @@ export const MANGA_LIST = [
     "status": "tugallangan",
     "rating": 8.4,
     "ratingCount": 287820,
-    "chapters": 0,
+    "chapters": 60,
     "views": 0,
     "genres": [
       "harakatli",
@@ -545,12 +545,12 @@ export const MANGA_LIST = [
     ],
     "coverAccent": "#a855f7",
     "synopsis": "Dunyoning eng zaif E-darajali ovchisi Sung Jin-Woo qotilliklar to'la sirli D-darajali ikki qavatli xavfli zindonga tushib qoladi. O'lim yoqasida u faqat o'zi ko'ra oladigan sirli \"Tizim\" topshiriqlarini qabul qiladi. Faqat uning o'zigagina darajasini cheksiz oshirish va soyalar armiyasining Monarxiga aylanish qobiliyati beriladi.",
-    "lastChapter": 0,
+    "lastChapter": 60,
     "lastUpdated": "2026-10-26",
-    "isNew": true,
+    "isNew": false,
     "isPopular": true,
-    "isFeatured": false,
-    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+    "isFeatured": true,
+    "featuredTagline": "60 ta bob to'liq mavjud!"
   },
   {
     "id": "bastard",
