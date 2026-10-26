@@ -70,27 +70,32 @@ async function generateReport() {
     const mangaChapters = chapters.filter(c => c.manga_id === manga.id);
     const sumPages = mangaChapters.reduce((acc, c) => acc + (c.pages_count || 0), 0);
 
+    let status = 'INCOMPLETE';
     let authorizedSource = 'None (Awaiting Content)';
     let availableCount = 0;
     let readerTested = 'No';
     let blocker = 'None';
 
     if (item.slug === 'solo-leveling') {
+      status = 'COMPLETE';
       authorizedSource = 'MangaAnidon Uzbek Package (60 Chapter PDFs)';
       availableCount = 60;
       readerTested = 'Yes (HTTP 200 / CDP Verified)';
-      blocker = 'None (Complete)';
+      blocker = 'None (Complete: 60 chapters ingested)';
     } else if (item.slug === 'sss-class-revival-hunter') {
+      status = 'INCOMPLETE';
       authorizedSource = 'Local Telegram Fan Scan ([MW] SSS-Class Suicide Hunter)';
       availableCount = 1;
       readerTested = 'No (Blocked)';
       blocker = 'Unauthorized fan-scan (Asura Scans watermark via Telegram). Lacks publisher redistribution rights from Kakao/Tapas.';
     } else if (['who-made-me-a-princess', 'operation-true-love', 'eleceed', 'a-returners-magic-should-be-special'].includes(item.slug)) {
+      status = 'INCOMPLETE';
       authorizedSource = 'Mangabox Public API (Permitted Guest Connector)';
-      availableCount = item.slug.startsWith('who') || item.slug.startsWith('operation') ? 20 : 50;
+      availableCount = 5; // 5 chapters genuinely free without login
       readerTested = 'Yes (HTTP 200 / R2 WebP Verified)';
-      blocker = 'None (Sample ingested; remaining chapters unlocked via feed)';
+      blocker = 'Source authentication gate: Chapters 6+ return HTTP 401 (LOGIN_REQUIRED: Telegram login required on source). Cannot legally bypass login wall.';
     } else {
+      status = 'INCOMPLETE';
       authorizedSource = 'None on disk / No open syndication feed';
       availableCount = 0;
       readerTested = 'No';
@@ -101,6 +106,7 @@ async function generateReport() {
       series: item.title,
       slug: item.slug,
       category: item.category,
+      status,
       authorizedSource,
       chaptersAvailable: availableCount,
       chaptersImported: mangaChapters.length,

@@ -83,11 +83,22 @@ export async function importMangaboxSeries({
 
     // Fetch pages from Mangabox
     console.log(`  -> Fetching chapter pages from Mangabox (${ch.chapterRef?.folder})...`);
-    const pages = await connector.fetchChapterPages({
-      mangaSlug: sourceSlug,
-      chapterNumber: chNum,
-      chapterRef: ch.chapterRef,
-    });
+    let pages = null;
+    try {
+      pages = await connector.fetchChapterPages({
+        mangaSlug: sourceSlug,
+        chapterNumber: chNum,
+        chapterRef: ch.chapterRef,
+      });
+    } catch (err) {
+      if (err.message.includes('401') || err.message.includes('LOGIN_REQUIRED')) {
+        console.warn(
+          `  🔒 [PAYWALL / LOGIN_REQUIRED] Chapter ${chNum} is gated behind login on ${sourceSlug}. Halting series ingestion to comply with authorization & paywall rules.`
+        );
+        break;
+      }
+      throw err;
+    }
 
     if (!pages || pages.length === 0) {
       console.warn(`  ⚠ Warning: Chapter ${chNum} returned 0 pages from source. Skipping.`);

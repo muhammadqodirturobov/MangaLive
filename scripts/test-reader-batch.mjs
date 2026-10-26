@@ -22,13 +22,19 @@ async function checkUrl(url) {
 }
 
 async function run() {
-  console.log('Testing Reader & R2 Proxy verification:');
+  console.log('Testing Reader & R2 Proxy verification for Chapters 1 & 5:');
   for (const slug of slugs) {
-    const readerRes = await checkUrl(`http://localhost:5173/manga/${slug}/chapter/1`);
-    const imgRes = await checkUrl(`http://localhost:5173/api/r2/manga/${slug}/chapters/1/001.webp`);
-    console.log(`- [${slug}]`);
-    console.log(`    Reader UI: HTTP ${readerRes.status} (${readerRes.contentType})`);
-    console.log(`    R2 Ch1 P1: HTTP ${imgRes.status} (${imgRes.contentType}, ${imgRes.byteLength} bytes)`);
+    const ch1Reader = await checkUrl(`http://localhost:5173/manga/${slug}/chapter/1`);
+    const ch1Img = await checkUrl(`http://localhost:5173/api/r2/manga/${slug}/chapters/1/001.webp`);
+    
+    const ch5Reader = await checkUrl(`http://localhost:5173/manga/${slug}/chapter/5`);
+    const ch5Img = await checkUrl(`http://localhost:5173/api/r2/manga/${slug}/chapters/5/001.webp`);
+
+    console.log(`\n- [${slug}]`);
+    console.log(`    Ch 1 Reader UI: HTTP ${ch1Reader.status} (${ch1Reader.contentType})`);
+    console.log(`    Ch 1 R2 P1:     HTTP ${ch1Img.status} (${ch1Img.contentType}, ${ch1Img.byteLength} bytes)`);
+    console.log(`    Ch 5 Reader UI: HTTP ${ch5Reader.status} (${ch5Reader.contentType})`);
+    console.log(`    Ch 5 R2 P1 (Guest): HTTP ${ch5Img.status} (Access gated: 401 expected for guest)`);
   }
 }
 

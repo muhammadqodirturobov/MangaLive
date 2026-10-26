@@ -220,52 +220,84 @@ export class MangaboxPublicConnector extends BaseSourceAdapter {
 
   /**
    * Fetch chapter list for a manga and return only free, unlocked chapters.
+   * Paginates through all available chapters on the source API.
    */
   async discoverChapters(mangaSlug, afterChapterNumber = 0) {
     await this.ensureGuestSession();
 
-    const res = await fetch(
-      `${this.baseUrl}/api/mangas/${mangaSlug}/chapters?page=1&limit=50&sort=asc`,
-      {
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          'Origin': 'https://mangabox.uz',
-          'Referer': 'https://mangabox.uz/',
-          'Authorization': `Bearer ${this.guestToken}`,
-          ...(this.sessionCookie ? { 'Cookie': this.sessionCookie } : {}),
-        },
+    let page = 1;
+    const limit = 100;
+    const availableChaptersMap = new Map();
+
+    while (true) {
+      let res;
+      let retries = 3;
+      while (retries > 0) {
+        try {
+          res = await fetch(
+            `${this.baseUrl}/api/mangas/${mangaSlug}/chapters?page=${page}&limit=${limit}&sort=asc`,
+            {
+              headers: {
+                'User-Agent':
+                  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Origin': 'https://mangabox.uz',
+                'Referer': 'https://mangabox.uz/',
+                'Authorization': `Bearer ${this.guestToken}`,
+                ...(this.sessionCookie ? { 'Cookie': this.sessionCookie } : {}),
+              },
+            }
+          );
+          if (res.ok) break;
+        } catch (err) {
+          // network retry
+        }
+        retries--;
+        if (retries > 0) await new Promise((r) => setTimeout(r, 1000));
       }
+
+      if (!res || !res.ok) {
+        break;
+      }
+
+      const json = await res.json();
+      const rawChapters = json.data || json;
+
+      if (!Array.isArray(rawChapters) || rawChapters.length === 0) {
+        break;
+      }
+
+      for (const ch of rawChapters) {
+        // Parse chapter number from name or folder (e.g. "Bob 0" -> 0, "Bob 1" -> 1)
+        const numMatch = (ch.name || ch.folder).match(/(\d+(?:\.\d+)?)/);
+        const chapterNumber = numMatch ? parseFloat(numMatch[1]) : 0;
+
+        // Filter: only unlocked / permitted chapters
+        const isPermitted = !ch.isLocked && !ch.requiresLogin && !ch.requiresPro;
+
+        if (isPermitted && chapterNumber > afterChapterNumber) {
+          if (!availableChaptersMap.has(chapterNumber)) {
+            availableChaptersMap.set(chapterNumber, {
+              chapterNumber,
+              title: ch.name || `${chapterNumber}-bob`,
+              pageCount: ch.pageCount || 0,
+              chapterRef: {
+                folder: ch.folder,
+                name: ch.name,
+              },
+            });
+          }
+        }
+      }
+
+      if (rawChapters.length < limit) {
+        break;
+      }
+      page++;
+    }
+
+    const availableChapters = Array.from(availableChaptersMap.values()).sort(
+      (a, b) => a.chapterNumber - b.chapterNumber
     );
-
-    if (!res.ok) {
-      throw new Error(`Failed to fetch chapters for ${mangaSlug}: HTTP ${res.status}`);
-    }
-
-    const json = await res.json();
-    const rawChapters = json.data || json;
-
-    const availableChapters = [];
-    for (const ch of rawChapters) {
-      // Parse chapter number from name or folder (e.g. "Bob 0" -> 0, "Bob 1" -> 1)
-      const numMatch = (ch.name || ch.folder).match(/(\d+(?:\.\d+)?)/);
-      const chapterNumber = numMatch ? parseFloat(numMatch[1]) : 0;
-
-      // Filter: only unlocked / permitted chapters
-      const isPermitted = !ch.isLocked && !ch.requiresLogin && !ch.requiresPro;
-
-      if (isPermitted && chapterNumber > afterChapterNumber) {
-        availableChapters.push({
-          chapterNumber,
-          title: ch.name || `${chapterNumber}-bob`,
-          pageCount: ch.pageCount || 0,
-          chapterRef: {
-            folder: ch.folder,
-            name: ch.name,
-          },
-        });
-      }
-    }
 
     return availableChapters;
   }
@@ -313,15 +345,26 @@ export class MangaboxPublicConnector extends BaseSourceAdapter {
         const pageUrl = pageUrls[i];
         const pageNumber = i + 1;
 
-        const imgRes = await fetch(pageUrl, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-            'Referer': 'https://mangabox.uz/',
-          },
-        });
+        let imgRes;
+        let retries = 3;
+        while (retries > 0) {
+          try {
+            imgRes = await fetch(pageUrl, {
+              headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                'Referer': 'https://mangabox.uz/',
+              },
+            });
+            if (imgRes.ok) break;
+          } catch (e) {
+            // retry on network error
+          }
+          retries--;
+          if (retries > 0) await new Promise((r) => setTimeout(r, 800));
+        }
 
-        if (!imgRes.ok) {
-          throw new Error(`Failed to download page ${pageNumber} from ${pageUrl}: HTTP ${imgRes.status}`);
+        if (!imgRes || !imgRes.ok) {
+          throw new Error(`Failed to download page ${pageNumber} from ${pageUrl}: HTTP ${imgRes?.status || 'Network error'}`);
         }
 
         const buffer = Buffer.from(await imgRes.arrayBuffer());
