@@ -26,6 +26,72 @@ export function getReadingHistory() {
 }
 
 /**
+ * Fetch unified reading history merging authenticated remote Supabase records
+ * with local-first guest storage, sorted by most recently read.
+ * @returns {Promise<Array<{mangaId: string, mangaSlug?: string, mangaTitle: string, chapterNumber: number, coverImage?: string, availableChapters?: number, scrollProgress?: number, timestamp: number}>>}
+ */
+export async function fetchUnifiedReadingHistory() {
+  const localItems = localGetReadingHistory() || [];
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data, error } = await supabase
+          .from('user_reading_history')
+          .select(`
+            id,
+            manga_id,
+            last_chapter_number,
+            last_page_number,
+            scroll_progress,
+            read_at,
+            mangas (
+              id,
+              slug,
+              title,
+              cover_url,
+              chapters_count
+            )
+          `)
+          .eq('user_id', user.id)
+          .order('read_at', { ascending: false });
+
+        if (!error && Array.isArray(data) && data.length > 0) {
+          const remoteItems = data.map((row) => ({
+            mangaId: row.manga_id,
+            mangaSlug: row.mangas?.slug || row.manga_id,
+            mangaTitle: row.mangas?.title || 'Noma\'lum manga',
+            coverImage: row.mangas?.cover_url || '',
+            availableChapters: Number(row.mangas?.chapters_count || 0),
+            chapterNumber: Number(row.last_chapter_number || 1),
+            scrollProgress: Number(row.scroll_progress || 0),
+            timestamp: new Date(row.read_at).getTime(),
+          }));
+
+          const map = new Map();
+          for (const item of remoteItems) {
+            const key = String(item.mangaSlug || item.mangaId).toLowerCase();
+            map.set(key, item);
+          }
+          for (const item of localItems) {
+            const key = String(item.mangaSlug || item.mangaId).toLowerCase();
+            if (!map.has(key) || (item.timestamp && item.timestamp > (map.get(key).timestamp || 0))) {
+              map.set(key, { ...map.get(key), ...item });
+            }
+          }
+          return Array.from(map.values()).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        }
+      }
+    } catch (err) {
+      console.warn('fetchUnifiedReadingHistory remote error:', err.message);
+    }
+  }
+
+  return localItems;
+}
+
+/**
  * Get the last read chapter number for a specific manga.
  * @param {string} mangaIdOrSlug
  * @returns {{mangaId: string, mangaTitle: string, chapterNumber: number, timestamp: number, mangaSlug?: string} | null}
@@ -49,10 +115,28 @@ async function resolveMangaUuid(idOrSlug) {
  * @param {number} chapterNumber
  * @param {number} [scrollProgress=0]
  * @param {string} [mangaSlug]
+ * @param {string} [coverImage]
+ * @param {number} [availableChapters]
  */
-export async function recordReadingProgress(mangaId, mangaTitle, chapterNumber, scrollProgress = 0, mangaSlug = '') {
+export async function recordReadingProgress(
+  mangaId,
+  mangaTitle,
+  chapterNumber,
+  scrollProgress = 0,
+  mangaSlug = '',
+  coverImage = '',
+  availableChapters = 0
+) {
   // Always update local storage first
-  localRecordReadingProgress(mangaId, mangaTitle, chapterNumber, mangaSlug);
+  localRecordReadingProgress(
+    mangaId,
+    mangaTitle,
+    chapterNumber,
+    mangaSlug,
+    coverImage,
+    availableChapters,
+    scrollProgress
+  );
 
   // Sync to Supabase if authenticated
   if (isSupabaseConfigured && supabase) {

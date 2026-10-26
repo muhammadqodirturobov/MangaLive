@@ -10,7 +10,7 @@ import ContinueReading from '../components/ContinueReading/ContinueReading.jsx';
 import WeeklyRanking from '../components/WeeklyRanking/WeeklyRanking.jsx';
 import { WEEKLY_RANKINGS } from '../data/rankings.js';
 import { GENRES } from '../data/genres.js';
-import { getReadingHistory } from '../services/userService.js';
+import { getReadingHistory, fetchUnifiedReadingHistory } from '../services/userService.js';
 import {
   fetchFeaturedMangas,
   fetchPopularManga,
@@ -44,10 +44,19 @@ export default function HomePage() {
   const [loading, setLoading] = useState(initialFeatured.length === 0);
   const [dbError, setDbError] = useState(null);
 
-  // Load reading history on mount
+  // Load reading history on mount (instant local-first, then sync unified)
   useEffect(() => {
-    const history = getReadingHistory();
-    setReadingHistory(history || []);
+    const local = getReadingHistory();
+    if (local && local.length > 0) {
+      setReadingHistory(local);
+    }
+    fetchUnifiedReadingHistory().then((unified) => {
+      if (Array.isArray(unified)) {
+        setReadingHistory(unified);
+      }
+    }).catch((err) => {
+      console.warn('[HomePage] Unified reading history fetch error:', err);
+    });
   }, []);
 
   const loadData = useCallback(async () => {
@@ -77,8 +86,6 @@ export default function HomePage() {
     loadData();
   }, [loadData]);
 
-  const latestReadItem = readingHistory.length > 0 ? readingHistory[0] : null;
-
   return (
     <main className={styles.homeMain}>
       {/* ── Database error banner with Retry button */}
@@ -98,19 +105,18 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* ── 1. Cinematic Featured Hero Spotlight ───────────────────── */}
+      {/* ── 1. Compact Featured Hero Carousel with Peeking Slides ─── */}
       {featuredMangas.length > 0 && <FeaturedBanner mangas={featuredMangas} />}
 
       <div className={`container ${styles.container}`}>
-        {/* ── 2. Platform Value Proposition Pillars Strip ────────────── */}
-        <ValuePropositionStrip />
+        {/* ── 2. O'qishni davom ettirish (Multi-Series Continue Reading Row) ── */}
+        <ContinueReading
+          items={readingHistory}
+          allMangas={[...featuredMangas, ...popularManga, ...latestManga]}
+        />
 
-        {/* ── 3. Continue Reading (if visitor has local reading history) ─ */}
-        {latestReadItem && (
-          <section className={styles.continueSection} aria-label="Mutolaani davom ettirish">
-            <ContinueReading historyItem={latestReadItem} />
-          </section>
-        )}
+        {/* ── 3. Platform Value Proposition Pillars Strip ────────────── */}
+        <ValuePropositionStrip />
 
         {/* ── 4. Ommabop Asarlar (Trending Manga Carousel) ──────────── */}
         {popularManga.length > 0 && (

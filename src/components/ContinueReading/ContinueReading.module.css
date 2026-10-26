@@ -1,46 +1,138 @@
-.continueCard {
+/* =========================================================
+   MangaLive.uz — Multi-Series Continue Reading Row
+   ========================================================= */
+
+.section {
+  width: 100%;
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-5);
+  box-sizing: border-box;
+}
+
+/* ── Section Header ───────────────────────────────────────── */
+.header {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
-  background: linear-gradient(135deg, rgba(30, 27, 75, 0.45) 0%, rgba(20, 24, 39, 0.75) 100%);
-  border: 1px solid rgba(124, 58, 237, 0.28);
-  border-radius: var(--radius-lg);
-  padding: var(--space-3) var(--space-4);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(8px);
-  margin-bottom: var(--space-6);
-  position: relative;
-  overflow: hidden;
-  transition: border-color var(--transition-fast), transform var(--transition-fast);
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+  padding: 0 2px;
 }
 
-.continueCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--color-purple-500);
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.continueCard:hover {
-  border-color: rgba(167, 139, 250, 0.45);
-}
-
-.iconWrapper {
+.iconCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(236, 72, 153, 0.2));
+  border: 1px solid rgba(168, 85, 247, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: rgba(124, 58, 237, 0.2);
-  border-radius: var(--radius-md);
-  color: var(--color-purple-300);
   flex-shrink: 0;
 }
 
-.content {
+.headerIcon {
+  color: #c084fc;
+}
+
+.titleText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.allHistoryLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #c084fc;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  transition: all var(--transition-fast);
+}
+
+.allHistoryLink:hover {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: rgba(168, 85, 247, 0.4);
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+/* ── Multi-Series Responsive Row Grid ─────────────────────── */
+.rowGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ── Individual Manga Continue Card ───────────────────────── */
+.card {
+  position: relative;
+  background: rgba(14, 17, 34, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  border-color: rgba(168, 85, 247, 0.35);
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 24px -6px rgba(0, 0, 0, 0.6),
+    0 0 20px -8px rgba(168, 85, 247, 0.25);
+}
+
+/* Thumbnail Wrap */
+.thumbLink {
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.thumbWrap {
+  width: 50px;
+  height: 70px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  background-color: #0d1124;
+}
+
+/* Content Column */
+.cardContent {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -48,79 +140,209 @@
   gap: 3px;
 }
 
-.headerRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.badge {
-  font-size: 10px;
-  font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--color-purple-300);
-  background: rgba(124, 58, 237, 0.25);
-  padding: 1px 7px;
-  border-radius: var(--radius-full);
-}
-
-.timeAgo {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  color: var(--color-text-muted);
-}
-
-.mangaInfo {
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--color-text-primary);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.titleLink {
+  text-decoration: none;
+  min-width: 0;
 }
 
 .mangaTitle {
-  font-weight: var(--weight-semibold);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+  transition: color var(--transition-fast);
+}
+
+.titleLink:hover .mangaTitle {
+  color: #c084fc;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.chapterBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  background: rgba(168, 85, 247, 0.16);
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  color: #d8b4fe;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.timeText {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Progress Indicator */
+.progressBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7 0%, #ec4899 100%);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 500;
+}
+
+/* Resume Action Button */
+.resumeActionBtn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 14px -2px rgba(139, 92, 246, 0.5);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+}
+
+.resumeBtnText {
+  display: none;
+}
+
+.resumeActionBtn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px -2px rgba(139, 92, 246, 0.65);
+  filter: brightness(1.1);
   color: #ffffff;
 }
 
-.separator {
-  color: var(--color-text-muted);
+/* ── Tasteful Empty State ─────────────────────────────────── */
+.emptyRow {
+  background: rgba(14, 17, 34, 0.45);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  box-sizing: border-box;
 }
 
-.chapterNum {
-  color: var(--color-purple-400);
-  font-weight: var(--weight-medium);
+.emptyLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.resumeBtn {
+.emptyIconBox {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  font-size: var(--text-xs);
-  padding: 8px 14px;
-  gap: 6px;
-  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.35);
 }
 
-@media (max-width: 640px) {
-  .continueCard {
+.emptyIcon {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.emptyTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.emptyTitle {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.emptySubtitle {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.emptyActionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #c084fc;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  transition: all var(--transition-fast);
+}
+
+.emptyActionLink:hover {
+  background: rgba(168, 85, 247, 0.2);
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+/* ── Mobile Layout (< 768px) ──────────────────────────────── */
+@media (max-width: 768px) {
+  .rowGrid {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 10px;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .rowGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .card {
+    flex: 0 0 255px;
+    scroll-snap-align: start;
+  }
+
+  .emptyRow {
     flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-3);
-    padding: var(--space-3);
+    align-items: flex-start;
+    gap: 10px;
   }
 
-  .content {
-    width: 100%;
-  }
-
-  .resumeBtn {
-    justify-content: center;
-    width: 100%;
+  .emptyActionLink {
+    align-self: flex-start;
   }
 }

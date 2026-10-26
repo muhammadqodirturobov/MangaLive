@@ -131,7 +131,16 @@ export default function ReaderPage() {
   // 4. Auto-record reading history
   useEffect(() => {
     if (manga && !Number.isNaN(chNum)) {
-      recordReadingProgress(manga.id, manga.title, chNum, readingProgress, manga.slug);
+      const totalChs = Number(manga.availableChapters ?? manga.chapters ?? manga.chapters_count ?? 0);
+      recordReadingProgress(
+        manga.id,
+        manga.title,
+        chNum,
+        readingProgress,
+        manga.slug,
+        manga.coverImage || '',
+        totalChs
+      );
     }
   }, [manga, chNum, readingProgress]);
 

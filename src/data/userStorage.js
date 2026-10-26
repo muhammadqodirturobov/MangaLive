@@ -28,8 +28,19 @@ export function getReadingHistory() {
  * @param {string} mangaTitle
  * @param {number} chapterNumber
  * @param {string} [mangaSlug]
+ * @param {string} [coverImage]
+ * @param {number} [availableChapters]
+ * @param {number} [scrollProgress]
  */
-export function recordReadingProgress(mangaId, mangaTitle, chapterNumber, mangaSlug = '') {
+export function recordReadingProgress(
+  mangaId,
+  mangaTitle,
+  chapterNumber,
+  mangaSlug = '',
+  coverImage = '',
+  availableChapters = 0,
+  scrollProgress = 0
+) {
   try {
     const history = getReadingHistory();
     const cleanId = String(mangaId).toLowerCase();
@@ -45,7 +56,10 @@ export function recordReadingProgress(mangaId, mangaTitle, chapterNumber, mangaS
       mangaId,
       mangaSlug: mangaSlug || undefined,
       mangaTitle,
-      chapterNumber,
+      chapterNumber: Number(chapterNumber) || 1,
+      coverImage: coverImage || undefined,
+      availableChapters: Number(availableChapters) || undefined,
+      scrollProgress: Number(scrollProgress) || 0,
       timestamp: Date.now(),
     });
 
