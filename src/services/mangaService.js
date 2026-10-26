@@ -152,7 +152,7 @@ export async function getMangaList(options = {}) {
     if (query.trim()) {
       // In PostgREST .or() filters, commas act as delimiters unless the value is wrapped in double quotes.
       const sanitized = query.trim().replace(/"/g, '\\"');
-      req = req.or(`title.ilike."%${sanitized}%",title_en.ilike."%${sanitized}%",author.ilike."%${sanitized}%"`);
+      req = req.or(`title.ilike."%${sanitized}%",title_en.ilike."%${sanitized}%",slug.ilike."%${sanitized}%",author.ilike."%${sanitized}%"`);
     }
     if (type && type !== 'barchasi') {
       req = req.eq('type', type.toLowerCase());

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Eye, BookOpen, Clock, Play, AlertCircle,
-  Heart, RotateCcw, ArrowUpDown, RefreshCw, Lock, Star
+  Heart, RotateCcw, ArrowUpDown, RefreshCw, Lock, Star, ShieldCheck
 } from 'lucide-react';
 import { getCachedManga, fetchMangaById } from '../services/mangaService.js';
 import { getCachedChapters, fetchChapters } from '../services/chapterService.js';
@@ -369,9 +369,10 @@ export default function MangaDetailPage() {
                     )}
                   </>
                 ) : (
-                  <span style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--text-sm)' }}>
-                    Hozircha boblar yuklanmagan
-                  </span>
+                  <div className={styles.awaitingBadge} title="Rasmiy litsenziyalangan kontent ruxsatnomasi kutilmoqda">
+                    <ShieldCheck size={16} color="#c084fc" aria-hidden="true" />
+                    <span>Litsenziya kutilmoqda</span>
+                  </div>
                 )}
 
                 <button
@@ -421,8 +422,19 @@ export default function MangaDetailPage() {
           </div>
 
           {chapters.length === 0 ? (
-            <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#94a3b8', background: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
-              <p>Ushbu mangada hozircha birorta bob yuklanmagan.</p>
+            <div className={styles.emptyChaptersCard}>
+              <div className={styles.emptyIconCircle}>
+                <Clock size={28} color="#c084fc" />
+              </div>
+              <h3 className={styles.emptyTitle}>Rasmiy litsenziya kutilmoqda (Awaiting Authorization)</h3>
+              <p className={styles.emptySubtitle}>
+                Ushbu asar MangaLive katalogiga rasmiy ravishda kiritildi. Mualliflik huquqlari va tarjima litsenziyasi tasdiqlanishi bilan boblar bosqichma-bosqich taqdim etiladi.
+              </p>
+              <div className={styles.emptyMetaPills}>
+                <span className={styles.emptyPill}>Status: Tekshirilgan metadata</span>
+                <span className={styles.emptyPill}>Boblar soni: 0</span>
+                <span className={styles.emptyPill}>R2 HD Muqova mavjud</span>
+              </div>
             </div>
           ) : (
             <div className={styles.chapterList} role="list">

@@ -519,6 +519,659 @@ export const MANGA_LIST = [
       "isPopular": true,
       "isFeatured": false
   },
+  {
+    "id": "solo-leveling",
+    "uuid": "11e94378-8f56-469e-ae09-37db992cc3a5",
+    "slug": "solo-leveling",
+    "coverImage": "/api/r2/manga/solo-leveling/cover.jpg",
+    "title": "Yakkaxon daraja oshirish",
+    "titleEn": "Solo Leveling",
+    "author": "Chugong, DUBU (Redice Studio)",
+    "type": "manhwa",
+    "status": "tugallangan",
+    "rating": 8.4,
+    "ratingCount": 287820,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "harakatli",
+      "fantaziya",
+      "sarguzasht",
+      "super-qahramon"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Dunyoning eng zaif E-darajali ovchisi Sung Jin-Woo qotilliklar to'la sirli D-darajali ikki qavatli xavfli zindonga tushib qoladi. O'lim yoqasida u faqat o'zi ko'ra oladigan sirli \"Tizim\" topshiriqlarini qabul qiladi. Faqat uning o'zigagina darajasini cheksiz oshirish va soyalar armiyasining Monarxiga aylanish qobiliyati beriladi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": true,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "bastard",
+    "uuid": "32483939-4c64-490a-90ba-591ce534e57a",
+    "slug": "bastard",
+    "coverImage": "/api/r2/manga/bastard/cover.jpg",
+    "title": "Haromi",
+    "titleEn": "Bastard",
+    "author": "Carnby Kim, Yeong-Chan Hwang",
+    "type": "manhwa",
+    "status": "tugallangan",
+    "rating": 6.6,
+    "ratingCount": 475,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "psixologik",
+      "sirli",
+      "fojiaviy"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Maktabda kamsitiladigan nimjon bola Jin Seonning dahshatli siri bor: uning hurmatli va boy tadbirkor otasi aslida shafqatsiz seriyali qotil, Jin esa uning noiloj sherigi. Biroq ota o'zining navbatdagi qurboni sifatida Jinning yagona do'sti bo'lgan Kyun Yoonni nishonga olganida, Jin otasiga qarshi chiqishga va qizni himoya qilishga qasam ichadi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": true,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "operation-true-love",
+    "uuid": "48c86b05-ab10-478c-8b0f-e564010837b0",
+    "slug": "operation-true-love",
+    "coverImage": "/api/r2/manga/operation-true-love/cover.jpg",
+    "title": "Haqiqiy sevgi operatsiyasi",
+    "titleEn": "Operation: True Love",
+    "author": "kkokkalee, Dledumb",
+    "type": "manhwa",
+    "status": "davom etmoqda",
+    "rating": 7.4,
+    "ratingCount": 17852,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "romantik",
+      "maktab",
+      "komediya",
+      "sirli"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Soo-ae Shim o'zini hech kim sevmasligini his qiladi. Bir kuni u eski telefon ichida g'alati dasturni topadi: u har bir insonning hayoti davomida oladigan muhabbat ballarini ko'rsatadi. Dahshatlisi shundaki, Soo-aening sevgi balli mutlaqo 0 ga teng! O'z taqdirini o'zgartirish va sevgiga loyiq ekanligini isbotlash uchun u maktabning eng jozibali o'quvchisi bilan \"soxta muhabbat operatsiyasi\"ni boshlaydi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": false,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "omniscient-readers-viewpoint",
+    "uuid": "fa57e52d-3acf-471a-bf9f-566692cf42e8",
+    "slug": "omniscient-readers-viewpoint",
+    "coverImage": "/api/r2/manga/omniscient-readers-viewpoint/cover.jpg",
+    "title": "Barchasini biluvchi kitobxon nigohi",
+    "titleEn": "Omniscient Reader",
+    "author": "sing N song, Sleepy-C (Redice Studio)",
+    "type": "manhwa",
+    "status": "davom etmoqda",
+    "rating": 8.6,
+    "ratingCount": 134191,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "fantaziya",
+      "harakatli",
+      "sarguzasht",
+      "sirli",
+      "psixologik"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Kim Dokja — \"Qulagan dunyoda omon qolishning uch yo'li\" nomli minglab bobli noma'lum romanining yagona sodiq o'quvchisi edi. Roman nihoyasiga yetgan kuni ushbu romanning apokaliptik voqelig'i birdan haqiqatga aylanadi. Butun Seul qonli ssenariylar maydoniga aylanganda, dunyoning qanday yakunlanishini faqat bitta inson — Dokja biladi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": true,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "seasons-of-blossom",
+    "uuid": "5e890b61-41a9-4f79-a85e-b158a24b69d0",
+    "slug": "seasons-of-blossom",
+    "coverImage": "/api/r2/manga/seasons-of-blossom/cover.jpg",
+    "title": "Gullagan fasllar",
+    "titleEn": "Seasons of Blossom",
+    "author": "Hongduck, NEMONE",
+    "type": "manhwa",
+    "status": "tugallangan",
+    "rating": 8.5,
+    "ratingCount": 20545,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "romantik",
+      "maktab",
+      "fojiaviy",
+      "psixologik"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Har bir faslning o'z rangi, quvonchi va dardi bor. Bahor — nozik ilk muhabbat, yoz esa yoshlikdagi unutilmas yo'qotish va yurak og'riqlari haqida hikoya qiladi. Maktabdagi yoshlarning murakkab hissiyotlari, sirlari va ulg'ayish mashaqqatlari to'rt fasl misolida nihoyatda ta'sirchan ifodalangan.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": false,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "the-remarried-empress",
+    "uuid": "762cb83a-6bda-418b-83f2-945873a50a6e",
+    "slug": "the-remarried-empress",
+    "coverImage": "/api/r2/manga/the-remarried-empress/cover.jpg",
+    "title": "Qayta turmush qurgan imperatrisa",
+    "titleEn": "The Remarried Empress",
+    "author": "Alphatart, Sumpul",
+    "type": "manhwa",
+    "status": "davom etmoqda",
+    "rating": 7.6,
+    "ratingCount": 21145,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "romantik",
+      "fantaziya",
+      "tarixiy",
+      "fojiaviy"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Navier Ellie Trovi Sharqiy Imperiyaning ideal imperatrisasi edi. Ammo imperator Sovieshu qochqin cho'ri Rashtaga oshiq bo'lib, Navierga xiyonat qiladi va ajrashishni talab etadi. Navier saroy oldida xotirjamlik bilan ajrashishga rozilik beradi, biroq bir shart bilan: G'arbiy Qirollikning jozibali hukmdori Heinrey bilan qayta turmush qurish ruxsati!",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": false,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "villains-are-destined-to-die",
+    "uuid": "a024e2c2-de55-4927-8bbb-a12295c3030f",
+    "slug": "villains-are-destined-to-die",
+    "coverImage": "/api/r2/manga/villains-are-destined-to-die/cover.jpg",
+    "title": "Yovuzlar o'limga mahkum",
+    "titleEn": "Villains Are Destined to Die",
+    "author": "Gwon Gyeoeul, SUOL",
+    "type": "manhwa",
+    "status": "davom etmoqda",
+    "rating": 8.4,
+    "ratingCount": 43959,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "romantik",
+      "fantaziya",
+      "isekai",
+      "psixologik"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Bosh qahramon mashhur otome o'yinining qiyin rejimiga tushib qoladi va eng nafratlangan yovuz qahramon Penelope Eckhart tanasida uyg'onadi. Penelope uchun har qanday xato harakat yoki noto'g'ri so'z muqarrar o'lim bilan tugaydi. Uning atrofidagi besh erkak qahramonning muhabbat foizi noldan past. Omon qolish uchun u kamida bitta erkakning mehrini 100% ga yetkazishi shart.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": false,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "first-frost",
+    "uuid": "53381180-c85e-48d0-8cbd-9d01b1046b11",
+    "slug": "first-frost",
+    "coverImage": "/api/r2/manga/first-frost/cover.jpg",
+    "title": "Birinchi qirov",
+    "titleEn": "First Frost",
+    "author": "Zhu Yi, Xiao Guo, zero",
+    "type": "manhua",
+    "status": "davom etmoqda",
+    "ratingCount": 0,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "romantik",
+      "psixologik"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Wen Yifan ona shahriga ish yuzasidan qaytganida, o'tmishdagi unutilmas xotiralarga duch keladi. Tasodifiy uchrashuv uni maktab yillarida rad etgan yigiti Sang Yan bilan yuzlashtiradi. Taqdir o'yini bilan ular bir kvartirada qo'shni ijarachi bo'lib qolishadi. Yillar davomida aytilmagan so'zlar va yashirilgan hislar asta-sekin yuzaga chiqa boshlaydi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": false,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "leveling-with-the-gods",
+    "uuid": "7b6bb1c2-d571-489a-b33c-f1b3090de9d8",
+    "slug": "leveling-with-the-gods",
+    "coverImage": "/api/r2/manga/leveling-with-the-gods/cover.jpg",
+    "title": "Xudolar bilan birga daraja oshirish",
+    "titleEn": "Level Up with the Gods",
+    "author": "Black Ajin, Oh Hyun",
+    "type": "manhwa",
+    "status": "davom etmoqda",
+    "rating": 7.8,
+    "ratingCount": 29326,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "harakatli",
+      "fantaziya",
+      "sarguzasht",
+      "isekai"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Minoraga kirgan Kim YuWon do'stlari bilan birga xudolarga qarshi kurashadi, ammo mag'lubiyat muqarrar bo'lib qoladi. Kronosning vaqt qurbonligi evaziga YuWon barcha xotiralarini saqlab, Minoraning tubiga — eng boshlang'ich davriga qaytadi. Endi u xudolar ham havas qiladigan darajaga yetishi kerak.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": true,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "the-greatest-estate-developer",
+    "uuid": "b8c6686f-19c2-4d8c-a2c1-4494b40c8f68",
+    "slug": "the-greatest-estate-developer",
+    "coverImage": "/api/r2/manga/the-greatest-estate-developer/cover.jpg",
+    "title": "Eng buyuk koshona meʼmori",
+    "titleEn": "The Greatest Estate Developer",
+    "author": "BK_Moon, Kim Hyunsoo, Lee Hyunmin",
+    "type": "manhwa",
+    "status": "davom etmoqda",
+    "rating": 9,
+    "ratingCount": 71134,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "komediya",
+      "fantaziya",
+      "isekai",
+      "sarguzasht"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Fuqarolik muhandisligi talabasi Kim Suho fantastik roman olamidagi xonavayron bo'lgan Baron Frontera xonadonining mayxo'r o'g'li Lloyd Frontera tanasida uyg'onadi. Bo'ynidagi ulkan qarzlardan qutulish va qulay pensiya hayotini qurish uchun Lloyd o'zining zamonaviy muhandislik bilimlari, qat'iyati va beqiyos kulgili mimikalari bilan butun o'rta asr dunyosini qayta qurishga kirishadi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": true,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "eleceed",
+    "uuid": "c126029c-8b64-4fdc-8bcf-89d22f18a381",
+    "slug": "eleceed",
+    "coverImage": "/api/r2/manga/eleceed/cover.jpg",
+    "title": "Eleceed",
+    "titleEn": "Eleceed",
+    "author": "Son Jeho, Zhena",
+    "type": "manhwa",
+    "status": "davom etmoqda",
+    "rating": 8.5,
+    "ratingCount": 47399,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "harakatli",
+      "komediya",
+      "super-qahramon",
+      "maktab"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Jiwoo — yashirin chaqmoq tezligiga ega mehribon va mushuksevar o'smir. Dunyoning eng qudratli uyg'ongan sehrgarlaridan biri Kayden og'ir jarohat tufayli o'z kuchlarini semiz ko'cha mushugi tanasiga joylashtirishga majbur bo'ladi. Jiwoo yarador mushukni qutqargach, ular o'rtasida kutilmagan ustoz-shogirdlik va kulgili sarguzashtlar boshlanadi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": true,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "maybe-meant-to-be",
+    "uuid": "04729676-e541-4f7d-9524-331977e8c176",
+    "slug": "maybe-meant-to-be",
+    "coverImage": "/api/r2/manga/maybe-meant-to-be/cover.jpg",
+    "title": "Balki taqdirimiz birgadir",
+    "titleEn": "Maybe Meant to Be",
+    "author": "Damcho, honeyskein",
+    "type": "manhwa",
+    "status": "davom etmoqda",
+    "rating": 7.9,
+    "ratingCount": 28229,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "romantik",
+      "komediya"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "32 yoshli ishsiz Jia Han ota-onasining tinimsiz \"qachon turmushga chiqasan\" degan tazyiqlaridan to'yadi. Tasodifan u bolalikdagi do'sti, shartnoma bo'yicha ishlovchi Jin Mincheol bilan uchrashadi. Yarim hazil, yarim jiddiy tarzda ular ota-onalarni tinchlantirish uchun soxta nikoh qurishga kelishib olishadi. Ammo qog'ozdagi nikoh asta-sekin haqiqiy romantik tuyg'ularga aylanib boradi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": false,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "a-business-proposal",
+    "uuid": "28ffe1ad-67fb-40c9-8e5d-440a18e4b87e",
+    "slug": "a-business-proposal",
+    "coverImage": "/api/r2/manga/a-business-proposal/cover.jpg",
+    "title": "Ish yuzasidan taklif",
+    "titleEn": "A Business Proposal",
+    "author": "HaeHwa, Narak, Perilla",
+    "type": "manhwa",
+    "status": "tugallangan",
+    "rating": 7.9,
+    "ratingCount": 12921,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "romantik",
+      "komediya"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Shin Hari badavlat dugonasi o'rniga uni rad etishlari uchun soxta uchrashuvga boradi. Uchrashuvda esa uning ro'parasida o'zi ishlaydigan kompaniyaning talabchan bosh direktori Kang Tae-moo o'tirgan bo'ladi! Tae-moo buvisining tazyiqidan qutulish uchun uchrashgan birinchi qiziga uylanishga qaror qilgan edi. Hari ishini yo'qotmaslik uchun ikkilamchi hayot kechirishga majbur bo'ladi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": false,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "reincarnation-of-the-suicidal-battle-god",
+    "uuid": "75fba74d-465a-4992-9561-851810bb287e",
+    "slug": "reincarnation-of-the-suicidal-battle-god",
+    "coverImage": "/api/r2/manga/reincarnation-of-the-suicidal-battle-god/cover.jpg",
+    "title": "Jang xudosining qayta tug'ilishi",
+    "titleEn": "Doom Breaker",
+    "author": "Cheong-Dam",
+    "type": "manhwa",
+    "status": "davom etmoqda",
+    "rating": 7.9,
+    "ratingCount": 41406,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "harakatli",
+      "fantaziya",
+      "sarguzasht",
+      "fojiaviy"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Insoniyatning eng so'nggi jangchisi Zephyr, demonlar hukmdori Tartarosga qarshi qaqshatqich jangda mag'lubiyatga uchraydi. Biroq uning taslim bo'lmas jasorati va hiylasi xudolarni hayratda qoldiradi. Unga o'z xotiralarini saqlagan holda o'tmishga qaytish imkoni beriladi. Zephyr endi insoniyat taqdirini qutqarish va xudolarga ham dars berib qo'yish uchun qaytadan qasos jangiga kirishadi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": true,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "a-returners-magic-should-be-special",
+    "uuid": "e22a3edf-421c-453e-bd81-b53905da6361",
+    "slug": "a-returners-magic-should-be-special",
+    "coverImage": "/api/r2/manga/a-returners-magic-should-be-special/cover.jpg",
+    "title": "Qaytgan insonning sehri o'zgacha bo'lishi kerak",
+    "titleEn": "A Returner's Magic Should Be Special",
+    "author": "Yu So-nan, Wookjakga",
+    "type": "manhwa",
+    "status": "tugallangan",
+    "rating": 7.6,
+    "ratingCount": 50838,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "fantaziya",
+      "harakatli",
+      "maktab",
+      "sarguzasht"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Soya Dunyosi insoniyatni deyarli qirib tashladi. Desir Arman va uning bir necha safdoshi so'nggi ajdahoni o'ldirganida, dunyo portlab ketadi. Biroq Desir o'zini 13 yil oldin, Xebrion elita sehrgarlik akademiyasiga kirish arafasida ko'radi. U o'tmishdagi sinfiy tabaqalanishni yengib, bo'lajak falokatga qarshi eng kuchli sehrgarlar jamoasini shakllantirishi shart.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": true,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "sss-class-revival-hunter",
+    "uuid": "36a38a19-335b-45d2-bf6e-88f5ea85d9cc",
+    "slug": "sss-class-revival-hunter",
+    "coverImage": "/api/r2/manga/sss-class-revival-hunter/cover.jpg",
+    "title": "SSS-darajali tirilish ovchisi",
+    "titleEn": "SSS-Class Revival Hunter",
+    "author": "Shin Noah, Bill K",
+    "type": "manhwa",
+    "status": "davom etmoqda",
+    "rating": 8.3,
+    "ratingCount": 69996,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "harakatli",
+      "fantaziya",
+      "psixologik",
+      "sarguzasht"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Qobiliyatsiz F-darajali ovchi Kim Gong-Ja birinchi raqamli qahramon Olovli Imperatorga nihoyatda hasad qilardi. Tasodifan u qotilining qobiliyatini ko'chirib olish mahoratiga ega bo'ladi, lekin buning uchun u o'lishi shart. Olovli Imperator uni o'ldirganida, Gong-Ja uning 24 soat oldinga qaytish ko'nikmasini egallab oladi. O'limdan qo'rqmaydigan ovchi shu tariqa Minoraning eng yuqori pog'onalariga ko'tariladi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": true,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "doom-breaker",
+    "uuid": "f3e084a4-6b3e-41b7-90d9-9069d4821f17",
+    "slug": "doom-breaker",
+    "coverImage": "/api/r2/manga/doom-breaker/cover.jpg",
+    "title": "Doom Breaker: Qasoskor jangchi",
+    "titleEn": "Doom Breaker",
+    "author": "Cheong-Dam",
+    "type": "manhwa",
+    "status": "davom etmoqda",
+    "rating": 7.9,
+    "ratingCount": 41406,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "harakatli",
+      "fantaziya",
+      "sarguzasht",
+      "fojiaviy"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Qorong'u xudolar insoniyatni ko'ngilxushlik uchun yo'q qilayotgan bir paytda, eng so'nggi insoniy qahramon Zephyr xudolarning ko'z o'ngida buyuk kurash olib boradi. Urush xudolari unga ikkinchi imkoniyat taqdim etadi — o'tmishga qaytib, o'z taqdirini qayta yozish va insoniyatni halokatdan asrab qolish imkoniyati.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": true,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "the-reason-why-raeliana-ended-up-at-the-dukes-mansion",
+    "uuid": "7f5448fd-ebeb-4adc-9d06-e81e9870cbfc",
+    "slug": "the-reason-why-raeliana-ended-up-at-the-dukes-mansion",
+    "coverImage": "/api/r2/manga/the-reason-why-raeliana-ended-up-at-the-dukes-mansion/cover.jpg",
+    "title": "Raeliana gersog qasriga borishining sababi",
+    "titleEn": "The Reason Why Raeliana Ended Up at the Duke's Mansion",
+    "author": "Milcha, Whale",
+    "type": "manhwa",
+    "status": "tugallangan",
+    "rating": 8.1,
+    "ratingCount": 29564,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "romantik",
+      "fantaziya",
+      "isekai",
+      "sirli"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Eunha sirli tarzda vafot etib, o'zi bilgan roman qahramoni Raeliana Mcmillan tanasida uyg'onadi. Romanga ko'ra, Raeliana o'z unashtirilgan yigiti tomonidan zaharlanib o'lishi kerak. Bu o'limdan qochish uchun u qudratli va xavfli Gersog Noah Volstaire Wynknight bilan 6 oylik soxta nikoh shartnomasini tuzadi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": false,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "i-shall-master-this-family",
+    "uuid": "a8240e73-586f-4812-888b-97496ce34cf8",
+    "slug": "i-shall-master-this-family",
+    "coverImage": "/api/r2/manga/i-shall-master-this-family/cover.jpg",
+    "title": "Bu safar oila boshlig'i bo'laman",
+    "titleEn": "I Shall Master this Family!",
+    "author": "Kim Roah, Mon",
+    "type": "manhwa",
+    "status": "davom etmoqda",
+    "rating": 8.2,
+    "ratingCount": 25708,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "romantik",
+      "fantaziya",
+      "isekai",
+      "tarixiy"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Firentia qudratli Lombardi xonadonining noqonuniy farzandi bo'lsa-da, butun umrini oila ravnaqiga bag'ishlagan edi. Biroq amakilarining ahmoqligi tufayli imperiyaning eng buyuk xonadoni butkul xonavayron bo'ladi. Avtohalokatdan so'ng Firentia o'zining 7 yoshli bolaligiga qaytadi. Endi u xonadonning boshqaruvini o'z qo'liga olishga va taqdirini qayta yozishga bel bog'laydi.",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": false,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  },
+  {
+    "id": "who-made-me-a-princess",
+    "uuid": "ad8cd668-403e-4e70-a2f8-5f471b7c2580",
+    "slug": "who-made-me-a-princess",
+    "coverImage": "/api/r2/manga/who-made-me-a-princess/cover.jpg",
+    "title": "Meni kim malika qildi",
+    "titleEn": "Who Made Me a Princess",
+    "author": "Plutus, Spoon",
+    "type": "manhwa",
+    "status": "tugallangan",
+    "rating": 8.3,
+    "ratingCount": 40758,
+    "chapters": 0,
+    "views": 0,
+    "genres": [
+      "romantik",
+      "fantaziya",
+      "isekai",
+      "komediya"
+    ],
+    "coverColor": [
+      "#0b0d19",
+      "#1e1b4b"
+    ],
+    "coverAccent": "#a855f7",
+    "synopsis": "Athanasia o'z otasi — sovuqqon imperator Claude de Alger Obelia qo'lida 18 yoshida qatl etiladigan baxtsiz malika haqidagi ertak kitobiga tushib qoladi. O'limdan qutulish uchun u bolalikdanoq qochishga pul to'playdi, biroq kutilmaganda saroy bog'ida otasi bilan to'qnash keladi. Endi uning yagona omon qolish yo'li — shafqatsiz otasining mehrini qozonish!",
+    "lastChapter": 0,
+    "lastUpdated": "2026-10-26",
+    "isNew": true,
+    "isPopular": false,
+    "isFeatured": false,
+    "featuredTagline": "Rasmiy litsenziya kutilmoqda"
+  }
 ];
 
 /**
@@ -596,6 +1249,7 @@ export function searchManga(query) {
     (m) =>
       m.title.toLowerCase().includes(q) ||
       (m.titleEn && m.titleEn.toLowerCase().includes(q)) ||
+      (m.slug && m.slug.toLowerCase().includes(q)) ||
       m.author.toLowerCase().includes(q) ||
       m.genres.some((g) => g.toLowerCase().includes(q))
   );

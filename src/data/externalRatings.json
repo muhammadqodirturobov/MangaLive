@@ -33,7 +33,7 @@
     "source": "MyAnimeList",
     "externalId": 146966,
     "title": "Mercenary Enrollment",
-    "score": 7.80,
+    "score": 7.8,
     "scale": 10,
     "members": 19567,
     "url": "https://myanimelist.net/manga/146966",
@@ -43,7 +43,7 @@
     "source": "MyAnimeList",
     "externalId": 146982,
     "title": "Latna Saga: Survival of a Sword King",
-    "score": 7.80,
+    "score": 7.8,
     "scale": 10,
     "members": 9511,
     "url": "https://myanimelist.net/manga/146982",
@@ -123,7 +123,7 @@
     "source": "MyAnimeList",
     "externalId": 172429,
     "title": "Solo Leveling: Ragnarok",
-    "score": 7.60,
+    "score": 7.6,
     "scale": 10,
     "members": 10830,
     "url": "https://myanimelist.net/manga/172429",
@@ -159,5 +159,202 @@
     "url": "https://anilist.co/manga/160564",
     "syncedAt": "2026-10-26T07:56:00.000Z"
   },
-  "1hp-klubi-qayta-boshlanish": null
+  "1hp-klubi-qayta-boshlanish": null,
+  "reincarnation-of-the-suicidal-battle-god": {
+    "source": "MyAnimeList",
+    "externalId": 147172,
+    "title": "Doom Breaker",
+    "score": 7.9,
+    "scale": 10,
+    "members": 41406,
+    "url": "https://myanimelist.net/manga/147172",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "omniscient-readers-viewpoint": {
+    "source": "MyAnimeList",
+    "externalId": 132214,
+    "title": "Omniscient Reader",
+    "score": 8.6,
+    "scale": 10,
+    "members": 134191,
+    "url": "https://myanimelist.net/manga/132214",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "leveling-with-the-gods": {
+    "source": "MyAnimeList",
+    "externalId": 148009,
+    "title": "Level Up with the Gods",
+    "score": 7.8,
+    "scale": 10,
+    "members": 29326,
+    "url": "https://myanimelist.net/manga/148009",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "a-returners-magic-should-be-special": {
+    "source": "MyAnimeList",
+    "externalId": 132247,
+    "title": "A Returner's Magic Should Be Special",
+    "score": 7.6,
+    "scale": 10,
+    "members": 50838,
+    "url": "https://myanimelist.net/manga/132247",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "solo-leveling": {
+    "source": "MyAnimeList",
+    "externalId": 121496,
+    "title": "Solo Leveling",
+    "score": 8.4,
+    "scale": 10,
+    "members": 287820,
+    "url": "https://myanimelist.net/manga/121496",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "the-greatest-estate-developer": {
+    "source": "MyAnimeList",
+    "externalId": 147272,
+    "title": "The Greatest Estate Developer",
+    "score": 9,
+    "scale": 10,
+    "members": 71134,
+    "url": "https://myanimelist.net/manga/147272",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "sss-class-revival-hunter": {
+    "source": "MyAnimeList",
+    "externalId": 146909,
+    "title": "SSS-Class Revival Hunter",
+    "score": 8.3,
+    "scale": 10,
+    "members": 69996,
+    "url": "https://myanimelist.net/manga/146909",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "bastard": {
+    "source": "AniList",
+    "externalId": 170031,
+    "title": "The Mean Guy",
+    "score": 6.6,
+    "scale": 10,
+    "members": 475,
+    "url": "https://anilist.co/manga/170031",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "eleceed": {
+    "source": "MyAnimeList",
+    "externalId": 147171,
+    "title": "Eleceed",
+    "score": 8.5,
+    "scale": 10,
+    "members": 47399,
+    "url": "https://myanimelist.net/manga/147171",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "doom-breaker": {
+    "source": "MyAnimeList",
+    "externalId": 147172,
+    "title": "Doom Breaker",
+    "score": 7.9,
+    "scale": 10,
+    "members": 41406,
+    "url": "https://myanimelist.net/manga/147172",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "operation-true-love": {
+    "source": "MyAnimeList",
+    "externalId": 149101,
+    "title": "Operation: True Love",
+    "score": 7.4,
+    "scale": 10,
+    "members": 17852,
+    "url": "https://myanimelist.net/manga/149101",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "maybe-meant-to-be": {
+    "source": "MyAnimeList",
+    "externalId": 147712,
+    "title": "Maybe Meant to Be",
+    "score": 7.9,
+    "scale": 10,
+    "members": 28229,
+    "url": "https://myanimelist.net/manga/147712",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "the-reason-why-raeliana-ended-up-at-the-dukes-mansion": {
+    "source": "MyAnimeList",
+    "externalId": 118646,
+    "title": "The Reason Why Raeliana Ended Up at the Duke's Mansion",
+    "score": 8.1,
+    "scale": 10,
+    "members": 29564,
+    "url": "https://myanimelist.net/manga/118646",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "seasons-of-blossom": {
+    "source": "MyAnimeList",
+    "externalId": 145539,
+    "title": "Seasons of Blossom",
+    "score": 8.5,
+    "scale": 10,
+    "members": 20545,
+    "url": "https://myanimelist.net/manga/145539",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "a-business-proposal": {
+    "source": "MyAnimeList",
+    "externalId": 134678,
+    "title": "A Business Proposal",
+    "score": 7.9,
+    "scale": 10,
+    "members": 12921,
+    "url": "https://myanimelist.net/manga/134678",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "i-shall-master-this-family": {
+    "source": "MyAnimeList",
+    "externalId": 147692,
+    "title": "I Shall Master this Family!",
+    "score": 8.2,
+    "scale": 10,
+    "members": 25708,
+    "url": "https://myanimelist.net/manga/147692",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "the-remarried-empress": {
+    "source": "MyAnimeList",
+    "externalId": 123475,
+    "title": "The Remarried Empress",
+    "score": 7.6,
+    "scale": 10,
+    "members": 21145,
+    "url": "https://myanimelist.net/manga/123475",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "first-frost": {
+    "source": "AniList",
+    "title": "First Frost",
+    "scale": 10,
+    "url": "https://anilist.co/manga/undefined",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "who-made-me-a-princess": {
+    "source": "MyAnimeList",
+    "externalId": 121269,
+    "title": "Who Made Me a Princess",
+    "score": 8.3,
+    "scale": 10,
+    "members": 40758,
+    "url": "https://myanimelist.net/manga/121269",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  },
+  "villains-are-destined-to-die": {
+    "source": "MyAnimeList",
+    "externalId": 133641,
+    "title": "Villains Are Destined to Die",
+    "score": 8.4,
+    "scale": 10,
+    "members": 43959,
+    "url": "https://myanimelist.net/manga/133641",
+    "syncedAt": "2026-10-26T10:15:00.000Z"
+  }
 }
