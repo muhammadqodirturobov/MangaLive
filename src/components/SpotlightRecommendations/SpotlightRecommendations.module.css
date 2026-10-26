@@ -1,0 +1,318 @@
+/* =========================================================
+   MangaLive.uz — Curated Editorial Spotlight Recommendations
+   ========================================================= */
+
+.section {
+  width: 100%;
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.badgeWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  color: #c084fc;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+
+.sparkleIcon {
+  color: #fbbf24;
+}
+
+.title {
+  font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.viewAllLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-purple-400);
+  transition: all var(--transition-fast);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(124, 58, 237, 0.08);
+}
+
+.viewAllLink:hover {
+  color: #ffffff;
+  background: rgba(124, 58, 237, 0.2);
+  transform: translateX(2px);
+}
+
+/* ── 2-Column Responsive Grid ─────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+/* ── Individual Spotlight Card ────────────────────────────── */
+.card {
+  position: relative;
+  display: flex;
+  background: rgba(14, 17, 34, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  gap: var(--space-4);
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.5);
+  transition: all var(--transition-fast);
+  overflow: hidden;
+}
+
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(18, 22, 44, 0.85);
+  box-shadow:
+    0 16px 36px -8px rgba(0, 0, 0, 0.7),
+    0 0 24px -6px var(--card-glow);
+  transform: translateY(-2px);
+}
+
+.coverLink {
+  flex-shrink: 0;
+  width: 120px;
+  display: block;
+  text-decoration: none;
+}
+
+.coverWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.42;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.coverGlow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(0, 0, 0, 0.7) 100%);
+  pointer-events: none;
+}
+
+.typeTag {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: rgba(7, 8, 17, 0.85);
+  backdrop-filter: blur(8px);
+  color: #e2e8f0;
+  font-size: 8px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
+  gap: 6px;
+}
+
+.metaTop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.ratingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: #fef08a;
+  font-size: 11px;
+}
+
+.starIcon {
+  color: #fbbf24;
+  fill: #fbbf24;
+}
+
+.ratingScore {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.ratingScale {
+  font-size: 10px;
+  color: #cbd5e1;
+}
+
+.unratedBadge {
+  font-size: 10px;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.chapterBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #c4b5fd;
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.titleLink {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardTitle {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--transition-fast);
+}
+
+.card:hover .cardTitle {
+  color: var(--color-purple-400);
+}
+
+.cardTitleEn {
+  font-size: 11px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.synopsis {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #94a3b8;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  gap: var(--space-2);
+}
+
+.genresList {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.genreTag {
+  font-size: 10px;
+  color: #64748b;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.readBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(124, 58, 237, 0.2);
+  border: 1px solid rgba(124, 58, 237, 0.4);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.readBtn:hover {
+  background: var(--color-purple-600);
+  border-color: var(--color-purple-500);
+  transform: translateY(-1px);
+}
+
+/* ── Mobile Layout ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .card {
+    padding: var(--space-3);
+    gap: var(--space-3);
+  }
+
+  .coverLink {
+    width: 90px;
+  }
+
+  .synopsis {
+    display: none; /* Keep mobile card tight and punchy */
+  }
+
+  .cardTitle {
+    font-size: var(--text-sm);
+  }
+}

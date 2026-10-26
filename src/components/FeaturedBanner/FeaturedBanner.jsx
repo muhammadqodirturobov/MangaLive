@@ -1,239 +1,326 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Play, BookOpen, Sparkles, TrendingUp, ChevronLeft, ChevronRight, RotateCcw, Star } from 'lucide-react';
+import { Play, RotateCcw, Sparkles, BookOpen, Star, ChevronLeft, ChevronRight, Bookmark } from 'lucide-react';
 import CoverImage from '../CoverImage/CoverImage.jsx';
-import { buildFeaturedBannerArtwork } from '../../assets/coverHelper.js';
+import { getMangaThematicProfile } from '../../assets/coverHelper.js';
 import { getLastReadChapter } from '../../services/userService.js';
 import { formatExternalRating } from '../../services/ratingService.js';
 import styles from './FeaturedBanner.module.css';
 
+const SLIDE_DURATION_MS = 6500;
+
 export default function FeaturedBanner({ mangas = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [progress, setProgress] = useState(0);
   const timerRef = useRef(null);
+  const progressIntervalRef = useRef(null);
+  const startTimeRef = useRef(null);
 
-  // Normalize input: can be array or single manga object
+  // Normalize items
   const items = Array.isArray(mangas) && mangas.length > 0
     ? mangas
     : mangas ? [mangas] : [];
-
   const total = items.length;
+
   const currentManga = items[currentIndex] || null;
+  const currentSlug = currentManga?.slug || currentManga?.id || '';
+  const theme = getMangaThematicProfile(currentSlug);
 
-  // Auto-rotation every 6 seconds, paused when hovering or controls focused
+  // Respect prefers-reduced-motion
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const goToSlide = useCallback((index) => {
+    setCurrentIndex(index);
+    setProgress(0);
+    startTimeRef.current = Date.now();
+  }, []);
+
+  const handlePrev = useCallback(() => {
+    goToSlide((currentIndex - 1 + total) % total);
+  }, [currentIndex, total, goToSlide]);
+
+  const handleNext = useCallback(() => {
+    goToSlide((currentIndex + 1) % total);
+  }, [currentIndex, total, goToSlide]);
+
+  // Handle timer & progress bar
   useEffect(() => {
-    if (total <= 1 || isPaused) return;
+    if (total <= 1 || isPaused || prefersReducedMotion) {
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      return;
+    }
 
-    timerRef.current = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % total);
-    }, 6000);
+    startTimeRef.current = Date.now();
+
+    progressIntervalRef.current = setInterval(() => {
+      const elapsed = Date.now() - (startTimeRef.current || Date.now());
+      const pct = Math.min(100, (elapsed / SLIDE_DURATION_MS) * 100);
+      setProgress(pct);
+
+      if (elapsed >= SLIDE_DURATION_MS) {
+        goToSlide((currentIndex + 1) % total);
+      }
+    }, 50);
 
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
     };
-  }, [total, isPaused]);
+  }, [currentIndex, total, isPaused, prefersReducedMotion, goToSlide]);
 
   if (!currentManga) return null;
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + total) % total);
-  };
+  const extRating = formatExternalRating(currentSlug);
+  const lastRead = getLastReadChapter(currentManga.id) || (currentManga.slug ? getLastReadChapter(currentManga.slug) : null);
+  const availableChapters = Number(currentManga.availableChapters ?? currentManga.chapters ?? currentManga.lastChapter ?? 0);
+  const targetChapter = lastRead
+    ? Math.min(Math.max(1, Number(lastRead.chapterNumber) || 1), Math.max(1, availableChapters))
+    : 1;
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % total);
-  };
-
-  const artworkSrc = currentManga.bannerImage || currentManga.coverImage || buildFeaturedBannerArtwork(currentManga);
-  const stars = Math.round(currentManga.rating);
+  const coverUrl = currentManga.coverImage || '';
+  const mangaTarget = currentManga.slug || currentManga.id;
 
   return (
     <section
-      className={styles.bannerSection}
+      className={styles.heroSection}
       aria-label="Tavsiya etilgan bosh asarlar"
+      style={{
+        '--hero-accent': theme.accent,
+        '--hero-glow': theme.glow,
+        '--hero-color-1': theme.palette[0],
+        '--hero-color-2': theme.palette[1],
+      }}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
       onBlur={() => setIsPaused(false)}
     >
-      <div className={`container ${styles.bannerContainer}`}>
-        <div className={styles.bannerCard}>
-          {/* Wide Landscape Artwork Background filling right side */}
+      <div className={`container ${styles.heroContainer}`}>
+        <div className={styles.stageCard}>
+          {/* ── 1. Panoramic Ambient Backdrop ──────────────────────── */}
           <div
-            className={styles.bannerArtwork}
-            style={{ backgroundImage: `url("${artworkSrc}")` }}
+            className={styles.backdropArt}
+            style={{ backgroundImage: `url("${coverUrl}")` }}
             aria-hidden="true"
           />
+          <div className={styles.ambientGlow} aria-hidden="true" />
+          <div className={styles.scrimHorizontal} aria-hidden="true" />
+          <div className={styles.scrimVertical} aria-hidden="true" />
 
-          {/* Deep dark gradient overlay towards the left */}
-          <div className={styles.bannerScrim} aria-hidden="true" />
-
-          {/* Manual Previous/Next Controls (visible on desktop) */}
+          {/* ── 2. Arrow Navigation Controls (Desktop) ─────────────── */}
           {total > 1 && (
-            <>
+            <div className={styles.arrowControls} aria-hidden="true">
               <button
                 type="button"
-                className={`${styles.navBtn} ${styles.prevBtn}`}
+                className={`${styles.arrowBtn} ${styles.prevArrow}`}
                 onClick={handlePrev}
                 aria-label="Oldingi tavsiya"
+                tabIndex={0}
               >
-                <ChevronLeft size={20} />
+                <ChevronLeft size={22} />
               </button>
               <button
                 type="button"
-                className={`${styles.navBtn} ${styles.nextBtn}`}
+                className={`${styles.arrowBtn} ${styles.nextArrow}`}
                 onClick={handleNext}
                 aria-label="Keyingi tavsiya"
+                tabIndex={0}
               >
-                <ChevronRight size={20} />
+                <ChevronRight size={22} />
               </button>
-            </>
+            </div>
           )}
 
-          {/* Content Layer */}
-          <div className={styles.bannerContent}>
-            {/* Badges row */}
-            <div className={styles.topBadges}>
-              <span className={styles.spotlightBadge}>
-                <Sparkles size={13} aria-hidden="true" />
-                HAFTANING TANLANGANI
-              </span>
-              <span className={styles.typeBadge}>
-                {currentManga.type?.toUpperCase()}
-              </span>
-              {currentManga.featuredTagline && (
-                <span className={styles.taglineBadge}>
-                  <TrendingUp size={13} aria-hidden="true" />
-                  {currentManga.featuredTagline}
+          {/* ── 3. Main Split Stage Layout ──────────────────────────── */}
+          <div className={styles.stageGrid}>
+            {/* ── Left Column: Editorial & Action Showcase ─────────── */}
+            <div className={styles.contentCol}>
+              {/* Badges Strip */}
+              <div className={styles.badgeRow}>
+                <span className={styles.spotlightPill}>
+                  <Sparkles size={13} className={styles.sparkleIcon} aria-hidden="true" />
+                  HAFTANING ASOSIY TANLOVI
                 </span>
-              )}
-            </div>
+                <span className={styles.typePill}>
+                  {currentManga.type ? currentManga.type.toUpperCase() : 'MANHWA'}
+                </span>
+                <span className={styles.statusPill}>
+                  <span className={styles.pulsingDot} aria-hidden="true" />
+                  DAVOM ETMOQDA
+                </span>
+              </div>
 
-            {/* Title & Headline */}
-            <h1 className={styles.bannerTitle}>
-              {currentManga.title}
-            </h1>
-            {currentManga.titleEn && currentManga.titleEn.trim() && (
-              <span className={styles.bannerTitleEn}>
-                {currentManga.titleEn.trim()}
-              </span>
-            )}
+              {/* Title & International Subtitle */}
+              <div className={styles.titleGroup}>
+                <h1 className={styles.heroTitle}>
+                  {currentManga.title}
+                </h1>
+                {currentManga.titleEn && currentManga.titleEn.trim() && (
+                  <span className={styles.heroSubtitle}>
+                    {currentManga.titleEn.trim()}
+                  </span>
+                )}
+              </div>
 
-            {/* Author & Rating row */}
-            <div className={styles.metaRow}>
-              <span className={styles.authorTag}>
-                <BookOpen size={14} aria-hidden="true" />
-                {currentManga.author}
-              </span>
-
-              {(() => {
-                const extRating = formatExternalRating(currentManga.slug || currentManga.id);
-                return extRating.hasRating ? (
-                  <div className={styles.ratingBadge} title={`${extRating.badge} · ${extRating.members}`}>
-                    <Star size={13} style={{ color: '#fbbf24', fill: '#fbbf24' }} aria-hidden="true" />
+              {/* Metadata row: Rating, Chapters, Author */}
+              <div className={styles.metaRow}>
+                {extRating.hasRating ? (
+                  <div
+                    className={styles.ratingBadge}
+                    title={`${extRating.badge} — ${extRating.members}`}
+                  >
+                    <Star size={14} className={styles.starIcon} aria-hidden="true" />
                     <span className={styles.ratingScore}>{extRating.score}</span>
-                    <span style={{ fontSize: '11px', color: '#94a3b8' }}>/10</span>
-                    <span className={styles.ratingVoters}>({extRating.members})</span>
+                    <span className={styles.ratingScale}>/10</span>
+                    <span className={styles.ratingMembers}>({extRating.members})</span>
                   </div>
                 ) : (
                   <div className={styles.ratingBadge}>
-                    <span className={styles.ratingVoters}>Baholanmagan</span>
+                    <span className={styles.ratingMembers}>AniList Baholanmagan</span>
                   </div>
-                );
-              })()}
-            </div>
+                )}
 
-            {/* Synopsis */}
-            <p className={styles.synopsis}>
-              {currentManga.synopsis}
-            </p>
+                <div className={styles.chaptersBadge}>
+                  <BookOpen size={13} aria-hidden="true" />
+                  <span>{availableChapters} ta bob mavjud</span>
+                </div>
 
-            {/* Genre tags */}
-            <div className={styles.genresList}>
-              {currentManga.genres?.map((g) => (
+                {currentManga.author && (
+                  <span className={styles.authorBadge}>
+                    <span>{currentManga.author}</span>
+                  </span>
+                )}
+              </div>
+
+              {/* Uzbek Synopsis */}
+              <p className={styles.synopsisText}>
+                {currentManga.synopsis || "O'zbek tilidagi ajoyib sarguzasht va hayajonli jang sahnalari."}
+              </p>
+
+              {/* Genre Tags */}
+              {Array.isArray(currentManga.genres) && currentManga.genres.length > 0 && (
+                <div className={styles.genresList}>
+                  {currentManga.genres.slice(0, 5).map((genre) => (
+                    <Link
+                      key={genre}
+                      to={`/katalog?janr=${encodeURIComponent(genre)}`}
+                      className={styles.genrePill}
+                    >
+                      #{genre}
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {/* CTA Action Buttons */}
+              <div className={styles.ctaRow}>
                 <Link
-                  key={g}
-                  to={`/katalog?janr=${g}`}
-                  className={styles.genrePill}
+                  to={`/manga/${mangaTarget}/chapter/${targetChapter}`}
+                  className={`${styles.primaryCta} btn`}
                 >
-                  #{g}
+                  {lastRead ? (
+                    <>
+                      <RotateCcw size={18} aria-hidden="true" />
+                      <span>O'qishni davom ettirish ({lastRead.chapterNumber}-bob)</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play size={18} fill="currentColor" aria-hidden="true" />
+                      <span>Hozir o'qish ({targetChapter}-bob)</span>
+                    </>
+                  )}
                 </Link>
-              ))}
-            </div>
 
-            {/* Actions */}
-            <div className={styles.ctaRow}>
-              {(() => {
-                const mangaTarget = currentManga.slug || currentManga.id;
-                const lastRead = getLastReadChapter(currentManga.id) || (currentManga.slug ? getLastReadChapter(currentManga.slug) : null);
-                const maxAvailable = Number(currentManga.availableChapters ?? currentManga.chapters ?? currentManga.lastChapter ?? 1);
-                const targetChapter = lastRead
-                  ? Math.min(Math.max(1, Number(lastRead.chapterNumber) || 1), maxAvailable)
-                  : 1;
-
-                return (
-                  <>
-                    <Link
-                      to={`/manga/${mangaTarget}/chapter/${targetChapter}`}
-                      className={`btn btn-primary ${styles.primaryCta}`}
-                    >
-                      {lastRead ? (
-                        <>
-                          <RotateCcw size={16} aria-hidden="true" />
-                          O'qishni davom ettirish ({lastRead.chapterNumber}-bob)
-                        </>
-                      ) : (
-                        <>
-                          <Play size={16} fill="currentColor" aria-hidden="true" />
-                          O'qishni boshlash ({targetChapter}-bob)
-                        </>
-                      )}
-                    </Link>
-                    <Link
-                      to={`/manga/${mangaTarget}`}
-                      className={`btn btn-outline ${styles.secondaryCta}`}
-                    >
-                      Batafsil ma'lumot
-                    </Link>
-                  </>
-                );
-              })()}
-            </div>
-          </div>
-
-          {/* Right Floating Manga Book Cover */}
-          <div className={styles.coverSide} aria-hidden="true">
-            <div className={styles.coverGlow} />
-            <div className={styles.coverWrapper}>
-              <div className={styles.coverBook}>
-                <CoverImage
-                  src={currentManga.coverImage}
-                  alt={`${currentManga.title} muqovasi`}
-                  title={currentManga.title}
-                  type={currentManga.type}
-                  priority={true}
-                />
+                <Link
+                  to={`/manga/${mangaTarget}`}
+                  className={`${styles.secondaryCta} btn`}
+                >
+                  <Bookmark size={16} aria-hidden="true" />
+                  <span>Batafsil ma'lumot</span>
+                </Link>
               </div>
             </div>
-            <div className={styles.coverFloatingPill}>
-              <span className={styles.pillNum}>{currentManga.lastChapter}</span>
-              <span className={styles.pillText}>-bob yangilandi</span>
+
+            {/* ── Right Column: 3D Grand Artwork Showcase ──────────── */}
+            <div className={styles.artworkCol} aria-hidden="true">
+              <div className={styles.artworkPerspective}>
+                <div className={styles.artworkGlow} />
+                <div className={styles.artworkFrame}>
+                  <CoverImage
+                    src={coverUrl}
+                    alt={`${currentManga.title} muqovasi`}
+                    title={currentManga.title}
+                    type={currentManga.type}
+                    priority={true}
+                    fetchpriority="high"
+                  />
+                  <div className={styles.artworkGlassSheen} />
+                  <div className={styles.coverFloatingBadge}>
+                    <span className={styles.badgePulse} />
+                    <span>{availableChapters} ta bob</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Carousel Pagination Dots */}
+          {/* ── 4. Interactive Slide Switcher / Thumbnail Deck ──────── */}
           {total > 1 && (
-            <div className={styles.dotsBar} role="tablist" aria-label="Tavsiyalar varaqlari">
-              {items.map((_, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  role="tab"
-                  aria-selected={idx === currentIndex}
-                  aria-label={`${idx + 1}-tavsiya`}
-                  className={`${styles.dot} ${idx === currentIndex ? styles.activeDot : ''}`}
-                  onClick={() => setCurrentIndex(idx)}
-                />
-              ))}
+            <div
+              className={styles.switcherDeck}
+              role="tablist"
+              aria-label="Tavsiya etilgan asarlar ro'yxati"
+            >
+              {items.map((manga, idx) => {
+                const isActive = idx === currentIndex;
+                const mSlug = manga.slug || manga.id;
+                const mRating = formatExternalRating(mSlug);
+
+                return (
+                  <button
+                    key={`${mSlug}-${idx}`}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-label={`${idx + 1}-tavsiya: ${manga.title}`}
+                    className={`${styles.switcherTab} ${isActive ? styles.switcherTabActive : ''}`}
+                    onClick={() => goToSlide(idx)}
+                  >
+                    {/* Progress Fill Line on Active Tab */}
+                    {isActive && (
+                      <div
+                        className={styles.tabProgressFill}
+                        style={{ width: `${progress}%` }}
+                        aria-hidden="true"
+                      />
+                    )}
+
+                    <div className={styles.tabThumb}>
+                      <img
+                        src={manga.coverImage}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className={styles.tabThumbImg}
+                      />
+                    </div>
+
+                    <div className={styles.tabInfo}>
+                      <span className={styles.tabTitle}>{manga.title}</span>
+                      <div className={styles.tabMeta}>
+                        {mRating.hasRating && (
+                          <span className={styles.tabScore}>★ {mRating.score}</span>
+                        )}
+                        <span className={styles.tabCh}>
+                          {manga.availableChapters ?? manga.chapters ?? 0} bob
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>

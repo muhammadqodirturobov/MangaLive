@@ -27,6 +27,10 @@ body {
   line-height: var(--leading-normal);
   color: var(--color-text-primary);
   background-color: var(--color-bg-base);
+  background-image:
+    radial-gradient(circle at 50% -15%, rgba(124, 58, 237, 0.15) 0%, transparent 45%),
+    radial-gradient(circle at 100% 25%, rgba(56, 189, 248, 0.06) 0%, transparent 35%);
+  background-attachment: fixed;
   min-height: 100vh;
   overflow-x: hidden;
   max-width: 100%;

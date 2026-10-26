@@ -19,31 +19,32 @@
   --color-purple-900: #4c1d95;
 
   /* --- Dark background scale --------------------------- */
-  --color-bg-base:    #0d0f1a;   /* deepest — page background  */
-  --color-bg-surface: #141626;   /* cards, panels              */
-  --color-bg-raised:  #1a1d2e;   /* elevated cards, header     */
-  --color-bg-overlay: #1e2235;   /* hover states, dropdowns    */
+  --color-bg-base:    #060711;   /* deepest — luxury dark canvas */
+  --color-bg-surface: #0c0e1e;   /* cards, glass panels          */
+  --color-bg-raised:  #12152b;   /* elevated cards, header       */
+  --color-bg-overlay: #181d38;   /* hover states, dropdowns      */
 
   /* --- Text scale -------------------------------------- */
   --color-text-primary:   #ffffff;
-  --color-text-secondary: #9ca3af;  /* muted descriptors      */
-  --color-text-tertiary:  #6b7280;  /* placeholders, labels   */
-  --color-text-accent:    #a78bfa;  /* purple accent text     */
+  --color-text-secondary: #94a3b8;  /* slate muted descriptors   */
+  --color-text-tertiary:  #64748b;  /* placeholders, labels      */
+  --color-text-accent:    #c084fc;  /* purple accent text        */
 
   /* --- Border ------------------------------------------ */
-  --color-border:        rgba(255, 255, 255, 0.07);
-  --color-border-accent: rgba(124, 58, 237, 0.4);
+  --color-border:        rgba(255, 255, 255, 0.08);
+  --color-border-accent: rgba(124, 58, 237, 0.45);
 
   /* --- Status colors ----------------------------------- */
   --color-success: #22c55e;
-  --color-warning: #f59e0b;
+  --color-warning: #fbbf24;
   --color-error:   #ef4444;
-  --color-info:    #3b82f6;
+  --color-info:    #38bdf8;
 
   /* --- Gradients --------------------------------------- */
   --gradient-brand:  linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
-  --gradient-banner: linear-gradient(to right, rgba(13,15,26,0.98) 0%, rgba(13,15,26,0.7) 60%, transparent 100%);
-  --gradient-card:   linear-gradient(to top, rgba(13,15,26,0.95) 0%, transparent 60%);
+  --gradient-brand-glow: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  --gradient-banner: linear-gradient(to right, rgba(6,7,17,0.98) 0%, rgba(6,7,17,0.7) 60%, transparent 100%);
+  --gradient-card:   linear-gradient(to top, rgba(6,7,17,0.95) 0%, transparent 60%);
 
   /* --- Spacing (8-pt grid) ----------------------------- */
   --space-1: 0.25rem;   /*  4px */

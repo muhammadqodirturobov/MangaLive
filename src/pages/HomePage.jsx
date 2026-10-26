@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, AlertTriangle, RefreshCw, Sparkles, Compass } from 'lucide-react';
+import { ChevronRight, AlertTriangle, RefreshCw, Compass } from 'lucide-react';
 import FeaturedBanner from '../components/FeaturedBanner/FeaturedBanner.jsx';
+import ValuePropositionStrip from '../components/ValuePropositionStrip/ValuePropositionStrip.jsx';
+import SpotlightRecommendations from '../components/SpotlightRecommendations/SpotlightRecommendations.jsx';
 import MangaCarousel from '../components/MangaCarousel/MangaCarousel.jsx';
 import LatestUpdatesGrid from '../components/LatestUpdatesGrid/LatestUpdatesGrid.jsx';
 import ContinueReading from '../components/ContinueReading/ContinueReading.jsx';
@@ -96,18 +98,46 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* ── 1. Featured Manga Spotlight Banner ─────────────────────── */}
+      {/* ── 1. Cinematic Featured Hero Spotlight ───────────────────── */}
       {featuredMangas.length > 0 && <FeaturedBanner mangas={featuredMangas} />}
 
       <div className={`container ${styles.container}`}>
-        {/* ── 2. Continue Reading (if history exists) ────────────────── */}
+        {/* ── 2. Platform Value Proposition Pillars Strip ────────────── */}
+        <ValuePropositionStrip />
+
+        {/* ── 3. Continue Reading (if visitor has local reading history) ─ */}
         {latestReadItem && (
           <section className={styles.continueSection} aria-label="Mutolaani davom ettirish">
             <ContinueReading historyItem={latestReadItem} />
           </section>
         )}
 
-        {/* ── 3. Quick Genre Explorer Pills ─────────────────────────── */}
+        {/* ── 4. Ommabop Asarlar (Trending Manga Carousel) ──────────── */}
+        {popularManga.length > 0 && (
+          <section className={styles.sectionBlock}>
+            <MangaCarousel
+              title="Ommabop Asarlar"
+              subtitle="O'zbek tiliga tarjima qilingan eng mashhur manhwa va mangalar"
+              mangas={popularManga}
+              showRank={true}
+              rightAction={
+                <Link to="/katalog" className={styles.viewAllTextLink}>
+                  <span>Hammasini ko'rish</span>
+                  <ChevronRight size={14} />
+                </Link>
+              }
+            />
+          </section>
+        )}
+
+        {/* ── 5. Sizga Tavsiya Etiladi (Editorial Curated Showcase) ──── */}
+        {popularManga.length > 0 && (
+          <SpotlightRecommendations
+            mangas={popularManga.filter((m) => m.rating >= 7.5 || m.canonicalRating10 >= 7.5)}
+          />
+        )}
+
+        {/* ── 6. Quick Genre Explorer Pills ─────────────────────────── */}
         <section className={styles.genreBar} aria-label="Ommabop janrlar">
           <div className={styles.genreHeader}>
             <Compass size={15} className={styles.genreIcon} />
@@ -133,25 +163,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── 4. Mashhur Asarlar (Trending Manga Carousel) ──────────── */}
-        {popularManga.length > 0 && (
-          <section className={styles.sectionBlock}>
-            <MangaCarousel
-              title="Mashhur Asarlar"
-              subtitle="O'zbek tiliga tarjima qilingan eng ommabop manhwa va mangalar"
-              mangas={popularManga}
-              showRank={true}
-              rightAction={
-                <Link to="/katalog" className={styles.viewAllTextLink}>
-                  <span>Hammasini ko'rish</span>
-                  <ChevronRight size={14} />
-                </Link>
-              }
-            />
-          </section>
-        )}
-
-        {/* ── 5. Main 2-Column Section: Latest Releases + AniList Top Ranking ── */}
+        {/* ── 7. Main 2-Column Section: Latest Releases + AniList Top Ranking ── */}
         <div className={styles.splitLayout}>
           <div className={styles.mainColumn}>
             {latestManga.length > 0 && (

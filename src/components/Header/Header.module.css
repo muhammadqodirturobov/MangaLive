@@ -2,10 +2,10 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #090a14;
+  background: rgba(6, 7, 17, 0.88);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   height: var(--header-height);
   display: flex;
   align-items: center;
