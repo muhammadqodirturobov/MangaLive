@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Header          from './components/Header/Header.jsx';
 import Footer          from './components/Footer/Footer.jsx';
 import HomePage        from './pages/HomePage.jsx';
@@ -129,6 +130,7 @@ export default function App() {
         </AppShell>
         <AuthModal />
         <GuestPrompt />
+        <Analytics />
       </BrowserRouter>
     </AuthProvider>
   );
